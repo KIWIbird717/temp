@@ -10,14 +10,9 @@ function registerRoutes(app: express.Application, dirPath: string, prefix: strin
     const isDirectory = fs.statSync(filePath).isDirectory();
     
     if (isDirectory) {
-      registerRoutes(app, filePath, path.join(prefix, file));
+      registerRoutes(app, filePath, path.join(prefix, file).replace(/\\/g, "/") + "/" );
     } else {
-      const route = file.split(".")[0];
-      const page = require(filePath).default;
-      console.log(route)
-      
-      app.use(prefix, page);
-      
+      app.use(prefix, require(filePath).default);
     }
   }
 
