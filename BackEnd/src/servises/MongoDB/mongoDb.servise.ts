@@ -3,12 +3,12 @@ import mongoose from "mongoose"
 
 const DB_URL: string = process.env.DB_URL
 
+/**
+ * Create connection with MongoDB
+ * @description
+ * You can specify connect options by adding an Object in `mongoose.connect()`
+ */
 export const dbConnection = async (): Promise<void> => {
-  /**
-   * Create connection with MongoDB
-   * You can specify connect options by adding an Object in @function mongoose.connect
-   */
-
   try {
     await mongoose.connect(DB_URL as string)
 
@@ -18,11 +18,10 @@ export const dbConnection = async (): Promise<void> => {
   }
 }
 
+/**
+ * Disconnect from MongoDB
+ */
 export const dbDisconnection = async (): Promise<void> => {
-  /**
-   * Disconnect from MongoDB
-   */
-
   try {
     await mongoose.connection.close()
 

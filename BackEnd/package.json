@@ -2,13 +2,13 @@
   "name": "autoregtg",
   "version": "1.0.0",
   "description": "",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/main.js",
+    "start": "node dist/index.js",
     "dev": "nodemon"
   },
-  "author": "Artemka#7944",
+  "author": "xono.one",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",

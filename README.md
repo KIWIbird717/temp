@@ -20,3 +20,10 @@ Open [http://localhost:8080](http://localhost:8080) to view it in the browser.
 Launches the FrontEnd ReactApp in the interactive watch mode.\
 You can run it separately in `WebApp` folder, by `npm rstart` command\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+
+## By the time of release
+
+### TODO list
+
+1. Do not foget to remove `cors policy` in `src/middlewares/login.moddleware.ts`
