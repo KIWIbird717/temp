@@ -1,0 +1,24 @@
+{
+  "name": "autoregtg-main",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "server": "npm run dev --prefix BackEnd",
+    "client": "npm start --prefix WebApp",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xonoone/AutoregTG.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xonoone/AutoregTG/issues"
+  },
+  "homepage": "https://github.com/xonoone/AutoregTG#readme",
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
