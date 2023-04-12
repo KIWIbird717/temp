@@ -1,8 +1,8 @@
-import express from "express";
+import { Application } from "express";
 import fs from "fs";
 import path from "path";
 
-function registerRoutes(app: express.Application, dirPath: string, prefix: string = "/", callback?: () => void) {
+const registerRoutes = (app: Application, dirPath: string, prefix: string = "/", callback?: () => void): void  => {
   const files = fs.readdirSync(dirPath);
 
   for (const file of files) {
