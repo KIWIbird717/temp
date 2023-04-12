@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import registerRoutes from "./utils/registerRoutes";
+import registerRoutes from "./utils/express/registerRoutes";
 
 import dotenv from 'dotenv';
 import path from "path";
@@ -10,10 +10,12 @@ const app: Express = express();
 
 
 // Auto-routing system
-const pagesPath = path.join(__dirname, "pages");
-registerRoutes(app, pagesPath);
+const pagesPath: string = path.join(__dirname, "pages");
+registerRoutes(app, pagesPath, "/", () => {
+  console.log("[SERVER]: Pages loaded")
+});
 
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server is running at http://localhost:${process.env.PORT}`);
+  console.log(`[SERVER]: Running at http://localhost:${process.env.PORT}`);
 });
