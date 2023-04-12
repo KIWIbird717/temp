@@ -1,6 +1,7 @@
 import express, { Express } from 'express';
 import registerRoutes from "./utils/express/registerRoutes";
 import Middleware from './middlewares/login.middleware';
+import { dbConnection, dbDisconnection } from './servises/mongoDb.servise';
 
 import dotenv from 'dotenv';
 import path from "path";
@@ -12,6 +13,9 @@ const app: Express = express();
 
 const ServerInitPoint = async (): Promise<void> => {
   try {
+    // Connect to MongoDB (Currently unavailable, customer did not create one)
+    // await dbConnection()
+
     // Start server
     app.listen(process.env.PORT, () => {
       console.log(`[SERVER]: Running at http://localhost:${process.env.PORT}`);
@@ -31,7 +35,9 @@ const ServerInitPoint = async (): Promise<void> => {
   }
 }
 
-ServerInitPoint().catch((err: any) => {
+ServerInitPoint().catch( async (err: any) => {
+  // Disconnect from MongoDB (Currently unavailable, customer did not create one)
+  // await dbDisconnection()
   console.error(err)
   process.exit(1)
 })
