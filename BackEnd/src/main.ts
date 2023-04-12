@@ -19,3 +19,5 @@ registerRoutes(app, pagesPath, "/", () => {
 app.listen(process.env.PORT, () => {
   console.log(`[SERVER]: Running at http://localhost:${process.env.PORT}`);
 });
+
+const tempMsg: string = "хуй"
