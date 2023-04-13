@@ -9,13 +9,13 @@ import { NewTgUserSchema, INewTgUserSchema } from "./newTgUserSchema.servise";
  * 
  * @arguments
  * - `phoneNumber` (номер) required
- * - `resting` (отлёжка) required
- * - `fullName` (ФИО) required
+ * - `resting` (отлёжка)   required
+ * - `fullName` (ФИО)      required
  * - `twoFactorAuth` (2фа) required
- * - `proxy` (Привязанная группа прокси) optional
- * - `status` (статус) required
+ * - `proxy` (Привязанная группа прокси)     optional
+ * - `status` (статус)     required
  * - `latestActivity` (Последняя активность) required
- * - `accountGroup` (группа аккаунтов) optional
+ * - `accountGroup` (группа аккаунтов)       optional
  * 
  * @todo status (статус) Возможно изменим это поле, в зависимости от Telegram API
  * @todo latestActivity (Последняя активность) Возможно изменим это поле, в зависимости от Telegram API

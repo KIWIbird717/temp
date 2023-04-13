@@ -4,7 +4,7 @@ const router: Router = express.Router();
 
 
 router.get('/echo', (req: Request, res: Response) => {
-    res.send('Ok');
+    res.status(200).send('Ok');
 });
   
 

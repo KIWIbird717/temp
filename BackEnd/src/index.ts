@@ -2,7 +2,6 @@ import express, { Express } from 'express';
 import registerRoutes from "./utils/express/registerRoutes";
 import Middleware from './middlewares/login.middleware';
 import { dbConnection, dbDisconnection } from './servises/MongoDB/mongoDb.servise';
-import { get, post } from './routes/routes.route'
 
 import dotenv from 'dotenv';
 import path from "path";
@@ -31,15 +30,12 @@ const ServerInitPoint = async (): Promise<void> => {
     // Middlewares
     Middleware(app)
 
-    // Routes
-    get(app)
-    post(app)
     
     // Auto-routing system
-    // const pagesPath: string = path.join(__dirname, "pages");
-    // registerRoutes(app, pagesPath, "/", () => {
-    //   console.log("\x1b[36m", "[SERVER]: Pages loaded")
-    // });
+    const pagesPath: string = path.join(__dirname, "routes");
+    registerRoutes(app, pagesPath, "/", () => {
+      console.log("\x1b[36m", "[SERVER]: Pages loaded")
+    });
 
   } catch(err) {
     throw err
