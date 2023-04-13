@@ -20,10 +20,10 @@ const ServerInitPoint = async (): Promise<void> => {
      * 
      * After that uncomment the line below and `dbDisconnection()` in the end of the file
      */
-    // await dbConnection()
+    await dbConnection()
 
     // Start server
-    app.listen(process.env.PORT, () => {
+    app.listen(process.env.PORT as string, () => {
       console.log("\x1b[36m", `[SERVER]: Running at http://localhost:${process.env.PORT}`);
     });
 
@@ -44,7 +44,7 @@ const ServerInitPoint = async (): Promise<void> => {
 
 ServerInitPoint().catch( async (err: any) => {
   // Disconnect from MongoDB (Currently unavailable, customer did not create one)
-  // await dbDisconnection()
+  await dbDisconnection()
   console.error(err)
   process.exit(1)
 })

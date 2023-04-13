@@ -1,5 +1,5 @@
 import express, { Router, Request, Response } from "express";
-import CreateNewTgUser from "../../servises/CreateTelegramUser/createNewTelegramUser.servise"
+import CreateNewTgUser from "../../servises/AddTelegramUserToBD/addNewTelegramUser.servise";
 
 const router: Router = express.Router();
 

@@ -1,7 +1,9 @@
 import mongoose from "mongoose"
+import dotenv from 'dotenv';
 
+dotenv.config();
 
-const DB_URL: string = process.env.DB_URL
+const DB_URL = process.env.DB_URL
 
 /**
  * Create connection with MongoDB
@@ -25,7 +27,7 @@ export const dbDisconnection = async (): Promise<void> => {
   try {
     await mongoose.connection.close()
 
-    console.log("\x1b[32m", '[MongoDB]: DB successfully disconnected')
+    console.log("\x1b[32m", '[MongoDB]: Disconnected from MongoDB')
   } catch(err) {
     throw new Error(`[MongoDB]: Can not disconnect from MongoDB. ${err}`)
   }
