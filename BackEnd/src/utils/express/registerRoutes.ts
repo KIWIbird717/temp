@@ -1,4 +1,5 @@
 import { Application } from "express";
+import { asyncWrapper } from "./errorHandler";
 import fs from "fs";
 import path from "path";
 
@@ -17,24 +18,45 @@ import path from "path";
  * 
  */
 
-const registerRoutes = (app: Application, dirPath: string, prefix: string = "/", callback?: () => void): void  => {
+const wrapRouteHandlers = (router) => {
+  const routes = router.stack
+    .filter((layer) => layer.route)
+    .map((layer) => layer.route);
+
+  routes.forEach((route) => {
+    const methods = Object.keys(route.methods);
+
+    methods.forEach((method) => {
+      const originalHandler = route.stack[0].handle;
+      route[method](asyncWrapper(originalHandler));
+    });
+  });
+};
+
+const registerRoutes = (app: Application, dirPath: string, prefix: string = "/", callback?: () => void): void => {
   const files = fs.readdirSync(dirPath);
 
   for (const file of files) {
     const filePath = path.join(dirPath, file);
     const isDirectory = fs.statSync(filePath).isDirectory();
-    
+
     if (isDirectory) {
       // Init routes inside folder
-      registerRoutes(app, filePath, path.join(prefix, file).replace(/\\/g, "/") + "/" );
+      registerRoutes(app, filePath, path.join(prefix, file).replace(/\\/g, "/") + "/");
     } else {
-      app.use(prefix, require(filePath).default);
+      const routeModule = require(filePath);
+      const router = routeModule.default;
+
+      if (router) {
+        wrapRouteHandlers(router);
+        app.use(prefix, router);
+      }
     }
   }
 
   if (callback) {
     callback();
   }
-}
+};
 
 export default registerRoutes;
