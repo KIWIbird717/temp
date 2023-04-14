@@ -1,6 +1,6 @@
 import React from 'react'
 import { Menu } from 'antd'
-import { menuItems1 } from './SliderMenuItems'
+import { menuItems } from './SliderMenuItems'
 import Logo from '../../media/Logo.svg'
 
 export const SiderComponent = () => {
@@ -14,7 +14,7 @@ export const SiderComponent = () => {
         mode="inline"
         defaultSelectedKeys={['1']}
         style={{ borderRight: 0 }}
-        items={ menuItems1 }
+        items={ menuItems }
       />
     </div>
   )
