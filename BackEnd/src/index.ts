@@ -13,12 +13,10 @@ const app: Express = express();
 
 const ServerInitPoint = async (): Promise<void> => {
   try {
-    // Connect to MongoDB
     /**
-     * Connect to MongoDB (Currently unavailable, customer did not create one)
+     * Connect to MongoDB
      * @todo need to change DB_URL in .env in order to `dbConnection()` start work. Function already done 
      * 
-     * After that uncomment the line below and `dbDisconnection()` in the end of the file
      */
     await dbConnection()
 
@@ -43,7 +41,7 @@ const ServerInitPoint = async (): Promise<void> => {
 }
 
 ServerInitPoint().catch( async (err: any) => {
-  // Disconnect from MongoDB (Currently unavailable, customer did not create one)
+  // Disconnect from MongoDB
   await dbDisconnection()
   console.error(err)
   process.exit(1)

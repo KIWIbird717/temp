@@ -26,7 +26,7 @@ const newTgUserSchema: Schema = new Schema({
 }, { timestamps: true })
 
 /**
- * New user DB schema 
+ * New `Telegram` account DB schema 
  * @description
  * `All described fields are also in Notion in technical task`
  * `The name of the field is indicated in brackets in accordance with the specification file`

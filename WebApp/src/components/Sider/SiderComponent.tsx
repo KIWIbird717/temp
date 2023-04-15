@@ -1,14 +1,13 @@
 import React from 'react'
 import { Menu } from 'antd'
 import { menuItems } from './SliderMenuItems'
-import Logo from '../../media/Logo.svg'
+import logo from '../../images/logo.svg'
 
 export const SiderComponent = () => {
-
   return (
     <div className='w-full grid gap-6 py-6'>
       <div className='h-[100] w-full flex justify-center'>
-        <img src={Logo} alt='Logo'/>
+        <img src={logo} alt='Logo'/>
       </div>
       <Menu
         mode="inline"
