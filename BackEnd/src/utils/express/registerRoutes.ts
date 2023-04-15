@@ -28,10 +28,11 @@ const wrapRouteHandlers = (router) => {
 
     methods.forEach((method) => {
       const originalHandler = route.stack[0].handle;
-      route[method](asyncWrapper(originalHandler));
+      route.stack[0].handle = asyncWrapper(originalHandler);
     });
   });
 };
+
 
 const registerRoutes = (app: Application, dirPath: string, prefix: string = "/", callback?: () => void): void => {
   const files = fs.readdirSync(dirPath);
