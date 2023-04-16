@@ -3,7 +3,7 @@ import express, { Router, Request, Response } from "express";
 const router: Router = express.Router();
 
 
-router.get('/echo', (req: Request, res: Response) => {
+router.get('/echo', async (req: Request, res: Response) => {
     res.status(200).send('Ok');
 });
   

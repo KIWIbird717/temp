@@ -34,7 +34,6 @@ const ServerInitPoint = async (): Promise<void> => {
     registerRoutes(app, pagesPath, "/", () => {
       console.log("\x1b[36m", "[SERVER]: Pages loaded")
     });
-
   } catch(err) {
     throw err
   }
