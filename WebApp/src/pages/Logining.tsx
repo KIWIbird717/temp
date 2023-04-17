@@ -31,7 +31,7 @@ const emailRules: Rule[] = [
   }
 ]
 
-export const Registration = () => {
+export const Logining = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [formError, setFormError] = useState<IFormError>({validate: "", msg: ""})
 
@@ -43,19 +43,19 @@ export const Registration = () => {
     })
   }
 
-  const onFinish = async ({mail, password, remember}: IOnFinish): Promise<void> => {
+  const onFinish = async ({mail, password}: IOnFinish): Promise<void> => {
     try {
       setLoading(true)
-      const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/newUser/registration`
+      const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/newUser/login`
   
-      await axios.post(url, { mail, password, remember })
+      await axios.post(url, { mail, password })
         .then((res: any) => console.log('res', res))
         .then(() => setLoading(false))
     } catch (err: any) {
       setLoading(false)
 
-      if (err.response?.data.message === "User with this email already exists") {
-        setFormError({validate: "error", msg: 'Такой пользователь уже существует'})
+      if (err.response?.data.message === "Uncurrect password") {
+        setFormError({validate: "error", msg: 'Неверный пароль'})
       } else {
         notificationHandler()
       }
@@ -72,13 +72,11 @@ export const Registration = () => {
           onFinish={onFinish}
           style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
-          <Title>Регистрация</Title>
+          <Title>Авторизация</Title>
           <Form.Item
             name="mail"
             rules={emailRules}
             style={{ width: '100%' }}
-            validateStatus={formError.validate}
-            help={formError.msg}
           >
             <Input size="large" prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Почта" onChange={() => setFormError({validate: "", msg: ""})}/>
           </Form.Item>
@@ -86,7 +84,8 @@ export const Registration = () => {
             name="password"
             rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
             style={{ width: '100%' }}
-            hasFeedback
+            validateStatus={formError.validate}
+            help={formError.msg}
           >
             <Input.Password
               size="large"
@@ -114,16 +113,10 @@ export const Registration = () => {
               htmlType="submit" 
               style={{ width: '100%', background: colors.primary }}
             >
-              Зарегестрироваться
+              Войти
             </Button>
           </Form.Item>
 
-          <Form.Item style={{ width: '100%' }}>
-            <div className='w-full flex justify-between'>
-              Уже есть аккаунт?
-              <a href="">Войдите</a>
-            </div>
-          </Form.Item>
         </Form>
       </div>
     </div>

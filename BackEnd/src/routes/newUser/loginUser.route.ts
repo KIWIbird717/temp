@@ -5,24 +5,17 @@ import { customCompareDecription } from "../../utils/hooks/customCompareDecrypti
 
 const router: Router = express.Router()
 
-router.post('/registration', async (req: Request, res: Response) => {
+router.post('/login', async (req: Request, res: Response) => {
   const { mail, password } = req.body
     
   // Check if user already exists
   const existingUser: IRegisterUserSchema | null = await RegisterUserSchema.findOne({$or: [{ mail }]})
 
-  if (existingUser) {
-    if (await customCompareDecription(password, existingUser.password)) {
-      return res.status(201).json({ message: 'User logined successfully' })
-    } else {
-      return res.status(400).json({ message: 'User with this email already exists' })
-    }
-
+  if (await customCompareDecription(password, existingUser.password)) {
+    return res.status(201).json({ message: 'User logined successfully' })
+  } else {
+    return res.status(400).json({ message: 'Uncurrect password' })
   }
-
-  // adding data about new User to MongoDB
-  await CreateNewUser({ mail, password })
-  return res.status(201).json({ message: 'User registered successfully' })
 })
 
 export default router;
