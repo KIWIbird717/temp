@@ -30,7 +30,7 @@ export const Registration = () => {
   const onFinish = async ({mail, password, remember}: IOnFinish): Promise<void> => {
     try {
       // setLoading(true)
-      const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/registration`
+      const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/newUser/registration`
   
       await axios.post(url, { mail, password, remember })
         .then((res: any) => console.log(res.response.data.message))
