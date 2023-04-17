@@ -14,7 +14,8 @@ import { customEncryption } from '../../utils/hooks/customEncryption.util'
 const CreateNewUser = async (props: IRegisterUserSchema): Promise<IRegisterUserSchema> => {
   const post = new RegisterUserSchema({ 
     mail: props.mail, 
-    password: customEncryption(props.password)
+    // password: customEncryption(props.password)
+    password: props.password
   })
   const savePost = await post.save()
 

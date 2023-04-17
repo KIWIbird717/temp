@@ -51,7 +51,7 @@ const registerRoutes = async (app: Application, dirPath: string, prefix: string 
         wrapRouteHandlers(router);
         app.use(prefix, router);
       } else {
-        console.log("\033[33m", `[WARNING]: Wrong route ${filePath}`)
+        console.log("\x1b[33m", `[WARNING]: Wrong route ${filePath}`)
       }
     }
   });

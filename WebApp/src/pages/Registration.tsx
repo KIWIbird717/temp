@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Checkbox, Form, Input, Typography } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { colors } from '../global-style/style-colors.module';
 import axios from 'axios';
+import { Rule } from 'antd/lib/form';
 
 const { Title } = Typography
 
@@ -12,13 +13,31 @@ interface IOnFinish {
   remember: boolean
 }
 
-export const Registration = () => {
-  const onFinish = async ({mail, password, remember}: IOnFinish): Promise<void> => {
-    const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/registration`
+const emailRules: Rule[] = [
+  {
+    type: 'email',
+    message: 'Введите правильный адрес почты'
+  },
+  { 
+    required: true, 
+    message: 'Пожалуйста, введите Почту!' 
+  }
+]
 
-    axios.post(url, { mail, password, remember })
-      .then((res: any) => console.log(res))
-      .catch((err: any) => console.log(err))
+export const Registration = () => {
+  const [loading, setLoading] = useState<boolean>(false)
+
+  const onFinish = async ({mail, password, remember}: IOnFinish): Promise<void> => {
+    try {
+      // setLoading(true)
+      const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/registration`
+  
+      await axios.post(url, { mail, password, remember })
+        .then((res: any) => console.log(res.response.data.message))
+    } catch (err) {
+      // setLoading(false)
+      console.log('error', (err as any).response.data.message)
+    }
   }
 
   return (
@@ -34,7 +53,7 @@ export const Registration = () => {
           <Title>Регистрация</Title>
           <Form.Item
             name="mail"
-            rules={[{ required: true, message: 'Пожалуйста, введите Почту!' }]}
+            rules={emailRules}
             style={{ width: '100%' }}
           >
             <Input size="large" prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Почта" />
@@ -43,8 +62,9 @@ export const Registration = () => {
             name="password"
             rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
             style={{ width: '100%' }}
+            hasFeedback
           >
-            <Input
+            <Input.Password
               size="large"
               prefix={<LockOutlined className="site-form-item-icon" />}
               type="password"
@@ -63,7 +83,13 @@ export const Registration = () => {
           </Form.Item>
 
           <Form.Item style={{ width: '100%' }}>
-            <Button size='large' type="primary" htmlType="submit" style={{ width: '100%', background: colors.primary }}>
+            <Button 
+              loading={loading} 
+              size='large' 
+              type="primary" 
+              htmlType="submit" 
+              style={{ width: '100%', background: colors.primary }}
+            >
               Зарегестрироваться
             </Button>
           </Form.Item>
