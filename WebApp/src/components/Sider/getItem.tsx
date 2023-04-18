@@ -34,7 +34,7 @@ export interface IMenuItems {
  * @param style React.CSSProperties
  * @returns MenuItem
  */
-const getItem = (
+export const getItem = (
   label: string,
   key: React.Key,
   icon?: React.ReactElement | null,
@@ -45,21 +45,4 @@ const getItem = (
 ): IMenuItems => {
   return {key, icon, children, onClick, style, label, type} as IMenuItems
 }
-
-export const menuItems: IMenuItems[] = [
-  getItem('', 'grp1', null, [
-    getItem('Авторегистратор', '1', <ContactsOutlined />, null, null, () => console.log('Clicked')), 
-    getItem('Менеджер аккаунтов', '2', <UsergroupAddOutlined />, null, null, () => console.log('Clicked')),
-    getItem('Менеджер прокси', '3', <LockOutlined />, null, null, () => console.log('Clicked')),
-    getItem('Прогрев', '4', <MessageOutlined />, null, null, () => console.log('Clicked')),
-  ], 'group'),
-
-  getItem('', 'grp2', null, [
-    getItem('Настройки', '8', <SettingOutlined />, null, null, () => console.log('Clicked')), 
-  ], 'group'),
-
-  getItem('', 'grp3', null, [ 
-    getItem('Выход', '13', <LogoutOutlined />, null, null, () => console.log('Clicked'), {color: colors.dopError}),
-  ], 'group'),
-]
 

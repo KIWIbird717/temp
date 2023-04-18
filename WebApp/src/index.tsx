@@ -4,6 +4,8 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { ConfigProvider } from 'antd'
 import { colors } from './global-style/style-colors.module';
+import { Provider } from 'react-redux'
+import store from './store/store';
 
 
 const root = ReactDOM.createRoot(
@@ -18,10 +20,12 @@ const theme = {
 }
 
 root.render(
-  <BrowserRouter>
-    <ConfigProvider theme={theme}>
-      <App />
-    </ConfigProvider>
-  </BrowserRouter>
+  <Provider store={store}>
+    <BrowserRouter>
+      <ConfigProvider theme={theme}>
+        <App />
+      </ConfigProvider>
+    </BrowserRouter>
+  </Provider>
 );
 
