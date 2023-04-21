@@ -19,9 +19,8 @@ const appendFileAsync = util.promisify(fs.appendFile);
 function asyncWrapper(fn) {
   return function (req, res, next) {
     Promise.resolve(fn(req, res, next)).catch((err) => {
-      logErrorToFile(err).then(() => {
-        res.status(err.status || 500).send({ error: err.message });
-      });
+      logErrorToFile(err)
+      res.status(err.status || 500).send({ error: err.message });
     });
   };
 }
