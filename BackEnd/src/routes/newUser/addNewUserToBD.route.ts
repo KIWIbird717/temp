@@ -6,7 +6,7 @@ import { customCompareDecription } from "../../utils/hooks/customCompareDecrypti
 const router: Router = express.Router()
 
 router.post('/registration', async (req: Request, res: Response) => {
-  const { mail, password } = req.body
+  const { nick, mail, password } = req.body
     
   // Check if user already exists
   const existingUser: IRegisterUserSchema | null = await RegisterUserSchema.findOne({$or: [{ mail }]})
@@ -21,7 +21,7 @@ router.post('/registration', async (req: Request, res: Response) => {
   }
 
   // adding data about new User to MongoDB
-  await CreateNewUser({ mail, password })
+  await CreateNewUser({ nick, mail, password })
   return res.status(201).json({ message: 'User registered successfully' })
 })
 

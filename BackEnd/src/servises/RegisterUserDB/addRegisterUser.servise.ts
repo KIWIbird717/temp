@@ -8,11 +8,13 @@ import { customEncryption } from '../../utils/hooks/customEncryption.util'
  * Registrate new user in application
  * 
  * @arguments
+ * - `nick` required
  * - `mail` required
  * - `password` required (need to be encrypted by `customEncryption` hook)
  */
 const CreateNewUser = async (props: IRegisterUserSchema): Promise<IRegisterUserSchema> => {
   const post = new RegisterUserSchema({ 
+    nick: props.nick,
     mail: props.mail, 
     password: customEncryption(props.password)
   })
