@@ -25,9 +25,13 @@ const headerStyle: React.CSSProperties = {
   textAlign: 'center',
   color: '#000',
   height: headerStyleHeight,
-  paddingInline: 50,
-  lineHeight: '64px',
+  paddingInline: 0,
+  // lineHeight: '64px',
   backgroundColor: colors.background,
+  display: 'flex',
+  alignItems: "center",
+  justifyContent: 'space-between',
+  padding: '40px 0'
 }
 
 /**
@@ -38,7 +42,8 @@ const contentStyle: React.CSSProperties = {
   lineHeight: '120px',
   color: '#000',
   backgroundColor: colors.background,
-  padding: '50px 50px'
+  padding: '0px 40px 40px 40px'
 }
+
 
 export { siderStyle, headerStyle, contentStyle }

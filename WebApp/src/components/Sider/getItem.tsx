@@ -1,17 +1,8 @@
 import React from 'react'
-import {
-  ContactsOutlined,
-  UsergroupAddOutlined,
-  MessageOutlined,
-  SettingOutlined,
-  LogoutOutlined,
-  LockOutlined
-} from '@ant-design/icons';
 import { MenuProps } from 'antd';
-import { colors } from '../../global-style/style-colors.module';
 
 
-type MenuItem = Required<MenuProps>['items'][number];
+export type MenuItem = Required<MenuProps>['items'][number];
 
 export interface IMenuItems {
   label: string,
@@ -20,18 +11,20 @@ export interface IMenuItems {
   children?: MenuItem[],
   type?: 'group',
   onClick?: () => void,
-  style?: React.CSSProperties
+  style?: React.CSSProperties,
+  onMouseEnter: () => void,
+  onMouseLeave: () => void
 }
 
 /**
- * 
  * @param label string
  * @param key React.Key
  * @param icon React.ReactElement | null
  * @param children MenuItem[]
  * @param type 'group'
  * @param onClick () => void
- * @param style React.CSSProperties
+ * @param onMouseEnter () => void,
+ * @param onMouseLeave () => void
  * @returns MenuItem
  */
 export const getItem = (
@@ -41,8 +34,10 @@ export const getItem = (
   children?: MenuItem[] | null,
   type?: 'group' | null,
   onClick?: () => void,
-  style?: React.CSSProperties
+  style?: React.CSSProperties | null,
+  onMouseEnter?: (e: any) => void,
+  onMouseLeave?: () => void
 ): IMenuItems => {
-  return {key, icon, children, onClick, style, label, type} as IMenuItems
+  return {key, icon, children, onClick, style, label, type, onMouseEnter, onMouseLeave} as IMenuItems
 }
 

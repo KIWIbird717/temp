@@ -3,12 +3,12 @@ import { Button, Form, Input, Typography } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { colors } from '../global-style/style-colors.module';
 import axios from 'axios';
-import { Rule } from 'antd/lib/form';
 import { Link } from 'react-router-dom';
 import { notification } from 'antd';
 import { useDispatch } from 'react-redux';
 import { setUserIsLogined, setUserMail } from '../store/userSlice';
 import { isValidEmail } from '../utils/isValidEmail';
+import Logo from "../images/logo.svg"
 
 
 const { Title } = Typography
@@ -56,6 +56,7 @@ export const Registration = () => {
           if (res.status === 201) {
             dispatch(setUserMail(mail))
             dispatch(setUserIsLogined(true))
+            localStorage.setItem('sessionToken', mail)  // should contain only user email
           }
           setLoading(false)
         })
@@ -82,6 +83,11 @@ export const Registration = () => {
           onFinish={onFinish}
           style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
+          <Form.Item>
+            <div className="w-[200px] h-[200px] object-contain">
+              <img src={Logo} alt="logo"/>
+            </div>
+          </Form.Item>
           <Title>Регистрация</Title>
           <Form.Item
             name="mail"
@@ -119,7 +125,7 @@ export const Registration = () => {
           <Form.Item style={{ width: '100%' }}>
             <div className='w-full flex justify-between'>
               Уже есть аккаунт?
-              <Link to="/login">Войдите</Link>
+              <Link to="/">Войдите</Link>
             </div>
           </Form.Item>
         </Form>

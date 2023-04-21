@@ -7,7 +7,7 @@ import { IRootStoreState } from '../store/types';
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { RouterPages } from '../routerPages/RouterPages'
+import { RouterPages } from '../ApplicationPages/RouterPages'
 
 const { Sider } = Layout
 
@@ -33,9 +33,8 @@ export const Application = () => {
           <Sider style={siderStyle} width={siderWidth} collapsible={false}>
             <SiderComponent />
           </Sider>
-          <Layout>
-            {/* <RouterPages /> */}
-          </Layout>
+          
+          <RouterPages />
         </Layout>
       </Space>
     </motion.div>

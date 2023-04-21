@@ -15,7 +15,9 @@ const root = ReactDOM.createRoot(
 const theme = {
   token: {
     colorPrimary: colors.primary,
-    background: colors.primary
+    // colorPrimaryTextActive: colors.primary,
+    // colorLinkHover: colors.primary,
+    // controlItemBgActive: colors.primary,
   }
 }
 

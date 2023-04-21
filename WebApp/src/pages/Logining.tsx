@@ -8,6 +8,8 @@ import { notification } from 'antd';
 import { useDispatch } from 'react-redux';
 import { setUserIsLogined, setUserMail } from '../store/userSlice';
 import { isValidEmail } from '../utils/isValidEmail';
+import { Link } from 'react-router-dom';
+import Logo from "../images/logo.svg"
 
 const { Title } = Typography
 
@@ -66,6 +68,7 @@ export const Logining = () => {
           if (res.status === 201) {
             dispatch(setUserMail(mail))
             dispatch(setUserIsLogined(true))
+            localStorage.setItem('sessionToken', mail)  // should contain only user email
           }
           setLoading(false)
         })
@@ -90,6 +93,11 @@ export const Logining = () => {
           onFinish={onFinish}
           style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
+           <Form.Item>
+            <div className="w-[200px] h-[200px] object-contain">
+              <img src={Logo} alt="logo"/>
+            </div>
+          </Form.Item>
           <Title>Авторизация</Title>
           <Form.Item
             name="mail"
@@ -124,8 +132,12 @@ export const Logining = () => {
               Войти
             </Button>
           </Form.Item>
-
-          <Form.Item style={{ width: '100%' }} />
+          <Form.Item style={{ width: '100%' }}>
+            <div className='w-full flex justify-between'>
+              Нет аккаунта?
+              <Link to="/registration">Зарегестрируйтесь</Link>
+            </div>
+          </Form.Item>
 
         </Form>
       </div>

@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+
 
 import { AutoRegPage } from './Pages/AutoRegPage'
 
@@ -11,8 +11,6 @@ import { AutoRegPage } from './Pages/AutoRegPage'
  */
 export const RouterPages = () => {
   return (
-    <Routes>
-      <Route path='/' element={<AutoRegPage />} />
-    </Routes>
+    <AutoRegPage />
   )
 }
