@@ -75,10 +75,23 @@ export const Logining = () => {
     } catch (err: any) {
       setLoading(false)
 
-      if (err.response?.data.message === "Uncurrect password") {
-        setPassError({validate: "error", msg: 'Неверный пароль'})
-      } else {
-        notificationHandler()
+      // if (err.response?.data.message === "Uncurrect password") {
+      //   setPassError({validate: "error", msg: 'Неверный пароль'})
+      // } else {
+      //   notificationHandler()
+      // }
+      switch (err.response?.data.message) {
+        case "Uncurrect password":
+          setPassError({validate: "error", msg: 'Неверный пароль'})
+          break
+
+        case "User not found":
+          setFormError({validate: "error", msg: 'Такого пользователя не существует'})
+          break
+
+        default:
+          notificationHandler()
+          break
       }
     }
   }

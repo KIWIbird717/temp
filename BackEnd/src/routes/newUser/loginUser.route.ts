@@ -11,6 +11,9 @@ router.post('/login', async (req: Request, res: Response) => {
   // Check if user already exists
   const existingUser: IRegisterUserSchema | null = await RegisterUserSchema.findOne({$or: [{ mail }]})
 
+  if (!existingUser) {
+    return res.status(404).json({ message: 'User not found' })
+  }
   if (await customCompareDecription(password, existingUser.password)) {
     return res.status(201).json({ message: 'User logined successfully' })
   } else {
