@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
-import { Button, Checkbox, Form, Input, Typography } from 'antd';
+import { Button, Form, Input, Typography } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { colors } from '../global-style/style-colors.module';
 import axios from 'axios';
-import { Rule } from 'antd/lib/form';
-import type { NotificationPlacement } from 'antd/es/notification/interface';
+import { Link } from 'react-router-dom';
 import { notification } from 'antd';
+import { useDispatch } from 'react-redux';
+import { setUserIsLogined, setUserMail } from '../store/userSlice';
+import { isValidEmail } from '../utils/isValidEmail';
+import Logo from "../images/logo.svg"
+
 
 const { Title } = Typography
 
@@ -20,20 +24,11 @@ interface IFormError {
   msg: string
 }
 
-const emailRules: Rule[] = [
-  {
-    type: 'email',
-    message: 'Введите правильный адрес почты'
-  },
-  { 
-    required: true, 
-    message: 'Пожалуйста, введите Почту!' 
-  }
-]
-
 export const Registration = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [formError, setFormError] = useState<IFormError>({validate: "", msg: ""})
+  
+  const dispatch = useDispatch()
 
   const notificationHandler = () => {
     notification['error']({
@@ -45,12 +40,27 @@ export const Registration = () => {
 
   const onFinish = async ({mail, password, remember}: IOnFinish): Promise<void> => {
     try {
+      if (!mail) {
+        setFormError({validate: "error", msg: 'Пожалуйста, введите Почту!' })
+        return
+      }
+      if (!isValidEmail(mail)) {
+        setFormError({validate: "error", msg: 'Введите правильный адрес почты' })
+        return
+      }
       setLoading(true)
       const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/newUser/registration`
   
       await axios.post(url, { mail, password, remember })
-        .then((res: any) => console.log('res', res))
-        .then(() => setLoading(false))
+        .then((res: any) => {
+          if (res.status === 201) {
+            dispatch(setUserMail(mail))
+            dispatch(setUserIsLogined(true))
+            localStorage.setItem('sessionToken', mail)  // should contain only user email
+          }
+          setLoading(false)
+        })
+
     } catch (err: any) {
       setLoading(false)
 
@@ -62,6 +72,7 @@ export const Registration = () => {
     }
   }
 
+
   return (
     <div className='w-ful h-[100vh] flex items-center justify-center'>
       <div className='w-[300px]'>
@@ -72,10 +83,14 @@ export const Registration = () => {
           onFinish={onFinish}
           style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
+          <Form.Item>
+            <div className="w-[200px] h-[200px] object-contain">
+              <img src={Logo} alt="logo"/>
+            </div>
+          </Form.Item>
           <Title>Регистрация</Title>
           <Form.Item
             name="mail"
-            rules={emailRules}
             style={{ width: '100%' }}
             validateStatus={formError.validate}
             help={formError.msg}
@@ -86,7 +101,6 @@ export const Registration = () => {
             name="password"
             rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
             style={{ width: '100%' }}
-            hasFeedback
           >
             <Input.Password
               size="large"
@@ -95,16 +109,6 @@ export const Registration = () => {
               placeholder="Пароль"
             />
           </Form.Item>
-          {/* <Form.Item style={{ width: '100%' }}>
-            <Form.Item name="remember" valuePropName="checked" noStyle>
-              <div className='flex justify-between'>
-                <Checkbox>Запомнить меня</Checkbox>
-                <a className="login-form-forgot" href="">
-                  Забыли пароль?
-                </a>
-              </div>
-            </Form.Item>
-          </Form.Item> */}
 
           <Form.Item style={{ width: '100%' }}>
             <Button 
@@ -121,7 +125,7 @@ export const Registration = () => {
           <Form.Item style={{ width: '100%' }}>
             <div className='w-full flex justify-between'>
               Уже есть аккаунт?
-              <a href="">Войдите</a>
+              <Link to="/">Войдите</Link>
             </div>
           </Form.Item>
         </Form>

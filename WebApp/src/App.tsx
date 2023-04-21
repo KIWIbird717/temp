@@ -1,15 +1,40 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Registration } from './pages/Registration';
 import { Logining } from './pages/Logining';
+import { Application } from './pages/Application';
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import { IRootStoreState } from './store/types';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setUserMail, setUserIsLogined } from './store/userSlice'
 
 const App: React.FC = () => {
+  const dispatch = useDispatch()
+  const isUserLogined = useSelector((state: IRootStoreState) => state.user.isUserLogined)
+  const navigate = useNavigate()
 
+  // Chek if user logedin and stay user logedin after page reload
+  useEffect(() => {
+    const token = localStorage.getItem('sessionToken')  // contains user email
+
+    if (token) {
+      dispatch(setUserMail(token))
+      dispatch(setUserIsLogined(true))
+      navigate("/app")
+    } else {
+      navigate("/")
+    }
+  }, [isUserLogined])
+  
   return (
-    <div>
-      {/* <Registration /> */}
-      <Logining />
-    </div>
+    <Routes>
+      <Route path="/registration" element={<Registration />}/>
+      <Route path="/" element={<Logining />}/>
+      <Route path="/app" element={<Application />}/>
+    </Routes>
   )
 }
 
 export default App;
+
+
