@@ -14,10 +14,13 @@ import {
 import { colors } from '../../global-style/style-colors.module';
 import { useDispatch } from 'react-redux';
 import { LogOut } from '../../hooks/LogOut';
+import TerminalIcon from '@mui/icons-material/Terminal';
+import { Typography } from 'antd'
 
 
 export const SiderComponent = () => {
-  const { confirm } = Modal;
+  const { confirm } = Modal
+  const { Title } = Typography
   
   const dispatch = useDispatch()
   const [selectedKey, setSelectedKey] = useState<string>('1')
@@ -37,10 +40,11 @@ export const SiderComponent = () => {
       getItem('Менеджер аккаунтов', '2', <UsergroupAddOutlined />, null, null, () => setSelectedKey('2')),
       getItem('Менеджер прокси', '3', <LockOutlined />, null, null, () => setSelectedKey('3')),
       getItem('Прогрев', '4', <MessageOutlined />, null, null, () => setSelectedKey('4')),
+      getItem('Логи', '5', <TerminalIcon />, null, null, () => setSelectedKey('5')),
     ], 'group'),
   
     getItem('', 'grp2', null, [
-      getItem('Настройки', '5', <SettingOutlined />, null, null, () => setSelectedKey('5')), 
+      getItem('Настройки', '6', <SettingOutlined />, null, null, () => setSelectedKey('6')), 
     ], 'group')
   ]
 
@@ -81,8 +85,9 @@ export const SiderComponent = () => {
 
   return (
     <div className='w-full grid gap-6 py-6'>
-      <div className='h-[100px] flex justify-center'>
-        <img src={logo} alt='Logo'/>
+      <div className='h-[40px] flex justify-center items-end'>
+        <img width={40} src={logo} alt='Logo'/>
+        <Title level={5}>Авторегистратор</Title>
       </div>
       <div style={{ height: 'calc(100vh - 180px)' }} className='flex flex-col justify-between'>
         <Menu

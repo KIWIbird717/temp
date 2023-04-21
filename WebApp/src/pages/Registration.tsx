@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button, Form, Input, Typography } from 'antd';
-import { LockOutlined, MailOutlined } from '@ant-design/icons';
+import { LockOutlined, MailOutlined, UserOutlined } from '@ant-design/icons';
 import { colors } from '../global-style/style-colors.module';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -8,15 +8,16 @@ import { notification } from 'antd';
 import { useDispatch } from 'react-redux';
 import { setUserIsLogined, setUserMail } from '../store/userSlice';
 import { isValidEmail } from '../utils/isValidEmail';
+import { isValidNick } from '../utils/isValidNick';
 import Logo from "../images/logo.svg"
 
 
 const { Title } = Typography
 
 interface IOnFinish {
+  nick: string,
   mail: string,
   password: 'string',
-  remember: boolean
 }
 
 interface IFormError {
@@ -27,6 +28,7 @@ interface IFormError {
 export const Registration = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [formError, setFormError] = useState<IFormError>({validate: "", msg: ""})
+  const [nickErr, setNickErr] = useState<IFormError>({validate: "", msg: ""})
   
   const dispatch = useDispatch()
 
@@ -38,8 +40,15 @@ export const Registration = () => {
     })
   }
 
-  const onFinish = async ({mail, password, remember}: IOnFinish): Promise<void> => {
+  const onFinish = async ({nick, mail, password}: IOnFinish): Promise<void> => {
     try {
+      if (!nick) {
+        setNickErr({validate: "error", msg: 'Пожалуйста, введите Никнейм!' })
+        return
+      }
+      if (!isValidNick(nick)) {
+        setNickErr({validate: "error", msg: 'Никнейм должен содержать только буквы' })
+      }
       if (!mail) {
         setFormError({validate: "error", msg: 'Пожалуйста, введите Почту!' })
         return
@@ -51,7 +60,7 @@ export const Registration = () => {
       setLoading(true)
       const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/newUser/registration`
   
-      await axios.post(url, { mail, password, remember })
+      await axios.post(url, { nick, mail, password })
         .then((res: any) => {
           if (res.status === 201) {
             dispatch(setUserMail(mail))
@@ -89,6 +98,14 @@ export const Registration = () => {
             </div>
           </Form.Item>
           <Title>Регистрация</Title>
+          <Form.Item
+            name="nick"
+            style={{ width: '100%' }}
+            validateStatus={nickErr.validate}
+            help={nickErr.msg}
+          >
+            <Input size="large" prefix={<UserOutlined />} placeholder="Никнейм" onChange={() => setNickErr({validate: "", msg: ""})}/>
+          </Form.Item>
           <Form.Item
             name="mail"
             style={{ width: '100%' }}

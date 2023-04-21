@@ -18,9 +18,7 @@ export const AutoRegPage = () => {
       </Header> */}
       <Layout style={contentStyle}>
         <Header style={headerStyle}>
-          <Breadcrumb>
-            <Breadcrumb.Item>Авторегистратор</Breadcrumb.Item>
-          </Breadcrumb>
+          <Title level={5}>Авторегистратор</Title>
           <div className='flex items-center gap-2'>
             <Button style={{ backgroundColor: colors.white }} icon={<BellOutlined />} size='large' />
             <Button style={{ backgroundColor: colors.white }} icon={<UserOutlined />} size='large' />
@@ -29,18 +27,9 @@ export const AutoRegPage = () => {
         </Header>
 
         <Content>
-          <Row style={{ height: '100%' }} gutter={20}>
-            <Col span={16}>
-              <Card bordered={false} style={{ width: '100%', height: '100%' }}>
-                <Title>Авторегистратор</Title>
-              </Card>
-            </Col>
-            <Col span={8}>
-              <Card bordered={false} style={{ width: '100%', height: '100%' }}>
-                <Title>Авторегистратор</Title>
-              </Card>
-            </Col>
-          </Row>
+          <Card bordered={false} style={{ width: '100%', height: '100%' }}>
+            <Title>Авторегистратор</Title>
+          </Card>
         </Content>
       </Layout>
     </>
