@@ -8,10 +8,22 @@ const API_KEYS = {
   sms_acktiwator: process.env.SMS_ACKTIWATOR_API_KEY,
 };
 
-type Service = "sms-man" | "5sim" | "sms-activate" | "sms-activation-service" | "sms-acktiwator";
+export const serviceList = [
+  "sms-man",
+  "5sim",
+  "sms-activate",
+  "sms-activation-service",
+  "sms-acktiwator",
+];
 
+export type Service =
+  | "sms-man"
+  | "5sim"
+  | "sms-activate"
+  | "sms-activation-service"
+  | "sms-acktiwator";
 
-async function getTelegramCode(service: Service): Promise<string> {
+export async function getTelegramCode(service: Service): Promise<string> {
   switch (service) {
     case "sms-man":
       const response = await axios.get(
@@ -50,7 +62,7 @@ interface Country {
   name: string;
 }
 
-async function getCountry(service: Service): Promise<Country[]> {
+export async function getCountry(service: Service): Promise<Country[]> {
   let response: any;
   let countries: Country[] = [];
 
@@ -109,7 +121,7 @@ async function getCountry(service: Service): Promise<Country[]> {
   return countries;
 }
 
-async function rentPhoneRegistration(
+export async function rentPhoneRegistration(
   service: Service,
   telegramCode: string,
   country: string
@@ -164,18 +176,10 @@ async function rentPhoneRegistration(
   }
 }
 
-async function getRegistrationCodes(
+export async function getRegistrationCodes(
   service: Service,
-  country: string,
-  count: number
+  rentedPhones: Array<any>
 ): Promise<{ [phone: string]: string }> {
-  const telegramCode = await getTelegramCode(service);
-  const rentedPhones = await Promise.all(
-    Array.from({ length: count }, async () => {
-      return await rentPhoneRegistration(service, telegramCode, country);
-    })
-  );
-
   const codes: { [phone: string]: string } = {};
 
   for (const rentedPhone of rentedPhones) {
@@ -213,7 +217,7 @@ async function getRegistrationCodes(
             code = response2.data.sms[0].code;
           }
           break;
-  
+
         case "sms-activate":
           const response3 = await axios.get(
             `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getStatus&id=${rentedPhone.id}`
@@ -222,7 +226,7 @@ async function getRegistrationCodes(
             code = response3.data.split(":")[1];
           }
           break;
-  
+
         case "sms-activation-service":
           const response4 = await axios.get(
             `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getStatus&id=${rentedPhone.id}&lang=ru`
@@ -231,7 +235,7 @@ async function getRegistrationCodes(
             code = response4.data.split(":")[1];
           }
           break;
-  
+
         case "sms-acktiwator":
           const response5 = await axios.get(
             `https://sms-acktiwator.ru/api/getlatestcode/${API_KEYS.sms_acktiwator}?id=${rentedPhone.id}`
@@ -240,7 +244,7 @@ async function getRegistrationCodes(
             code = response5.data;
           }
           break;
-  
+
         default:
           throw new Error(`Unsupported service: ${service}`);
       }
@@ -255,7 +259,6 @@ async function getRegistrationCodes(
 
   return codes;
 }
-
 
 async function submitPhone(
   service: Service,

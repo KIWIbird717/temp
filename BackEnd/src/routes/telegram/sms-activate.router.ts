@@ -1,20 +1,20 @@
 import express, { Router, Request, Response } from "express";
-import * as smsService from "../../utils/sms-activate";
+import * as smsService from "../../utils/telegram/sms-activate";
 
 const router: Router = express.Router();
 
-// const services = [
-//   "sms-man",
-//   "5sim",
-//   "sms-acktiwator",
-//   "sms-activate",
-//   "sms-activation-service",
-// ];
+router.get("/get-service", async (req: Request, res: Response) => {
+  res.status(200).json(smsService.serviceList);
+});
 
-// router.get("/get-service", async (req: Request, res: Response) => {
-//   res.status(200).json(services);
-// });
-
+router.get("/get-country", async (req: Request, res: Response) => {
+    const service = req.query.service as string;
+    if (!service || !smsService.serviceList.includes(service)) {
+      return res.status(400).json({ error: 'Invalid query parameters' });
+    }
+    const countries = await smsService.getCountry(service as smsService.Service);
+    res.status(200).json(countries);
+});
 // router.get("/get-balance", async (req: Request, res: Response) => {
 //   const { service } = req.query;
 
