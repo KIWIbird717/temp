@@ -6,8 +6,10 @@ const colors = {
   primary: '#6F3DDB',
   danger: 'rgb(255, 77, 79)',
   dangerBg: 'rgba(255, 77, 79, 0.1)',
-  background: '#F7F9FD',
-  white: '#FFFFFF'
+  background: '#fff',
+  white: '#FFFFFF',
+  font: '#393D55',
+  stroke: 'rgba(57, 61, 85, 0.2)'
 }
 
 export {

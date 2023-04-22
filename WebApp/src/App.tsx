@@ -6,7 +6,14 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import { IRootStoreState } from './store/types';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setUserMail, setUserIsLogined } from './store/userSlice'
+import { setUserMail, setUserIsLogined, setUserId, setUserNick } from './store/userSlice'
+
+
+interface ILocalStorageParced {
+  id: string,
+  mail: string,
+  nick: string
+}
 
 const App: React.FC = () => {
   const dispatch = useDispatch()
@@ -16,9 +23,13 @@ const App: React.FC = () => {
   // Chek if user logedin and stay user logedin after page reload
   useEffect(() => {
     const token = localStorage.getItem('sessionToken')  // contains user email
-
+    
     if (token) {
-      dispatch(setUserMail(token))
+      // Parce data from localStorage
+      const tokenData: ILocalStorageParced = JSON.parse(token)
+      dispatch(setUserMail(tokenData.mail))
+      dispatch(setUserId(Number(tokenData.id)))
+      dispatch(setUserNick(tokenData.nick))
       dispatch(setUserIsLogined(true))
       navigate("/app")
     } else {

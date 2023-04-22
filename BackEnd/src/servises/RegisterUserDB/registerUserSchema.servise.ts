@@ -6,6 +6,20 @@ export interface IRegisterUserSchema {
   password: string
 }
 
+/**
+ * User info 
+ * `Response from MongoDB`
+ */
+export interface IUserRes {
+  _id: string,
+  nick: string,
+  mail: string,
+  password: string,
+  createdAt: Date,
+  updatedAt: Date,
+  __v: number
+}
+
 interface IRegisterUserModel extends Model<IRegisterUserSchema> {}
 
 const registerUserSchema: Schema = new Schema({

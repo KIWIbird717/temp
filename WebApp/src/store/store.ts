@@ -1,10 +1,12 @@
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userSlice from './userSlice'
+import appSlice from './appSlice'
 
 
-export default configureStore({
+export default  configureStore({
   reducer: {
-    user: userSlice
+    user: userSlice,
+    app: appSlice,
   },
   /**
    * You cant set up more middlewares
@@ -12,3 +14,10 @@ export default configureStore({
    */
   middleware: (gDM) => gDM({serializableCheck: false})
 })
+
+const rootReducer = combineReducers({
+  user: userSlice,
+  app: appSlice
+})
+
+export type StoreState = ReturnType<typeof rootReducer>

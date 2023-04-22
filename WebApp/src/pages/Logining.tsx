@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
 import { Button, Form, Input, Typography } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
-import { colors } from '../global-style/style-colors.module';
 import axios from 'axios';
-import { Rule } from 'antd/lib/form';
 import { notification } from 'antd';
 import { useDispatch } from 'react-redux';
-import { setUserIsLogined, setUserMail } from '../store/userSlice';
+import { setUserIsLogined, setUserMail, setUserNick, setUserId } from '../store/userSlice';
 import { isValidEmail } from '../utils/isValidEmail';
 import { Link } from 'react-router-dom';
-import Logo from "../images/logo.svg"
+import Logo from "../images/fullLogo.svg"
 
 const { Title } = Typography
 
@@ -24,16 +22,10 @@ interface IFormError {
   msg: string
 }
 
-const emailRules: Rule[] = [
-  {
-    type: 'email',
-    message: 'Введите правильный адрес почты'
-  },
-  { 
-    required: true, 
-    message: 'Пожалуйста, введите Почту!' 
-  }
-]
+const regFieldStyle: React.CSSProperties = {
+  width: '100%',
+  marginBottom: '10px'
+}
 
 export const Logining = () => {
   const [loading, setLoading] = useState<boolean>(false)
@@ -65,21 +57,24 @@ export const Logining = () => {
   
       await axios.post(url, { mail, password })
         .then((res: any) => {
+          console.log(res)
           if (res.status === 201) {
             dispatch(setUserMail(mail))
+            dispatch(setUserNick(res.data.data.nick))
+            dispatch(setUserId(res.data.data.id))
             dispatch(setUserIsLogined(true))
-            localStorage.setItem('sessionToken', mail)  // should contain only user email
+            const localStorageData = {
+              mail: mail,
+              nick: res.data.data.nick,
+              id: res.data.data.id,
+            }
+            localStorage.setItem('sessionToken', JSON.stringify(localStorageData))  // should contain only user email
           }
           setLoading(false)
         })
     } catch (err: any) {
       setLoading(false)
 
-      // if (err.response?.data.message === "Uncurrect password") {
-      //   setPassError({validate: "error", msg: 'Неверный пароль'})
-      // } else {
-      //   notificationHandler()
-      // }
       switch (err.response?.data.message) {
         case "Uncurrect password":
           setPassError({validate: "error", msg: 'Неверный пароль'})
@@ -106,47 +101,53 @@ export const Logining = () => {
           onFinish={onFinish}
           style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
-           <Form.Item>
-            <div className="w-[200px] h-[200px] object-contain">
+          <Form.Item>
+            <div className="w-[270px] h-full object-contain">
               <img src={Logo} alt="logo"/>
             </div>
           </Form.Item>
-          <Title>Авторизация</Title>
+          <Form.Item>
+            <Title level={5}>Войдите в свой аккаунт AutoReg</Title> 
+          </Form.Item>
+
           <Form.Item
             name="mail"
-            style={{ width: '100%' }}
+            style={regFieldStyle}
             validateStatus={formError.validate}
             help={formError.msg}
           >
-            <Input size="large" prefix={<MailOutlined className="site-form-item-icon" />} placeholder="Почта" onChange={() => setFormError({validate: "", msg: ""})}/>
+            <Input size="large" prefix={<MailOutlined />} placeholder="Почта" onChange={() => setFormError({validate: "", msg: ""})}/>
           </Form.Item>
           <Form.Item
             name="password"
             rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
-            style={{ width: '100%' }}
+            style={regFieldStyle}
             validateStatus={passError.validate}
             help={passError.msg}
           >
             <Input.Password
               size="large"
-              prefix={<LockOutlined className="site-form-item-icon" />}
+              prefix={<LockOutlined />}
               type="password"
               placeholder="Пароль"
             />
           </Form.Item>
+
           <Form.Item style={{ width: '100%' }}>
             <Button 
               loading={loading} 
               size='large' 
-              type="primary" 
+              type="primary"
               htmlType="submit" 
-              style={{ width: '100%', background: colors.primary }}
+              style={{ width: '100%' }}
+              // disabled
             >
               Войти
             </Button>
           </Form.Item>
+
           <Form.Item style={{ width: '100%' }}>
-            <div className='w-full flex justify-between'>
+            <div className='w-full flex gap-[10px]'>
               Нет аккаунта?
               <Link to="/registration">Зарегестрируйтесь</Link>
             </div>

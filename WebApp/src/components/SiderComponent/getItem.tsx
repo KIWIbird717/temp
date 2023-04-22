@@ -23,6 +23,7 @@ export interface IMenuItems {
  * @param children MenuItem[]
  * @param type 'group'
  * @param onClick () => void
+ * @param style React.CSSProperties | null
  * @param onMouseEnter () => void,
  * @param onMouseLeave () => void
  * @returns MenuItem

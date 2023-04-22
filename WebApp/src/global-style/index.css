@@ -1,6 +1,12 @@
-@tailwind base;
+/* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --primary: #6F3DDB;
+  --background: #F7F9FD;
+  --white: #fff;
+}
 
 body {
   margin: 0;
@@ -16,8 +22,3 @@ code {
     monospace;
 }
 
-:root {
-  --primary: #6F3DDB;
-  --background: #F7F9FD;
-  --white: #fff;
-}

@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express"
 import CreateNewUser from '../../servises/RegisterUserDB/addRegisterUser.servise'
-import { IRegisterUserSchema, RegisterUserSchema } from '../../servises/RegisterUserDB/registerUserSchema.servise';
+import { IRegisterUserSchema, RegisterUserSchema, IUserRes } from '../../servises/RegisterUserDB/registerUserSchema.servise';
 import { customCompareDecription } from "../../utils/hooks/customCompareDecryption.util";
 
 const router: Router = express.Router()
@@ -9,7 +9,7 @@ router.post('/registration', async (req: Request, res: Response) => {
   const { nick, mail, password } = req.body
     
   // Check if user already exists
-  const existingUser: IRegisterUserSchema | null = await RegisterUserSchema.findOne({$or: [{ mail }]})
+  const existingUser: IUserRes | null = await RegisterUserSchema.findOne({$or: [{ mail }]})
 
   if (existingUser) {
     if (await customCompareDecription(password, existingUser.password)) {
@@ -17,12 +17,23 @@ router.post('/registration', async (req: Request, res: Response) => {
     } else {
       return res.status(400).json({ message: 'User with this email already exists' })
     }
-
   }
 
   // adding data about new User to MongoDB
   await CreateNewUser({ nick, mail, password })
-  return res.status(201).json({ message: 'User registered successfully' })
+  const existingUserAfterReg: IUserRes = await RegisterUserSchema.findOne({$or: [{ mail }]})
+  return res.status(201).json(
+    { 
+      message: 'User registered successfully',
+      data: {
+        id: existingUserAfterReg._id,
+        nick: existingUserAfterReg.nick,
+        mail: existingUserAfterReg.mail,
+        createdAt: existingUserAfterReg.createdAt,
+        updatedAt: existingUserAfterReg.updatedAt,
+        __v: existingUserAfterReg.__v
+      }
+    })
 })
 
 export default router;

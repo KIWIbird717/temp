@@ -1,6 +1,6 @@
 import React, { useState} from 'react'
 import { Menu, Modal } from 'antd'
-import logo from '../../images/logo.svg'
+import fullLogo from '../../images/fullLogo.svg'
 import { getItem, IMenuItems } from "./getItem"
 import {
   ContactsOutlined,
@@ -13,14 +13,17 @@ import {
 } from '@ant-design/icons';
 import { colors } from '../../global-style/style-colors.module';
 import { useDispatch } from 'react-redux';
+import { setAppPage } from '../../store/appSlice';
 import { LogOut } from '../../hooks/LogOut';
 import TerminalIcon from '@mui/icons-material/Terminal';
-import { Typography } from 'antd'
+import { IAppState } from '../../store/types';
 
+const menuItemsStyle: React.CSSProperties = {
+  height: '50px'
+}
 
 export const SiderComponent = () => {
   const { confirm } = Modal
-  const { Title } = Typography
   
   const dispatch = useDispatch()
   const [selectedKey, setSelectedKey] = useState<string>('1')
@@ -34,17 +37,20 @@ export const SiderComponent = () => {
     setHoveredKey(null);
   }
 
+  const setItem = (page: IAppState["appPage"]): void => {
+    dispatch(setAppPage(page))
+    setSelectedKey(page)
+  }
+
   const menuItems: IMenuItems[] = [
-    getItem('', 'grp1', null, [
-      getItem('Авторегистратор', '1', <ContactsOutlined />, null, null, () => setSelectedKey('1')), 
-      getItem('Менеджер аккаунтов', '2', <UsergroupAddOutlined />, null, null, () => setSelectedKey('2')),
-      getItem('Менеджер прокси', '3', <LockOutlined />, null, null, () => setSelectedKey('3')),
-      getItem('Прогрев', '4', <MessageOutlined />, null, null, () => setSelectedKey('4')),
-      getItem('Логи', '5', <TerminalIcon />, null, null, () => setSelectedKey('5')),
-    ], 'group'),
+      getItem('Авторегистратор', '1', <ContactsOutlined />, null, null, () => setItem("1"), menuItemsStyle), 
+      getItem('Менеджер аккаунтов', '2', <UsergroupAddOutlined />, null, null, () => setItem("2"), menuItemsStyle),
+      getItem('Менеджер прокси', '3', <LockOutlined />, null, null, () => setItem("3"), menuItemsStyle),
+      getItem('Прогрев', '4', <MessageOutlined />, null, null, () => setItem("4"), menuItemsStyle),
+      getItem('Логи', '5', <TerminalIcon />, null, null, () => setItem("5"), menuItemsStyle),
   
     getItem('', 'grp2', null, [
-      getItem('Настройки', '6', <SettingOutlined />, null, null, () => setSelectedKey('6')), 
+      getItem('Настройки', '6', <SettingOutlined />, null, null, () => setItem("6"), menuItemsStyle), 
     ], 'group')
   ]
 
@@ -60,7 +66,8 @@ export const SiderComponent = () => {
         {
           marginTop: 'fillAvaliable',
           color: colors.danger, 
-          backgroundColor: hoveredKey === '6' ? colors.dangerBg : colors.white
+          backgroundColor: hoveredKey === '6' ? colors.dangerBg : colors.white,
+          ...menuItemsStyle
         }, 
         handleMenuItemMouseEnter, 
         handleMenuItemMouseLeave
@@ -85,11 +92,10 @@ export const SiderComponent = () => {
 
   return (
     <div className='w-full grid gap-6 py-6'>
-      <div className='h-[40px] flex justify-center items-end'>
-        <img width={40} src={logo} alt='Logo'/>
-        <Title level={5}>Авторегистратор</Title>
+      <div className='h-[100%] flex justify-center items-end gap-1 object-contain'>
+        <img className='h-[40px]' src={fullLogo} alt='Logo'/>
       </div>
-      <div style={{ height: 'calc(100vh - 180px)' }} className='flex flex-col justify-between'>
+      <div style={{ height: 'calc(100vh - 120px)' }} className='flex flex-col justify-between'>
         <Menu
           mode="inline"
           theme='light'

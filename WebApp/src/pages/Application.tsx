@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Layout, Space } from 'antd'
-import { SiderComponent } from '../components/Sider/SiderComponent'
+import { SiderComponent } from '../components/SiderComponent/SiderComponent'
 import { siderStyle } from '../global-style/layoutStyle'
 import { motion } from "framer-motion"
 import { IRootStoreState } from '../store/types';

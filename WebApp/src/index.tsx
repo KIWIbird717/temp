@@ -14,10 +14,24 @@ const root = ReactDOM.createRoot(
 
 const theme = {
   token: {
+    // Color paletee
     colorPrimary: colors.primary,
-    // colorPrimaryTextActive: colors.primary,
-    // colorLinkHover: colors.primary,
-    // controlItemBgActive: colors.primary,
+    // Font
+    colorText: colors.font,
+    fontSizeHeading1: 38,
+    fontSizeHeading2: 30,
+    fontSizeHeading3: 24,
+    fontSizeHeading4: 30,
+    fontSizeHeading5: 16,
+    fontSizeLG: 16,
+    fontWeightStrong: 600,
+    lineHeightHeading1: 1.2105263157894737,
+    lineHeightHeading2: 1.2666666666666666,
+    lineHeightHeading3: 1.3333333333333333,
+    lineHeightHeading4: 1.4,
+    lineHeightHeading5: 1.5,
+    marginXS: 8,
+    
   }
 }
 

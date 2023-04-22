@@ -6,10 +6,10 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { notification } from 'antd';
 import { useDispatch } from 'react-redux';
-import { setUserIsLogined, setUserMail } from '../store/userSlice';
+import { setUserId, setUserIsLogined, setUserMail, setUserNick } from '../store/userSlice';
 import { isValidEmail } from '../utils/isValidEmail';
 import { isValidNick } from '../utils/isValidNick';
-import Logo from "../images/logo.svg"
+import Logo from "../images/fullLogo.svg"
 
 
 const { Title } = Typography
@@ -23,6 +23,11 @@ interface IOnFinish {
 interface IFormError {
   validate: "" | "success" | "warning" | "error" | "validating" | undefined,
   msg: string
+}
+
+const regFieldStyle: React.CSSProperties = {
+  width: '100%',
+  marginBottom: '10px'
 }
 
 export const Registration = () => {
@@ -64,8 +69,16 @@ export const Registration = () => {
         .then((res: any) => {
           if (res.status === 201) {
             dispatch(setUserMail(mail))
+            dispatch(setUserNick(res.data.nick))
+            dispatch(setUserId(res.data.id))
+            dispatch(setUserMail(mail))
             dispatch(setUserIsLogined(true))
-            localStorage.setItem('sessionToken', mail)  // should contain only user email
+            const localStorageData = {
+              mail: mail,
+              nick: res.data.data.nick,
+              id: res.data.data.id,
+            }
+            localStorage.setItem('sessionToken', JSON.stringify(localStorageData))  // should contain only user email
           }
           setLoading(false)
         })
@@ -93,14 +106,17 @@ export const Registration = () => {
           style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}
         >
           <Form.Item>
-            <div className="w-[200px] h-[200px] object-contain">
+            <div className="w-[270px] h-full object-contain">
               <img src={Logo} alt="logo"/>
             </div>
           </Form.Item>
-          <Title>Регистрация</Title>
+          <Form.Item>
+            <Title level={5}>Создайте свой аккаунт в AutoReg</Title>
+          </Form.Item>
+          
           <Form.Item
             name="nick"
-            style={{ width: '100%' }}
+            style={regFieldStyle}
             validateStatus={nickErr.validate}
             help={nickErr.msg}
           >
@@ -108,7 +124,7 @@ export const Registration = () => {
           </Form.Item>
           <Form.Item
             name="mail"
-            style={{ width: '100%' }}
+            style={regFieldStyle}
             validateStatus={formError.validate}
             help={formError.msg}
           >
@@ -117,7 +133,7 @@ export const Registration = () => {
           <Form.Item
             name="password"
             rules={[{ required: true, message: 'Пожалуйста, введите пароль!' }]}
-            style={{ width: '100%' }}
+            style={regFieldStyle}
           >
             <Input.Password
               size="large"
@@ -140,7 +156,7 @@ export const Registration = () => {
           </Form.Item>
 
           <Form.Item style={{ width: '100%' }}>
-            <div className='w-full flex justify-between'>
+            <div className='w-full flex gap-[10px]'>
               Уже есть аккаунт?
               <Link to="/">Войдите</Link>
             </div>
