@@ -2,7 +2,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { IAppState } from "./types"
 
 const initialState: IAppState = {
-  appPage: '1'
+  appPage: '1',
+  accountsManagerFolder: null
 }
 
 export const appSlice = createSlice({
@@ -18,10 +19,14 @@ export const appSlice = createSlice({
     setAppPage: (state, action: PayloadAction<IAppState["appPage"]>) => {
       state.appPage = action.payload
     },
+    setAccountsManagerFolder: (state, action: PayloadAction<IAppState["accountsManagerFolder"]>) => {
+      state.accountsManagerFolder = action.payload
+    }
   }
 })
 
 export const {
-  setAppPage
+  setAppPage,
+  setAccountsManagerFolder
 } = appSlice.actions
 export default appSlice.reducer

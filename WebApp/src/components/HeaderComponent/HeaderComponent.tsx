@@ -21,21 +21,23 @@ export const HeaderComponent = ({title}: propsType) => {
 
   return (
     <Header style={ headerStyle }>
-      <div className='w-full h-full flex items-center justify-between'>
-        <motion.div className='flex flex-col items-start gap-1'>
-          <Title style={{ margin: '0px 0px' }} level={5}>Здравствуйте, {userNickName}</Title>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Title style={{ margin: '0px 0px', fontWeight: 'bold' }} level={1}>{title}</Title>
-          </motion.div>
-        </motion.div>
-        <div className='flex items-center gap-2'>
-          <Button style={{ backgroundColor: colors.white }} icon={<BellOutlined />} size='large' />
-          <Button style={{ backgroundColor: colors.white }} icon={<UserOutlined />} size='large' />
-          <p>Услуга оплачена</p>
+      <div className='w-full h-full flex items-center'>
+        <div className="w-full flex justify-between items-start">
+          <div className='flex flex-col items-start gap-1'>
+            <Title style={{ margin: '0px 0px' }} level={5}>Здравствуйте, {userNickName}</Title>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Title style={{ margin: '0px 0px', fontWeight: 'bold' }} level={1}>{title}</Title>
+            </motion.div>
+          </div>
+          <div className='flex items-start gap-2'>
+            <Button style={{ backgroundColor: colors.white }} icon={<BellOutlined />} size='large' />
+            <Button style={{ backgroundColor: colors.white }} icon={<UserOutlined />} size='large' />
+            {/* <p className=''>Услуга оплачена</p> */}
+          </div>
         </div>
       </div>
     </Header>

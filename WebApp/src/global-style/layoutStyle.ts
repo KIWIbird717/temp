@@ -54,7 +54,7 @@ const contentStyle: React.CSSProperties = {
  */
 const cardStyle: React.CSSProperties = {
   backgroundColor: colors.white,
-  boxShadow: '0px 100px 80px rgba(57, 61, 85, 0.05), 0px 39.6501px 43.3635px rgba(57, 61, 85, 0.031), 0px 18.4707px 32.7874px rgba(57, 61, 85, 0.0278), 0px 8.27251px 25.7097px rgba(57, 61, 85, 0.032), 0px 3.07015px 18.4935px rgba(57, 61, 85, 0.0339), 0px 0.660402px 10.0485px rgba(57, 61, 85, 0.0218)'
+  boxShadow: '0px 4px 80px rgba(57, 61, 85, 0.07), 0px 0.859547px 17.869px rgba(57, 61, 85, 0.0530829), 0px 0.153181px 5.32008px rgba(57, 61, 85, 0.0459551)'
 }
 
 

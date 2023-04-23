@@ -21,7 +21,7 @@ const theme = {
     fontSizeHeading1: 38,
     fontSizeHeading2: 30,
     fontSizeHeading3: 24,
-    fontSizeHeading4: 30,
+    fontSizeHeading4: 23,
     fontSizeHeading5: 16,
     fontSizeLG: 16,
     fontWeightStrong: 600,
@@ -31,7 +31,12 @@ const theme = {
     lineHeightHeading4: 1.4,
     lineHeightHeading5: 1.5,
     marginXS: 8,
-    
+    // Table
+    controlItemBgHover: colors.white,
+    controlItemBgActiveHover: colors.white,
+    colorFillContent: colors.white,
+    colorFillSecondary: colors.white,
+    colorSplit: colors.white
   }
 }
 

@@ -9,13 +9,13 @@ import {
   SettingOutlined,
   LogoutOutlined,
   LockOutlined,
-  ExclamationCircleFilled
+  ExclamationCircleFilled,
+  CodeOutlined
 } from '@ant-design/icons';
 import { colors } from '../../global-style/style-colors.module';
 import { useDispatch } from 'react-redux';
 import { setAppPage } from '../../store/appSlice';
 import { LogOut } from '../../hooks/LogOut';
-import TerminalIcon from '@mui/icons-material/Terminal';
 import { IAppState } from '../../store/types';
 
 const menuItemsStyle: React.CSSProperties = {
@@ -47,7 +47,7 @@ export const SiderComponent = () => {
       getItem('Менеджер аккаунтов', '2', <UsergroupAddOutlined />, null, null, () => setItem("2"), menuItemsStyle),
       getItem('Менеджер прокси', '3', <LockOutlined />, null, null, () => setItem("3"), menuItemsStyle),
       getItem('Прогрев', '4', <MessageOutlined />, null, null, () => setItem("4"), menuItemsStyle),
-      getItem('Логи', '5', <TerminalIcon />, null, null, () => setItem("5"), menuItemsStyle),
+      getItem('Логи', '5', <CodeOutlined />, null, null, () => setItem("5"), menuItemsStyle),
   
     getItem('', 'grp2', null, [
       getItem('Настройки', '6', <SettingOutlined />, null, null, () => setItem("6"), menuItemsStyle), 
