@@ -8,7 +8,16 @@ const API_KEYS = {
   sms_acktiwator: process.env.SMS_ACKTIWATOR_API_KEY,
 };
 
-export const serviceList = [
+export type Service =
+  | "sms-man"
+  | "5sim"
+  | "sms-activate"
+  | "sms-activation-service"
+  | "sms-acktiwator";
+
+type CheckerService = Service | string;
+
+export const serviceList: Service[] = [
   "sms-man",
   "5sim",
   "sms-activate",
@@ -16,12 +25,20 @@ export const serviceList = [
   "sms-acktiwator",
 ];
 
-export type Service =
-  | "sms-man"
-  | "5sim"
-  | "sms-activate"
-  | "sms-activation-service"
-  | "sms-acktiwator";
+export async function checkService(service: CheckerService): Promise<Service | null> {
+  if (!service || !serviceList.includes(service as Service)) {
+    return null;
+  }
+
+  return service as Service;
+}
+
+
+interface Country {
+  id: string;
+  name: string;
+}
+
 
 export async function getTelegramCode(service: Service): Promise<string> {
   switch (service) {
@@ -47,8 +64,6 @@ export async function getTelegramCode(service: Service): Promise<string> {
       return telegramService2.id;
 
     case "sms-activate":
-      return "tg";
-
     case "sms-activation-service":
       return "tg";
 
@@ -57,10 +72,6 @@ export async function getTelegramCode(service: Service): Promise<string> {
   }
 }
 
-interface Country {
-  id: string;
-  name: string;
-}
 
 export async function getCountry(service: Service): Promise<Country[]> {
   let response: any;
@@ -119,6 +130,50 @@ export async function getCountry(service: Service): Promise<Country[]> {
   }
 
   return countries;
+}
+
+export async function getBalance(service: Service): Promise<number> {
+  let response: any;
+  let balance: number;
+
+  switch (service) {
+    case "sms-man":
+      response = await axios.get(
+        `http://api.sms-man.ru/stubs/handler_api.php?action=getBalance&api_key=${API_KEYS.sms_man}`
+      );
+      balance = parseFloat(response.data.split(":")[1]);
+      break;
+    case "5sim":
+      response = await axios.get("https://5sim.biz/v1/user/profile", {
+        headers: {
+          Authorization: `Bearer ${API_KEYS.five_sim}`,
+          Accept: "application/json",
+        },
+      });
+      balance = response.data.balance;
+      break;
+    case "sms-acktiwator":
+      response = await axios.get(
+        `https://sms-acktiwator.ru/api/getbalance/${API_KEYS.sms_acktiwator}`
+      );
+      balance = parseFloat(response.data);
+      break;
+    case "sms-activate":
+      response = await axios.get(
+        `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getBalance`
+      );
+      balance = parseFloat(response.data.split(":")[1]);
+      break;
+    case "sms-activation-service":
+      response = await axios.get(
+        `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getBalance&lang=ru`
+      );
+      balance = parseFloat(response.data);
+      break;
+    default:
+      throw new Error("Invalid service.");
+  }
+  return balance;
 }
 
 export async function rentPhoneRegistration(
