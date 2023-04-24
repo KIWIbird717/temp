@@ -1,6 +1,6 @@
 import Reac, { useState } from 'react'
 import { MCard } from '../../components/Card/MCard'
-import { Select, Input, Table, Tooltip, Button } from 'antd'
+import { Select, Input, Table, Tooltip, Button, message } from 'antd'
 import { motion } from 'framer-motion'
 import { IHeaderType, TableHeaders, tableData } from './Collumns'
 import { CloseOutlined, ContainerOutlined, EditOutlined } from '@ant-design/icons'
@@ -21,11 +21,12 @@ export const Folders = () => {
         place: 'bottomRight'
       })
     } else {
-      notificationHandler({
-        type: 'warning',
-        msg: 'Не выбрано ниодной папки',
-        place: 'bottomRight'
-      })
+      // notificationHandler({
+      //   type: 'warning',
+      //   msg: 'Не выбрано ниодной папки',
+      //   place: 'bottomRight'
+      // })
+      message.warning('Не выбрано ниодной папки')
     }
   }
 

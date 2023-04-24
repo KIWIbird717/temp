@@ -17,6 +17,7 @@ import { useDispatch } from 'react-redux';
 import { setAppPage } from '../../store/appSlice';
 import { LogOut } from '../../hooks/LogOut';
 import { IAppState } from '../../store/types';
+import { resetPageData } from '../../utils/resetPageData';
 
 const menuItemsStyle: React.CSSProperties = {
   height: '50px'
@@ -39,18 +40,19 @@ export const SiderComponent = () => {
 
   const setItem = (page: IAppState["appPage"]): void => {
     dispatch(setAppPage(page))
+    resetPageData(dispatch)
     setSelectedKey(page)
   }
 
   const menuItems: IMenuItems[] = [
-      getItem('Авторегистратор', '1', <ContactsOutlined />, null, null, () => setItem("1"), menuItemsStyle), 
+      getItem('Авторегистратор', '1', <ContactsOutlined />, null, null, () => setItem("1"), menuItemsStyle),
       getItem('Менеджер аккаунтов', '2', <UsergroupAddOutlined />, null, null, () => setItem("2"), menuItemsStyle),
       getItem('Менеджер прокси', '3', <LockOutlined />, null, null, () => setItem("3"), menuItemsStyle),
       getItem('Прогрев', '4', <MessageOutlined />, null, null, () => setItem("4"), menuItemsStyle),
       getItem('Логи', '5', <CodeOutlined />, null, null, () => setItem("5"), menuItemsStyle),
   
     getItem('', 'grp2', null, [
-      getItem('Настройки', '6', <SettingOutlined />, null, null, () => setItem("6"), menuItemsStyle), 
+      getItem('Настройки', '6', <SettingOutlined />, null, null, () => setItem("6"), menuItemsStyle),
     ], 'group')
   ]
 

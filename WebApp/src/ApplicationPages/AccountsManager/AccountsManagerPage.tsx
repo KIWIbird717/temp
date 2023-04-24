@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
 import { contentStyle } from '../../global-style/layoutStyle'
 import { HeaderComponent } from '../../components/HeaderComponent/HeaderComponent'
-import { Typography, Layout  } from 'antd'
+import { Layout  } from 'antd'
 import { Folders } from './Folders'
 import { AccountsTable } from './AccountsTable'
 import { useSelector } from 'react-redux'
 import { StoreState } from '../../store/store'
 
 
-const { Title } = Typography
 const { Content } = Layout
 
 export const AccountsManagerPage = () => {
   const [openFolder, setOpenFolder] = useState<React.Key | null>(null)
+  const [loading, setLoading] = useState<boolean>(true)
   const currentFolder = useSelector((state: StoreState) => state.app.accountsManagerFolder)
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import type { ColumnsType } from 'antd/es/table';
 import tableCard from '../../images/tableCard.svg'
-import { Typography, Button } from 'antd'
+import { Typography, Button, Input } from 'antd'
 import { useDispatch } from 'react-redux';
 import { setAccountsManagerFolder } from '../../store/appSlice';
 
@@ -13,6 +13,7 @@ export interface IHeaderType {
   latestActivity: string,
   banned: number
 }
+
 
 const { Title } = Typography
 
@@ -43,15 +44,15 @@ export const TableHeaders = () => {
       dataIndex: 'accounts',
       render: (accounts: number) => (
         <Title style={{ margin: '0px 0px' }} level={5}>{accounts}</Title>
-      )
+      ),
     },
     {
       title: 'Страна',
-      dataIndex: 'country'
+      dataIndex: 'country',
     },
     {
       title: 'Последняя активность',
-      dataIndex: 'latestActivity'
+      dataIndex: 'latestActivity',
     },
     {
       title: 'Заблокировано',
@@ -92,3 +93,4 @@ export const tableData: IHeaderType[] = [
     banned: 0
   },
 ]
+
