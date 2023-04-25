@@ -12,7 +12,6 @@ const { Content } = Layout
 
 export const AccountsManagerPage = () => {
   const [openFolder, setOpenFolder] = useState<React.Key | null>(null)
-  const [loading, setLoading] = useState<boolean>(true)
   const currentFolder = useSelector((state: StoreState) => state.app.accountsManagerFolder)
 
   useEffect(() => {

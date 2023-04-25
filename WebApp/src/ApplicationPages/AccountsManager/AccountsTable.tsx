@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { MCard } from '../../components/Card/MCard'
 import { Table, Button, Tooltip, Modal, message } from 'antd'
-import { EditableCell, ParseAccountsTable, TableHeaders } from './ParseAccountsTable'
+import { ParseAccountsTable, TableHeaders } from './ParseAccountsTable'
 import { ArrowLeftOutlined, CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { setAccountsManagerFolder } from '../../store/appSlice'
@@ -37,11 +37,6 @@ export const AccountsTable = () => {
       })
       setSelectionType(false)
     } else {
-      // notificationHandler({
-      //   type: 'warning',
-      //   msg: 'Не выбрано ни одного аккаунта',
-      //   place: 'bottomRight'
-      // })
       message.warning('Не выбрано ни одного аккаунта')
     }
   }
@@ -82,7 +77,7 @@ export const AccountsTable = () => {
       <div className="flex flex-col gap-7">
         <div className="flex justify-between">
           <div className="flex  gap-3">
-            <Button onClick={() => dispatch(setAccountsManagerFolder(null))} className='border-[0px] shadow-md' size='large' shape="circle" icon={<ArrowLeftOutlined />} />
+            <Button onClick={() => dispatch(setAccountsManagerFolder(null))} className='border-[0px] shadow-md' size='large' shape="round" icon={<ArrowLeftOutlined />}>К папкам</Button>
           </div>
           <div className="flex  gap-3">
             {selectionType ? (
@@ -122,6 +117,7 @@ export const AccountsTable = () => {
               icon={selectionType ? <CloseOutlined /> : <EditOutlined />} 
               onClick={() => setSelectionType(!selectionType)} 
             />
+            <Button type='primary' size='large'>Проверить</Button>
           </div>
         </div>
         <Table
@@ -129,11 +125,6 @@ export const AccountsTable = () => {
           pagination={{ pageSize: 9 }}
           rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
           columns={TableHeaders()}
-          components={{
-            body: {
-              cell: EditableCell,
-            },
-          }}
           dataSource={ParseAccountsTable()}
           className='h-full'
         />
