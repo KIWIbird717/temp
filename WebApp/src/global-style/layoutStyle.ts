@@ -17,7 +17,13 @@ const siderStyle: React.CSSProperties = {
   color: '#fff',
   backgroundColor: colors.white,
   padding: '0 20px',
-  borderRight: `1px solid ${colors.stroke}`
+  borderRight: `1px solid ${colors.stroke}`,
+  overflow: 'auto',
+  height: '100vh',
+  position: 'fixed',
+  left: 0,
+  top: 0,
+  bottom: 0,
 }
 
 /**
@@ -42,6 +48,7 @@ const headerStyle: React.CSSProperties = {
 */
 const contentStyle: React.CSSProperties = {
   // minHeight: `calc(100vh - ${headerStyleHeight}px)`,
+  marginLeft: '250px',
   minHeight: '100vh',
   lineHeight: '120px',
   color: '#000',

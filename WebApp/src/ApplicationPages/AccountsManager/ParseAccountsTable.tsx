@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import type { ColumnsType, ColumnType } from 'antd/es/table';
+import type { ColumnType } from 'antd/es/table';
 import { 
   generateRandomPhoneNumber, 
   generateRandomResting,
@@ -9,8 +9,8 @@ import {
   generateRandomDate,
   generateRandomStatus
  } from './generateTempData';
-import { Tag, InputRef, Space, Input, Button, Dropdown, message, InputNumber, Form } from 'antd';
-import { CheckSquareOutlined, DeleteOutlined, EditOutlined, EnterOutlined, ExportOutlined, MoreOutlined, SearchOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { Tag, InputRef, Space, Input, Button, Dropdown, message, Avatar } from 'antd';
+import { CheckSquareOutlined, DeleteOutlined, EditOutlined, EnterOutlined, MoreOutlined, SearchOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
 import type { MenuProps } from 'antd';
@@ -18,6 +18,7 @@ import type { MenuProps } from 'antd';
 
 export interface IAccountsData {
   key: React.Key,
+  avatar: string,
   phoneNumber: string,
   resting: string,
   fullName: string,
@@ -25,16 +26,6 @@ export interface IAccountsData {
   proxy: string,
   latestActivity: string,
   status: string,
-}
-
-interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text';
-  record: IAccountsData;
-  index: number;
-  children: React.ReactNode;
 }
 
 type DataIndex = keyof IAccountsData;
@@ -125,7 +116,7 @@ export const TableHeaders = () => {
     {
       key: '0',
       label: 'Редактировать',
-      icon: <EditOutlined />,
+      icon: <EditOutlined />
     },
     {
       key: '1',
@@ -154,6 +145,17 @@ export const TableHeaders = () => {
   ]
   
   const tableHeaders: any = [
+    {
+      title: 'Аватар',
+      dataIndex: 'avatar',
+      render: (tag: any) => (
+        <span>
+          {[tag].map((el: string) => (
+            <Avatar icon={<UserOutlined />} />
+          ))}
+        </span>
+      ),
+    },
     {
       title: 'Номер',
       dataIndex: 'phoneNumber',
@@ -224,99 +226,8 @@ export const TableHeaders = () => {
   const onClick: MenuProps['onClick'] = ({ key }) => {
     message.info(`Click on item ${key}`)
   }
-
-  const [form] = Form.useForm();
-  const [data, setData] = useState(dropDownItems);
-  const [editingKey, setEditingKey] = useState<React.Key>('')
-
-  const isEditing = (record: IAccountsData) => record.key === editingKey;
-
-  const edit = (record: Partial<IAccountsData> & { key: React.Key }) => {
-    form.setFieldsValue({ phoneNumber: '', fullName: '', proxy: '', ...record })
-    setEditingKey(record.key);
-  }
-
-  const cancel = () => {
-    setEditingKey('')
-  }
-
-  const save = async (key: React.Key) => {
-    try {
-      const row = (await form.validateFields()) as IAccountsData;
-
-      const newData = [...data];
-      const index = newData.findIndex((item) => key === item?.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setData(newData);
-        setEditingKey('');
-      } else {
-        newData.push(row);
-        setData(newData);
-        setEditingKey('');
-      }
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
-  }
-
-  const mergedColumns = tableHeaders.map((col: any) => {
-    if (!col.editable) {
-      return col;
-    }
-    return {
-      ...col,
-      onCell: (record: IAccountsData) => ({
-        record,
-        inputType: col.dataIndex === 'age' ? 'number' : 'text',
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
-
-  
   
   return tableHeaders
-}
-
-export const EditableCell: React.FC<EditableCellProps> = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{ margin: 0 }}
-          rules={[
-            {
-              required: true,
-              message: `Please Input ${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
 }
 
 
@@ -326,6 +237,7 @@ export const ParseAccountsTable = () => {
   useEffect(() => {
     const dummyAll = new Array(35).fill(0).map((_, index) => { return {
       key: index,
+      avatar: 'e',
       phoneNumber: generateRandomPhoneNumber(),
       resting: generateRandomResting(),
       fullName: generateRandomName(),

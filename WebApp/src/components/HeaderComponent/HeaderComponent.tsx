@@ -1,5 +1,5 @@
 import { Header } from 'antd/es/layout/layout'
-import { Typography, Button } from 'antd'
+import { Typography, Button, Badge } from 'antd'
 import { colors } from '../../global-style/style-colors.module'
 import { BellOutlined, UserOutlined } from '@ant-design/icons'
 import { headerStyle } from '../../global-style/layoutStyle'
@@ -33,8 +33,10 @@ export const HeaderComponent = ({title}: propsType) => {
               <Title style={{ margin: '0px 0px', fontWeight: 'bold' }} level={1}>{title}</Title>
             </motion.div>
           </div>
-          <div className='flex items-start gap-2'>
-            <Button style={{ backgroundColor: colors.white }} icon={<BellOutlined />} size='large' />
+          <div className='flex items-start gap-4'>
+            <Badge count={5}>
+              <Button style={{ backgroundColor: colors.white }} icon={<BellOutlined />} size='large' />
+            </Badge>
             <Button style={{ backgroundColor: colors.white }} icon={<UserOutlined />} size='large' />
             {/* <p className=''>Услуга оплачена</p> */}
           </div>
