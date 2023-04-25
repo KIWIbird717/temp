@@ -3,7 +3,8 @@ import { IAppState } from "./types"
 
 const initialState: IAppState = {
   appPage: '1',
-  accountsManagerFolder: null
+  accountsManagerFolder: null,
+  proxyManagerFolder: null,
 }
 
 export const appSlice = createSlice({
@@ -21,12 +22,16 @@ export const appSlice = createSlice({
     },
     setAccountsManagerFolder: (state, action: PayloadAction<IAppState["accountsManagerFolder"]>) => {
       state.accountsManagerFolder = action.payload
+    },
+    setProxyManagerFolder: (state, action: PayloadAction<IAppState["proxyManagerFolder"]>) => {
+      state.proxyManagerFolder = action.payload
     }
   }
 })
 
 export const {
   setAppPage,
-  setAccountsManagerFolder
+  setAccountsManagerFolder,
+  setProxyManagerFolder
 } = appSlice.actions
 export default appSlice.reducer

@@ -8,7 +8,8 @@ export interface IUserState {
 
 export interface IAppState {
   appPage: '1' | '2' | '3' | '4' | '5' | '6',
-  accountsManagerFolder: React.Key | null
+  accountsManagerFolder: React.Key | null,
+  proxyManagerFolder: React.Key | null
 }
 
 export interface IRootStoreState {

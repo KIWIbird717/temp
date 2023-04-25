@@ -6,6 +6,8 @@
   --primary: #6C5DD3;
   --background: #F7F9FD;
   --white: #fff;
+  --success: rgb(137, 217, 127);
+  --warning: rgb(231, 218, 103);
 }
 
 .ant-table-tbody > tr:hover > td {

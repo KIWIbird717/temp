@@ -4,8 +4,8 @@ import { Table, Button, Tooltip, Modal, message } from 'antd'
 import { ParseAccountsTable, TableHeaders } from './ParseAccountsTable'
 import { ArrowLeftOutlined, CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { setAccountsManagerFolder } from '../../store/appSlice'
-import { IAccountsData } from './ParseAccountsTable'
+import { setProxyManagerFolder } from '../../store/appSlice'
+import { IProxyData } from './ParseAccountsTable'
 import { AnimatePresence, motion } from 'framer-motion'
 import { notificationHandler } from '../../components/notification'
 
@@ -14,15 +14,15 @@ const { confirm } = Modal
 
 export const AccountsTable = () => {
   const dispatch = useDispatch()
-  const [selectedFolders, setSelectedFolders] = useState<IAccountsData[]>([])
+  const [selectedFolders, setSelectedFolders] = useState<IProxyData[]>([])
   const [selectionType, setSelectionType] = useState<boolean>(false)
 
   const rowSelection = {
-    onChange: (selectedRowKey: React.Key[], selectedRows: IAccountsData[]) => {
+    onChange: (selectedRowKey: React.Key[], selectedRows: IProxyData[]) => {
       setSelectedFolders(selectedRows)
       console.log(`selectedRowKeys: ${selectedRowKey}, selectedRows: ${selectedRows}`)
     },
-    getCheckboxProps: (record: IAccountsData) => ({
+    getCheckboxProps: (record: IProxyData) => ({
       disabled: record.key === 'Disabled User', // Column configuration not to be checked
       key: record.key,
     }),
@@ -72,7 +72,7 @@ export const AccountsTable = () => {
       <div className="flex flex-col gap-7">
         <div className="flex justify-between">
           <div className="flex  gap-3">
-            <Button onClick={() => dispatch(setAccountsManagerFolder(null))} className='border-[0px] shadow-md' size='large' shape="round" icon={<ArrowLeftOutlined />}>К папкам</Button>
+            <Button onClick={() => dispatch(setProxyManagerFolder(null))} className='border-[0px] shadow-md' size='large' shape="round" icon={<ArrowLeftOutlined />}>К папкам</Button>
           </div>
           <div className="flex  gap-3">
             {selectionType ? (

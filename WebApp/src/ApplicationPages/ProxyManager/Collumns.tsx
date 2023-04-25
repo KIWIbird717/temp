@@ -1,19 +1,18 @@
 import type { ColumnsType } from 'antd/es/table';
-import tableCard from '../../images/tableCard.svg'
-import { Typography, Button, Input } from 'antd'
+import proxyFolders from '../../images/proxyFolder.svg'
+import { Typography, Button } from 'antd'
 import { useDispatch } from 'react-redux';
-import { setAccountsManagerFolder } from '../../store/appSlice';
-import { IdcardTwoTone } from '@ant-design/icons';
+import { setProxyManagerFolder } from '../../store/appSlice';
+import { SafetyCertificateTwoTone } from '@ant-design/icons';
 import { colors } from '../../global-style/style-colors.module';
 
 export interface IHeaderType {
   key: React.Key,
   folder: string,
   dopTitle: string,
-  accounts: number,
+  peoxies: number,
   country: string,
   latestActivity: string,
-  banned: number
 }
 
 
@@ -30,24 +29,24 @@ export const TableHeaders = () => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-5">
             <div className='h-[110px] object-contain'>
-              <img className='w-full h-full' src={tableCard} alt='icon'/>
+              <img className='w-full h-full' src={proxyFolders} alt='icon'/>
             </div>
             <div className="flex flex-col gap-1">
               <Title style={{ margin: '0px 0px' }} level={4}>{record.folder}</Title>
               <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{record.dopTitle}</Title>
             </div>
           </div>
-          <Button onClick={() => dispatch(setAccountsManagerFolder(record.key))}>Открыть папку</Button>
+          <Button onClick={() => dispatch(setProxyManagerFolder(record.key))}>Открыть папку</Button>
         </div>
       )
     },
     {
-      title: 'Аккаунты',
-      dataIndex: 'accounts',
+      title: 'Кол-во proxy',
+      dataIndex: 'peoxies',
       render: (accounts: number) => (
         <div className="flex gap-2">
           <Title style={{ margin: '0px 0px' }} level={5}>{accounts}</Title>
-          <IdcardTwoTone twoToneColor={colors.primary}/>
+          <SafetyCertificateTwoTone twoToneColor={colors.primary}/>
         </div>
       ),
     },
@@ -56,13 +55,9 @@ export const TableHeaders = () => {
       dataIndex: 'country',
     },
     {
-      title: 'Последняя активность',
+      title: 'Последнее изменение',
       dataIndex: 'latestActivity',
     },
-    {
-      title: 'Заблокировано',
-      dataIndex: 'banned'
-    }
   ]
 
   return tableHeaders
@@ -72,30 +67,27 @@ export const TableHeaders = () => {
 export const tableData: IHeaderType[] = [
   {
     key: '1',
-    folder: 'Telegram',
+    folder: 'Proxy',
     dopTitle: 'Аккаунты для прогрева',
-    accounts: 12,
-    country: 'Finland',
-    latestActivity: '22 апреля',
-    banned: 0,
+    peoxies: 12,
+    country: 'Финляндия',
+    latestActivity: '22 апреля, 2023',
   },
   {
     key: '2',
-    folder: 'Telegram',
+    folder: 'Proxy',
     dopTitle: 'Аккаунты для каналов',
-    accounts: 24,
-    country: 'Finland',
-    latestActivity: '22 апреля',
-    banned: 0
+    peoxies: 24,
+    country: 'Германия',
+    latestActivity: '22 апреля, 2023',
   },
   {
     key: '3',
-    folder: 'Telegram',
+    folder: 'Proxy',
     dopTitle: 'Аккаунты для переписок',
-    accounts: 24,
-    country: 'Finland',
-    latestActivity: '22 апреля',
-    banned: 0
+    peoxies: 24,
+    country: 'Тайланд',
+    latestActivity: '22 апреля, 2023',
   },
 ]
 

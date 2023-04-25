@@ -10,7 +10,9 @@ const colors = {
   white: '#FFFFFF',
   font: '#393D55',
   dopFont: '#888B99',
-  stroke: 'rgba(57, 61, 85, 0.2)'
+  stroke: 'rgba(57, 61, 85, 0.2)',
+  success: 'rgb(137, 217, 127)',
+  warning: 'rgb(231, 218, 103)',
 }
 
 export {

@@ -1,24 +1,35 @@
-import { Typography, Layout } from 'antd'
+import { useState, useEffect } from 'react'
 import { contentStyle } from '../../global-style/layoutStyle'
 import { HeaderComponent } from '../../components/HeaderComponent/HeaderComponent'
-import { MCard } from '../../components/Card/MCard'
+import { Layout  } from 'antd'
+import { Folders } from './Folders'
+import { AccountsTable } from './AccountsTable'
+import { useSelector } from 'react-redux'
+import { StoreState } from '../../store/store'
 
-const { Title } = Typography
+
 const { Content } = Layout
 
 export const ProxyManagerPage = () => {
+  const [openFolder, setOpenFolder] = useState<React.Key | null>(null)
+  const currentFolder = useSelector((state: StoreState) => state.app.proxyManagerFolder)
+
+  useEffect(() => {
+    setOpenFolder(currentFolder)
+    console.log(currentFolder)
+  }, [currentFolder])
 
   return (
-    <>
       <Layout style={contentStyle}>
-        <HeaderComponent title='Менеждер proxy'/>
+        <HeaderComponent title='Менеджер proxy'/>
 
-        <Content>
-          <MCard className='w-full h-full' >
-            <Title>Менеждер proxy</Title>
-          </MCard>
+        <Content className='flex flex-col gap-10'>
+          {openFolder ? (
+            <AccountsTable />
+            ) : (
+            <Folders />
+          )}
         </Content>
       </Layout>
-    </>
   )
 }
