@@ -8,19 +8,24 @@ router.get("/get-service", async (req: Request, res: Response) => {
 });
 
 router.get("/get-country", async (req: Request, res: Response) => {
-    const service = await smsService.checkService(req.query.service as string);
-    
-    const countries = await smsService.getCountry(service);
-    res.status(200).json(countries);
+  const service = await smsService.checkService(req.query.service as string);
+  if (service === null){
+    return res.status(400).json({ message: "Uncurrect service" });
+  }
+
+  const countries = await smsService.getCountry(service);
+  res.status(200).json(countries);
 });
 
 router.get("/get-balance", async (req: Request, res: Response) => {
   const service = await smsService.checkService(req.query.service as string);
+  if (service === null){
+    return res.status(400).json({ message: "Uncurrect service" });
+  }
 
-  const balance = await smsService.getBalance(service)
+  const balance = await smsService.getBalance(service);
 
   res.status(200).json(balance);
-})
-
+});
 
 export default router;
