@@ -1,4 +1,4 @@
-import { Service, getTelegramCode, rentPhoneRegistration } from "./sms-activate";
+import { Service, getTelegramCode, rentPhoneRegistration } from "./smsActivate";
 
 export async function registerTelegram(
   service: Service,
