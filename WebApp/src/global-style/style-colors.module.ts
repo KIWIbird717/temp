@@ -4,6 +4,7 @@
  */
 const colors = {
   primary: '#6C5DD3',
+  accent: '#FFA2BF',
   danger: 'rgb(255, 77, 79)',
   dangerBg: 'rgba(255, 77, 79, 0.1)',
   background: '#fff',

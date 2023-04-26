@@ -81,7 +81,7 @@ export const AutoRegPage = () => {
             />
             <div ref={mainCard} className="flex flex-col">
               <div className="w-full flex items-center justify-center">
-                <Segmented value={segmentValue} onChange={setSegmentValue} block options={Segment} className='mb-5 w-full'/>
+                <Segmented value={segmentValue} onChange={setSegmentValue} block options={Segment} className='mb-8 w-full'/>
               </div>
               <div ref={container} className="flex overflow-hidden">
                 <AnimatePresence>

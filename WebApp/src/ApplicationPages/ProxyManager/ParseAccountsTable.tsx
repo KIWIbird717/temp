@@ -187,9 +187,8 @@ export const TableHeaders = () => {
           <div>
             {[tags].map((tag: string) => {
               let color: string = 'green'
-              if (tag === 'active') {color = 'green'}
-              if (tag === 'banned') {color = 'red'}
-              if (tag === 'resting') {color = 'yellow'}
+              if (tag === 'работает') {color = 'green'}
+              if (tag === 'не работает') {color = 'yellow'}
     
               return <Tag color={color} key={tag}>{tag}</Tag>
             })}
@@ -201,16 +200,12 @@ export const TableHeaders = () => {
       ),
       filters: [
         {
-          text: 'active',
-          value: 'active'
+          text: 'работает',
+          value: 'работает'
         },
         {
-          text: 'banned',
-          value: 'banned'
-        },
-        {
-          text: 'resting',
-          value: 'resting'
+          text: 'не работает',
+          value: 'не работает'
         }
       ],
       onFilter: (value: any, record: any) => record.status.indexOf(value as string) === 0,

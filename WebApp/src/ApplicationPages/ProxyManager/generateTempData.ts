@@ -51,7 +51,7 @@ export const generateRandomDate = (startYear: number, endYear: number): string =
 }
 
 export const generateRandomStatus = (): string => {
-  const options = ['active', 'banned', 'resting'];
+  const options = ['работает', 'не работает']
   const randomIndex = Math.floor(Math.random() * options.length);
   return options[randomIndex];
 }

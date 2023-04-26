@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import { Menu, Modal } from 'antd'
 import fullLogo from '../../images/fullLogo.svg'
 import { getItem, IMenuItems } from "./getItem"
@@ -13,11 +13,12 @@ import {
   CodeOutlined
 } from '@ant-design/icons';
 import { colors } from '../../global-style/style-colors.module';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setAppPage } from '../../store/appSlice';
 import { LogOut } from '../../hooks/LogOut';
 import { IAppState } from '../../store/types';
 import { resetPageData } from '../../utils/resetPageData';
+import { StoreState } from '../../store/store';
 
 const menuItemsStyle: React.CSSProperties = {
   height: '50px'
@@ -29,6 +30,7 @@ export const SiderComponent = () => {
   const dispatch = useDispatch()
   const [selectedKey, setSelectedKey] = useState<string>('1')
   const [hoveredKey, setHoveredKey] = useState(null)
+  const currentAppPage = useSelector((state: StoreState) => state.app.appPage)
 
   const handleMenuItemMouseEnter = (e: any) => {
     setHoveredKey(e.key);
@@ -91,6 +93,10 @@ export const SiderComponent = () => {
       }
     })
   }
+
+  useEffect(() => {
+    setSelectedKey(currentAppPage)
+  }, [currentAppPage])
 
   return (
     <div className='w-full grid gap-6 py-6'>

@@ -3,7 +3,7 @@ import proxyFolders from '../../images/proxyFolder.svg'
 import { Typography, Button } from 'antd'
 import { useDispatch } from 'react-redux';
 import { setProxyManagerFolder } from '../../store/appSlice';
-import { SafetyCertificateTwoTone } from '@ant-design/icons';
+import { FolderOpenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { colors } from '../../global-style/style-colors.module';
 
 export interface IHeaderType {
@@ -36,7 +36,7 @@ export const TableHeaders = () => {
               <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{record.dopTitle}</Title>
             </div>
           </div>
-          <Button onClick={() => dispatch(setProxyManagerFolder(record.key))}>Открыть папку</Button>
+          <Button icon={<FolderOpenOutlined />} onClick={() => dispatch(setProxyManagerFolder(record.key))}>Открыть</Button>
         </div>
       )
     },
@@ -46,7 +46,7 @@ export const TableHeaders = () => {
       render: (accounts: number) => (
         <div className="flex gap-2">
           <Title style={{ margin: '0px 0px' }} level={5}>{accounts}</Title>
-          <SafetyCertificateTwoTone twoToneColor={colors.primary}/>
+          <SafetyCertificateTwoTone twoToneColor={colors.accent}/>
         </div>
       ),
     },
@@ -83,6 +83,14 @@ export const tableData: IHeaderType[] = [
   },
   {
     key: '3',
+    folder: 'Proxy',
+    dopTitle: 'Аккаунты для переписок',
+    peoxies: 24,
+    country: 'Тайланд',
+    latestActivity: '22 апреля, 2023',
+  },
+  {
+    key: '4',
     folder: 'Proxy',
     dopTitle: 'Аккаунты для переписок',
     peoxies: 24,

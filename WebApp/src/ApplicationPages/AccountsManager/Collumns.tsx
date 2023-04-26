@@ -3,7 +3,7 @@ import tableCard from '../../images/tableCard.svg'
 import { Typography, Button, Input } from 'antd'
 import { useDispatch } from 'react-redux';
 import { setAccountsManagerFolder } from '../../store/appSlice';
-import { IdcardTwoTone } from '@ant-design/icons';
+import { FolderOpenOutlined, IdcardTwoTone } from '@ant-design/icons';
 import { colors } from '../../global-style/style-colors.module';
 
 export interface IHeaderType {
@@ -37,7 +37,7 @@ export const TableHeaders = () => {
               <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{record.dopTitle}</Title>
             </div>
           </div>
-          <Button onClick={() => dispatch(setAccountsManagerFolder(record.key))}>Открыть папку</Button>
+          <Button icon={<FolderOpenOutlined />} onClick={() => dispatch(setAccountsManagerFolder(record.key))}>Открыть</Button>
         </div>
       )
     },
@@ -47,7 +47,7 @@ export const TableHeaders = () => {
       render: (accounts: number) => (
         <div className="flex gap-2">
           <Title style={{ margin: '0px 0px' }} level={5}>{accounts}</Title>
-          <IdcardTwoTone twoToneColor={colors.primary}/>
+          <IdcardTwoTone twoToneColor={colors.accent}/>
         </div>
       ),
     },

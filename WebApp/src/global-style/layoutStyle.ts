@@ -49,7 +49,7 @@ const headerStyle: React.CSSProperties = {
 const contentStyle: React.CSSProperties = {
   // minHeight: `calc(100vh - ${headerStyleHeight}px)`,
   marginLeft: '250px',
-  // minHeight: '100vh',
+  minHeight: '100vh',
   lineHeight: '120px',
   color: '#000',
   backgroundColor: colors.background,

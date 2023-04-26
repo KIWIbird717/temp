@@ -20,10 +20,10 @@ export const ProxyManagerPage = () => {
   }, [currentFolder])
 
   return (
-      <Layout style={contentStyle}>
+      <Layout style={{...contentStyle, minHeight: '100vh'}}>
         <HeaderComponent title='Менеджер proxy'/>
 
-        <Content className='flex flex-col gap-10'>
+        <Content className='h-full flex flex-col gap-10'>
           {openFolder ? (
             <AccountsTable />
             ) : (

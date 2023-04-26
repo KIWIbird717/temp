@@ -6,6 +6,8 @@ import { headerStyle } from '../../global-style/layoutStyle'
 import { useSelector } from 'react-redux'
 import { StoreState } from '../../store/store'
 import { motion } from 'framer-motion'
+import { useDispatch } from 'react-redux'
+import { setAppPage } from '../../store/appSlice'
 
 type propsType = {
   title: string
@@ -18,6 +20,11 @@ type propsType = {
 export const HeaderComponent = ({title}: propsType) => {
   const { Title } = Typography
   const userNickName = useSelector((state: StoreState) => state.user.nick)
+  const dispatch = useDispatch()
+
+  const handleNotificationButton = () => {
+    dispatch(setAppPage('5'))
+  }
 
   return (
     <Header style={ headerStyle }>
@@ -35,7 +42,7 @@ export const HeaderComponent = ({title}: propsType) => {
           </div>
           <div className='flex items-start gap-4'>
             <Badge count={5}>
-              <Button style={{ backgroundColor: colors.white }} icon={<BellOutlined />} size='large' />
+              <Button onClick={handleNotificationButton} style={{ backgroundColor: colors.white }} icon={<BellOutlined />} size='large' />
             </Badge>
             <Button style={{ backgroundColor: colors.white }} icon={<UserOutlined />} size='large' />
             {/* <p className=''>Услуга оплачена</p> */}

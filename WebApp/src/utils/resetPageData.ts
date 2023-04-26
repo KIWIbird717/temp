@@ -1,4 +1,4 @@
-import { setAccountsManagerFolder } from '../store/appSlice'
+import { setAccountsManagerFolder, setProxyManagerFolder } from '../store/appSlice'
 import { Dispatch } from 'react'
 import { AnyAction } from 'redux'
 
@@ -8,5 +8,8 @@ import { AnyAction } from 'redux'
  */
 export const resetPageData = (dispatch: Dispatch<AnyAction>) => {
 
-  return dispatch(setAccountsManagerFolder(null))
+  return (
+    dispatch(setAccountsManagerFolder(null)),
+    dispatch(setProxyManagerFolder(null))
+  )
 }
