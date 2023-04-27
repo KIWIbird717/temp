@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import tableCard from '../../images/tableCard.svg'
 import { Button, Typography } from 'antd'
-import { colors } from '../../global-style/style-colors.module'
+import { colors } from '../../../global-style/style-colors.module'
 import { UploadOutlined } from '@ant-design/icons'
 
 const { Title } = Typography

@@ -1,10 +1,10 @@
 import Reac, { useState } from 'react'
-import { MCard } from '../../components/Card/MCard'
+import { MCard } from '../../../components/Card/MCard'
 import { Select, Input, Table, Tooltip, Button, message } from 'antd'
 import { motion } from 'framer-motion'
 import { IHeaderType, TableHeaders, tableData } from './Collumns'
 import { CloseOutlined, ContainerOutlined, EditOutlined } from '@ant-design/icons'
-import { notificationHandler } from '../../components/notification'
+import { notificationHandler } from '../../../components/notification'
 
 const { Search } = Input
 

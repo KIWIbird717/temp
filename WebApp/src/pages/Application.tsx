@@ -7,7 +7,7 @@ import { IRootStoreState } from '../store/types';
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import { RouterPages } from '../ApplicationPages/RouterPages'
+import { RouterPages } from './ApplicationPages/RouterPages'
 
 const { Sider } = Layout
 

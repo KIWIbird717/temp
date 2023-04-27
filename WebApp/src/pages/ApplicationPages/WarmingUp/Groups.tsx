@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Avatar, List, Popover, Typography, Table, Button, Popconfirm } from 'antd'
 import { DeleteOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import { formatDate } from '../../utils/formatDate'
+import { formatDate } from '../../../utils/formatDate'
 
 const { Title } = Typography
 

@@ -1,13 +1,13 @@
 import Reac, { useRef, useState } from 'react'
-import { MCard } from '../../components/Card/MCard'
+import { MCard } from '../../../components/Card/MCard'
 import { Select, Input, Table, Tooltip, Button, message, Typography } from 'antd'
 import { motion } from 'framer-motion'
 import { IHeaderType, TableHeaders, tableData } from './Collumns'
 import { CloseOutlined, ContainerOutlined, EditOutlined } from '@ant-design/icons'
-import { notificationHandler } from '../../components/notification'
+import { notificationHandler } from '../../../components/notification'
 import { AutoregHeader } from '../Autoreg/AutoregHeader'
-import { StaticMessage } from '../../components/StaticMessage/StaticMessage'
-import { useContainerDimensions } from '../../hooks/useContainerDimention'
+import { StaticMessage } from '../../../components/StaticMessage/StaticMessage'
+import { useContainerDimensions } from '../../../hooks/useContainerDimention'
 
 
 const { Search } = Input

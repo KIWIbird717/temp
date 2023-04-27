@@ -1,13 +1,13 @@
 import { Typography, Layout, Avatar, Upload, message, Button, Statistic, Input } from 'antd'
-import { contentStyle } from '../../global-style/layoutStyle'
-import { HeaderComponent } from '../../components/HeaderComponent/HeaderComponent'
-import { MCard } from '../../components/Card/MCard'
+import { contentStyle } from '../../../global-style/layoutStyle'
+import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
+import { MCard } from '../../../components/Card/MCard'
 import { useSelector } from 'react-redux'
-import { StoreState } from '../../store/store'
+import { StoreState } from '../../../store/store'
 import type { UploadProps } from 'antd';
 import { BookOutlined, CheckOutlined, KeyOutlined, LinkOutlined, PlusOutlined, TagOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
 import { ProxySettingsInput } from './ProxySettingsInput'
-import { colors } from '../../global-style/style-colors.module'
+import { colors } from '../../../global-style/style-colors.module'
 
 const { Title } = Typography
 const { Content } = Layout

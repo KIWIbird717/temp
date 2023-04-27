@@ -1,5 +1,5 @@
 import { Typography } from "antd"
-import { colors } from "../../global-style/style-colors.module"
+import { colors } from "../../../global-style/style-colors.module"
 
 const { Title } = Typography
 

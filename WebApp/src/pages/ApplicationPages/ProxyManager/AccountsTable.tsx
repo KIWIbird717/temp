@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { MCard } from '../../components/Card/MCard'
+import { MCard } from '../../../components/Card/MCard'
 import { Table, Button, Tooltip, Modal, message } from 'antd'
 import { ParseAccountsTable, TableHeaders } from './ParseAccountsTable'
 import { ArrowLeftOutlined, CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { setProxyManagerFolder } from '../../store/appSlice'
+import { setProxyManagerFolder } from '../../../store/appSlice'
 import { IProxyData } from './ParseAccountsTable'
 import { AnimatePresence, motion } from 'framer-motion'
-import { notificationHandler } from '../../components/notification'
+import { notificationHandler } from '../../../components/notification'
 
 
 const { confirm } = Modal
