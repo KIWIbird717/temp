@@ -220,7 +220,7 @@ export async function getAvailablePhones(
       await checkForErrorFromAxiosResponse(response, service);
 
       Object.keys(response.data).forEach((key) => {
-        phones[key] = {
+        phones["telegram"] = {
           cost: parseInt(response.data[key].cost, 10),
           count: parseInt(response.data[key].count, 10),
         };
@@ -255,8 +255,8 @@ export async function getAvailablePhones(
       await checkForErrorFromAxiosResponse(response, service);
 
       phones["telegram"] = {
-        cost: parseInt(response.data["0"][telegramCode].cost, 10),
-        count: parseInt(response.data["0"][telegramCode].count, 10),
+        cost: parseInt(response.data[country.id][telegramCode].cost, 10),
+        count: parseInt(response.data[country.id][telegramCode].count, 10),
       };
       break;
 
@@ -269,7 +269,7 @@ export async function getAvailablePhones(
 
       response.data.forEach((service: any) => {
         if (service.name.toLowerCase() === telegramCode) {
-          phones[service.id] = {
+          phones["telegram"] = {
             cost: parseInt(service.cost, 10),
             count: parseInt(service.count, 10),
           };

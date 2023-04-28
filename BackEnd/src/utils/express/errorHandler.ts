@@ -1,6 +1,6 @@
 import { Application, Request, Response, NextFunction } from "express";
-import path from 'path';
-import fs from 'fs';
+import * as path from 'path';
+import { promises as fs } from 'fs';
 import util from 'util';
 
 /**
@@ -27,17 +27,20 @@ function asyncWrapper(fn) {
 
 async function logErrorToFile(err: ErrorWithStatus): Promise<void> {
   try {
-    const errorLogPath = path.join(__dirname, '../../../logs/errorExpress.txt');
+    const logsDir = path.join(__dirname, '../../../logs');
+    const errorLogPath = path.join(logsDir, 'errorExpress.txt');
     const errorMessage = Buffer.from(
       ` \n | Time: ${new Date()}\n | Error: ${err.message}\n | Stack: ${err.stack}\n\n`
     );
     if (process.env.DEBUG === "true") {
       console.log("\x1B[31m", `[ERROR]: ${errorMessage.toString()}`);
     }
-    await appendFileAsync(errorLogPath, errorMessage);
+    await fs.mkdir(logsDir, { recursive: true });
+    await fs.appendFile(errorLogPath, errorMessage, 'utf-8');
   } catch (error) {
     console.error("\x1B[31m", `[ERROR] Error writing to log file: ${error}`);
   }
 }
+
 
 export { asyncWrapper };
