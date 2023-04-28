@@ -11,7 +11,7 @@ import { RouterPages } from './ApplicationPages/RouterPages'
 
 const { Sider } = Layout
 
-export const Application = () => {
+export const Application = (): JSX.Element => {
   const siderWidth: number = 250
   const isUserLogined = useSelector((state: IRootStoreState) => state.user.isUserLogined)
 

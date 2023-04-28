@@ -1,16 +1,15 @@
 import React, { useState } from 'react'
-import tableCard from '../../images/tableCard.svg'
-import { Button, Typography } from 'antd'
+import tableCard from '../../../images/tableCard.svg'
+import { Typography } from 'antd'
 import { colors } from '../../../global-style/style-colors.module'
-import { UploadOutlined } from '@ant-design/icons'
 
 const { Title } = Typography
 
-type props = {
+interface IProps {
   className?: string
 }
 
-export const FolserSelection = ({className}: props) => {
+export const FolserSelection = ({className}: IProps): JSX.Element => {
   const [folderTitile, setFolderTitle] = useState('Название папки')
   const [folderDopTitle, setFolderDopTitle] = useState<string>('Тут может быть описание папки')
 
@@ -34,9 +33,6 @@ export const FolserSelection = ({className}: props) => {
           >
             {folderDopTitle}
         </Title>
-        {/* <div className="flex gap-3">
-          <Button icon={<UploadOutlined />}>Добавить в папку</Button>
-        </div> */}
       </div>
     </div>
   )
