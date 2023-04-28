@@ -2,9 +2,9 @@ import type { ColumnsType } from 'antd/es/table';
 import proxyFolders from '../../images/proxyFolder.svg'
 import { Typography, Button } from 'antd'
 import { useDispatch } from 'react-redux';
-import { setProxyManagerFolder } from '../../store/appSlice';
+import { setProxyManagerFolder } from '../../../store/appSlice';
 import { FolderOpenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
-import { colors } from '../../global-style/style-colors.module';
+import { colors } from '../../../global-style/style-colors.module';
 
 export interface IHeaderType {
   key: React.Key,

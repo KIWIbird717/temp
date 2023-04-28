@@ -1,8 +1,10 @@
 /**
  * If you want to change `colors` in this application
  * Change it `here`
+ * 
+ * @description don`t foget to change `root` in `index.css`
  */
-const colors = {
+export const colors = {
   primary: '#6C5DD3',
   accent: '#FFA2BF',
   danger: 'rgb(255, 77, 79)',
@@ -14,8 +16,4 @@ const colors = {
   stroke: 'rgba(57, 61, 85, 0.2)',
   success: 'rgb(137, 217, 127)',
   warning: 'rgb(231, 218, 103)',
-}
-
-export {
-  colors
 }

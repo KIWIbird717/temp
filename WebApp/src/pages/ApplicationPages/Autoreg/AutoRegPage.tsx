@@ -1,16 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
 import { Layout, Segmented } from 'antd'
-import { contentStyle } from '../../global-style/layoutStyle'
-import { HeaderComponent } from '../../components/HeaderComponent/HeaderComponent'
-import { MCard } from '../../components/Card/MCard'
+import { contentStyle } from '../../../global-style/layoutStyle'
+import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
+import { MCard } from '../../../components/Card/MCard'
 import img1 from '../../images/img1.svg'
 import img2 from '../../images/img2.svg'
 import img3 from '../../images/img3.svg'
 import { AutoregHeader } from './AutoregHeader'
 import { NewFolderSettings } from './NewFolderSettings'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useContainerDimensions } from '../../hooks/useContainerDimention'
-import { StaticMessage } from '../../components/StaticMessage/StaticMessage'
+import { useContainerDimensions } from '../../../hooks/useContainerDimention'
+import { StaticMessage } from '../../../components/StaticMessage/StaticMessage'
 
 
 

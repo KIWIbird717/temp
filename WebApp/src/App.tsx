@@ -23,7 +23,6 @@ const App: React.FC = () => {
   // Chek if user logedin and stay user logedin after page reload
   useEffect(() => {
     const token = localStorage.getItem('sessionToken')  // contains user email
-    
     if (token) {
       // Parce data from localStorage
       const tokenData: ILocalStorageParced = JSON.parse(token)

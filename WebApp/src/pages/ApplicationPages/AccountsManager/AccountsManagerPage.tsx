@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { contentStyle } from '../../global-style/layoutStyle'
-import { HeaderComponent } from '../../components/HeaderComponent/HeaderComponent'
+import { contentStyle } from '../../../global-style/layoutStyle'
+import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
 import { Layout  } from 'antd'
 import { Folders } from './Folders'
 import { AccountsTable } from './AccountsTable'
 import { useSelector } from 'react-redux'
-import { StoreState } from '../../store/store'
+import { StoreState } from '../../../store/store'
 
 
 const { Content } = Layout

@@ -1,11 +1,11 @@
 import { useRef } from 'react'
 import { Typography, Layout, List, Input } from 'antd'
-import { contentStyle } from '../../global-style/layoutStyle'
-import { HeaderComponent } from '../../components/HeaderComponent/HeaderComponent'
-import { MCard } from '../../components/Card/MCard'
-import { useContainerDimensions } from '../../hooks/useContainerDimention'
+import { contentStyle } from '../../../global-style/layoutStyle'
+import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
+import { MCard } from '../../../components/Card/MCard'
+import { useContainerDimensions } from '../../../hooks/useContainerDimention'
 import { SelectOptions } from './SelectOptions'
-import { formatDate } from '../../utils/formatDate'
+import { formatDate } from '../../../utils/formatDate'
 
 const { Content } = Layout
 const { Search } = Input

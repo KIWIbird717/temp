@@ -1,35 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react'
 import type { ColumnType } from 'antd/es/table';
 import { 
-  generateRandomPhoneNumber, 
-  generateRandomResting,
-  generateRandomName,
   generateRandomString,
-  generateRandomCountry,
-  generateRandomDate,
-  generateRandomStatus
+  generateRandomStatus,
+  generateRandomNumber
  } from './generateTempData';
 import { Tag, InputRef, Space, Input, Button, Dropdown, message, Avatar } from 'antd';
-import { CheckSquareOutlined, ClockCircleTwoTone, DeleteOutlined, EditOutlined, EnterOutlined, FieldTimeOutlined, MoreOutlined, SearchOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { CheckSquareOutlined, ClockCircleTwoTone, DeleteOutlined, EditOutlined, EnterOutlined, FieldTimeOutlined, HddTwoTone, MoreOutlined, SearchOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
 import type { MenuProps } from 'antd';
-import { colors } from '../../global-style/style-colors.module';
+import { colors } from '../../../global-style/style-colors.module';
 
 
-export interface IAccountsData {
+export interface IProxyData {
   key: React.Key,
-  avatar: string,
-  phoneNumber: string,
-  resting: string,
-  fullName: string,
-  secondFacAith: string,
-  proxy: string,
-  latestActivity: string,
-  status: string,
+  ip: string,
+  port: string,
+  login: string,
+  pass: string,
+  type: string,
+  delay: string,
+  status: string
 }
 
-type DataIndex = keyof IAccountsData;
+type DataIndex = keyof IProxyData;
 
 const GetColumnSearchProps = (data: DataIndex) => {
   const [searchText, setSearchText] = useState<string>('')
@@ -51,7 +46,7 @@ const GetColumnSearchProps = (data: DataIndex) => {
     setSearchText('');
   };
   
-  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<IAccountsData> => ({
+  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<IProxyData> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
@@ -147,50 +142,42 @@ export const TableHeaders = () => {
   
   const tableHeaders: any = [
     {
-      title: 'Аватар',
-      dataIndex: 'avatar',
-      render: (tag: any) => (
-        <span>
-          {[tag].map((el: string) => (
-            <Avatar icon={<UserOutlined />} />
-          ))}
-        </span>
-      ),
+      title: 'IP',
+      dataIndex: 'ip',
     },
     {
-      title: 'Номер',
-      dataIndex: 'phoneNumber',
-      editable: true,
-      ...GetColumnSearchProps('phoneNumber')
-    },
-    {
-      title: 'Отлёжка',
-      dataIndex: 'resting',
+      title: 'Порт',
+      dataIndex: 'port',
       render: (resting: string) => (
         <div className="flex gap-2">
           {resting} 
-          <ClockCircleTwoTone twoToneColor={colors.primary} />
+          <HddTwoTone twoToneColor={colors.primary} />
         </div>
       )
     },
     {
-      title: 'ФИО',
-      dataIndex: 'fullName',
+      title: 'Логин',
+      dataIndex: 'login',
       editable: true,
-      ...GetColumnSearchProps('fullName'),
     },
     {
-      title: '2ФА',
-      dataIndex: 'secondFacAith'
+      title: 'Парлоь',
+      dataIndex: 'pass'
     },
     {
-      title: 'Proxy',
+      title: 'Тип',
       editable: true,
-      dataIndex: 'proxy'
+      dataIndex: 'type'
     },
     {
-      title: 'Поседняя активность',
-      dataIndex: 'latestActivity'
+      title: 'Задержка',
+      dataIndex: 'delay',
+      render: (delays: string) => (
+        <div className="flex gap-2">
+          {delays} 
+          <ClockCircleTwoTone twoToneColor={colors.primary} />
+        </div>
+      )
     },
     {
       title: 'Статус',
@@ -200,9 +187,8 @@ export const TableHeaders = () => {
           <div>
             {[tags].map((tag: string) => {
               let color: string = 'green'
-              if (tag === 'active') {color = 'green'}
-              if (tag === 'banned') {color = 'red'}
-              if (tag === 'resting') {color = 'yellow'}
+              if (tag === 'работает') {color = 'green'}
+              if (tag === 'не работает') {color = 'yellow'}
     
               return <Tag color={color} key={tag}>{tag}</Tag>
             })}
@@ -214,16 +200,12 @@ export const TableHeaders = () => {
       ),
       filters: [
         {
-          text: 'active',
-          value: 'active'
+          text: 'работает',
+          value: 'работает'
         },
         {
-          text: 'banned',
-          value: 'banned'
-        },
-        {
-          text: 'resting',
-          value: 'resting'
+          text: 'не работает',
+          value: 'не работает'
         }
       ],
       onFilter: (value: any, record: any) => record.status.indexOf(value as string) === 0,
@@ -239,19 +221,18 @@ export const TableHeaders = () => {
 
 
 export const ParseAccountsTable = () => {
-  const [accountsData, setAccountsData] = useState<IAccountsData[]>([])
+  const [accountsData, setAccountsData] = useState<IProxyData[]>([])
 
   useEffect(() => {
     const dummyAll = new Array(35).fill(0).map((_, index) => { return {
       key: index,
-      avatar: 'e',
-      phoneNumber: generateRandomPhoneNumber(),
-      resting: generateRandomResting(),
-      fullName: generateRandomName(),
-      secondFacAith: generateRandomString(12),
-      proxy: generateRandomCountry(),
-      latestActivity: generateRandomDate(2023, 2023),
-      status: generateRandomStatus(),
+      ip: generateRandomString(14),
+      port: generateRandomNumber(4),
+      login: 'country-ms-session',
+      pass: generateRandomString(10),
+      type: 'http',
+      delay: generateRandomNumber(2),
+      status: generateRandomStatus()
     }})
     setAccountsData([...dummyAll])
   }, [])

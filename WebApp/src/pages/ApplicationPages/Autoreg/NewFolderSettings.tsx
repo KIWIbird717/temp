@@ -1,7 +1,7 @@
 import { Button, Cascader, InputNumber, Statistic, Popover, Typography } from 'antd'
 import { FolserSelection } from './FolserSelection'
 import { CheckOutlined, InfoCircleOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
-import { colors } from '../../global-style/style-colors.module'
+import { colors } from '../../../global-style/style-colors.module'
 import { motion } from 'framer-motion'
 
 const { Title } = Typography

@@ -2,9 +2,9 @@ import type { ColumnsType } from 'antd/es/table';
 import tableCard from '../../images/tableCard.svg'
 import { Typography, Button, Input } from 'antd'
 import { useDispatch } from 'react-redux';
-import { setAccountsManagerFolder } from '../../store/appSlice';
+import { setAccountsManagerFolder } from '../../../store/appSlice';
 import { FolderOpenOutlined, IdcardTwoTone } from '@ant-design/icons';
-import { colors } from '../../global-style/style-colors.module';
+import { colors } from '../../../global-style/style-colors.module';
 
 export interface IHeaderType {
   key: React.Key,
@@ -16,10 +16,9 @@ export interface IHeaderType {
   banned: number
 }
 
-
 const { Title } = Typography
 
-export const TableHeaders = () => {
+export const TableHeaders = (): ColumnsType<IHeaderType> => {
   const dispatch = useDispatch()
 
   const tableHeaders: ColumnsType<IHeaderType> = [
@@ -37,7 +36,10 @@ export const TableHeaders = () => {
               <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{record.dopTitle}</Title>
             </div>
           </div>
-          <Button icon={<FolderOpenOutlined />} onClick={() => dispatch(setAccountsManagerFolder(record.key))}>Открыть</Button>
+          <Button 
+            icon={<FolderOpenOutlined />} 
+            onClick={() => dispatch(setAccountsManagerFolder(record.key))}
+          >Открыть</Button>
         </div>
       )
     },

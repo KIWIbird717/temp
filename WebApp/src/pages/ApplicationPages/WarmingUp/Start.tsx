@@ -1,7 +1,7 @@
 import React from 'react'
 import { Cascader, InputNumber, Popover, Statistic, Typography } from 'antd'
 import { InfoCircleOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
-import { colors } from '../../global-style/style-colors.module'
+import { colors } from '../../../global-style/style-colors.module'
 
 const { Title } = Typography
 

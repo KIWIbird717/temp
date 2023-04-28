@@ -1,13 +1,20 @@
 import React, { useState } from 'react'
-import { MCard } from '../../components/Card/MCard'
+import { 
+  ArrowLeftOutlined, 
+  CloseOutlined, 
+  ContainerOutlined, 
+  DeleteOutlined, 
+  EditOutlined, 
+  ExclamationCircleFilled 
+} from '@ant-design/icons'
+import { MCard } from '../../../components/Card/MCard'
 import { Table, Button, Tooltip, Modal, message } from 'antd'
 import { ParseAccountsTable, TableHeaders } from './ParseAccountsTable'
-import { ArrowLeftOutlined, CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
-import { setAccountsManagerFolder } from '../../store/appSlice'
+import { setAccountsManagerFolder } from '../../../store/appSlice'
 import { IAccountsData } from './ParseAccountsTable'
 import { AnimatePresence, motion } from 'framer-motion'
-import { notificationHandler } from '../../components/notification'
+import { notificationHandler } from '../../../components/notification'
 
 
 const { confirm } = Modal
@@ -72,7 +79,12 @@ export const AccountsTable = () => {
       <div className="flex flex-col gap-7">
         <div className="flex justify-between">
           <div className="flex  gap-3">
-            <Button onClick={() => dispatch(setAccountsManagerFolder(null))} className='border-[0px] shadow-md' size='large' shape="round" icon={<ArrowLeftOutlined />}>К папкам</Button>
+            <Button 
+              size='large' shape="round"
+              icon={<ArrowLeftOutlined />}
+              className='border-[0px] shadow-md' 
+              onClick={() => dispatch(setAccountsManagerFolder(null))} 
+            >К папкам</Button>
           </div>
           <div className="flex  gap-3">
             {selectionType ? (
@@ -84,7 +96,14 @@ export const AccountsTable = () => {
                   className='flex gap-3'
                 >
                   <Tooltip title='Удалить выделенное'>
-                    <Button danger className={`border-[0px] shadow-md`} size='large' shape="circle" icon={<DeleteOutlined />} onClick={() => deleteSelectedAccounts()}/>
+                    <Button 
+                      danger 
+                      size='large' 
+                      shape="circle" 
+                      icon={<DeleteOutlined />} 
+                      className={`border-[0px] shadow-md`} 
+                      onClick={() => deleteSelectedAccounts()}
+                    />
                   </Tooltip>
                 </motion.div>
 
@@ -95,7 +114,13 @@ export const AccountsTable = () => {
                   className='flex gap-3'
                 >
                   <Tooltip title='Экспорт в архив'>
-                    <Button className={`border-[0px] shadow-md`} size='large' shape="circle" icon={<ContainerOutlined />} onClick={() => exportSelectedAccounts()}/>
+                    <Button 
+                      size='large' 
+                      shape="circle" 
+                      icon={<ContainerOutlined />} 
+                      className={`border-[0px] shadow-md`} 
+                      onClick={() => exportSelectedAccounts()}
+                    />
                   </Tooltip>
                 </motion.div>
               </AnimatePresence>
