@@ -4,14 +4,33 @@
 
 :root {
   --primary: #6C5DD3;
+  --primaryLight: #c7c2e9;
   --background: #F7F9FD;
   --white: #fff;
   --success: rgb(137, 217, 127);
   --warning: rgb(231, 218, 103);
 }
 
+/* Global Styles for antd Table component */
 .ant-table-tbody > tr:hover > td {
   background-color: transparent !important;
+}
+
+/* Global Style for editable Text component */
+h2.ant-typography .anticon-edit {
+  color: var(--primary);
+  font-size: 20px;
+  margin-left: 3px;
+}
+h3.ant-typography .anticon-edit {
+  color: var(--primary);
+  font-size: 17px;
+  margin-left: 3px;
+}
+h5.ant-typography .anticon-edit {
+  color: var(--primary);
+  font-size: 15px;
+  margin-left: 3px;
 }
 
 body {

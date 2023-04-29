@@ -1,48 +1,55 @@
+import { useState, useEffect } from 'react'
 import { Typography, Layout, Avatar, Upload, message, Button, Statistic, Input } from 'antd'
 import { contentStyle } from '../../../global-style/layoutStyle'
 import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
 import { MCard } from '../../../components/Card/MCard'
 import { useSelector } from 'react-redux'
 import { StoreState } from '../../../store/store'
-import type { UploadProps } from 'antd';
 import { BookOutlined, CheckOutlined, KeyOutlined, LinkOutlined, PlusOutlined, TagOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
 import { ProxySettingsInput } from './ProxySettingsInput'
+import { Progress } from 'antd'
 import { colors } from '../../../global-style/style-colors.module'
+import { AvatarUploadComponent } from './AvatarUploadComponent'
+import { AutoregHeader } from '../Autoreg/AutoregHeader'
+import { StaticMessage } from '../../../components/StaticMessage/StaticMessage'
+import styles from '../../../global-style/scroll-bar-style.module.css'
+
 
 const { Title } = Typography
 const { Content } = Layout
 
-const AvatarAploadComponent = () => {
-  const uploadProps: UploadProps = {
-    name: 'file',
-    /**@todo connect to DB */
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
-    headers: {
-      authorization: 'authorization-text',
-    },
-    onChange(info) {
-      if (info.file.status !== 'uploading') {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === 'done') {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === 'error') {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
-
-  return (
-    <div className="flex flex-col items-center gap-3">
-      <Upload {...uploadProps}>
-        <Button icon={<UploadOutlined />}>Загрузить аватар</Button>
-      </Upload>
-    </div>
-  )
-}
 
 export const SettingsPage = () => {
   const userName = useSelector((state: StoreState) => state.user.nick)
+  const userAvatar = useSelector((state: StoreState) => state.app.userAvatar)
+  const [accountsUsage, setAccountsUsage] = useState<number>(0)
+
+  useEffect(() => {
+    setAccountsUsage(9.3)
+  })
+
+  type smsServicesTypes = {
+    title: string,
+    type: "error" | "warning" | "success" | "service"
+  }
+  const smsServicesList: smsServicesTypes[] = [
+    {
+      title: 'SMS-Activate API',
+      type: 'service'
+    },
+    {
+      title: 'SMS-Activator',
+      type: 'service'
+    },
+    {
+      title: 'SMS-Service',
+      type: 'service'
+    },
+    {
+      title: 'SMS-Phones',
+      type: 'service'
+    }
+  ]
 
   return (
     <>
@@ -50,18 +57,22 @@ export const SettingsPage = () => {
         <HeaderComponent title='Настройки'/>
 
         <Content className='flex gap-8'>
-          <div className='flex flex-col w-full h-full max-w-[900px] gap-8'>
-            <MCard title='Настройка профиля' className='w-full h-full px-2 py-2' extra={<Button disabled type='link' icon={<CheckOutlined />}>Применить</Button>}>
+          <div className='flex flex-col w-full max-w-[1100px] gap-8'>
+            <MCard title='Настройка профиля' className='w-full' extra={<Button disabled type='link' icon={<CheckOutlined />}>Применить</Button>}>
               <div className="flex items-start gap-8 justify-between">
                 <div className="flex items-start gap-8">
-                  <Avatar size={110} icon={<UserOutlined />} />
-                  <div className="flex flex-col gap-3">
+                  <Avatar size={110} icon={userAvatar ? userAvatar : <UserOutlined />} />
+                  <div className="flex flex-col items-start justify-start gap-3">
                     <p style={{ margin: '0 0' }}>Имя</p>
                     <Title editable style={{ margin: '0 0' }} level={2}>{userName}</Title>
-                    <AvatarAploadComponent />
+                    <AvatarUploadComponent />
                   </div>
                 </div>
-                <Statistic title="Использовано аккаунтов" value={93} suffix="/ 1000" />
+
+                <div className="min-w-[300px] f-full">
+                  <Statistic title="Использовано аккаунтов" value={93} suffix="/ 1000" />
+                  <Progress percent={accountsUsage} strokeColor={colors.primary}/>
+                </div>
               </div>
             </MCard>
 
@@ -105,10 +116,27 @@ export const SettingsPage = () => {
             </MCard>
           </div>
 
-          {/* <MCard className='w-full max-w-[800px]'>
-            <Title>Дополнительная информация</Title>
-          </MCard> */}
-
+          <div className="max-w-[700px] w-full">
+            <MCard className='px-2 py-2'>
+              <div>
+                <AutoregHeader 
+                  title='Список СМС сервисов' 
+                  dopTitle='Добавленные СМС сервисы' 
+                />
+              </div>
+              <div 
+                className={`flex flex-col gap-3 overflow-y-scroll overflow-x-hidden pr-[5px] ${styles.scroll_bar_style}`}
+              >
+              {smsServicesList.map((service: smsServicesTypes, index) => (
+                <StaticMessage 
+                  key={index}
+                  title={service.title}
+                  type={service.type}
+                />
+              ))}
+              </div>
+            </MCard>
+          </div>
         </Content>
       </Layout>
     </>
