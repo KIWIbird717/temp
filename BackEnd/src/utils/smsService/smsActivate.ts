@@ -363,77 +363,96 @@ export async function rentPhoneRegistration(
   telegramCode: string,
   country: string
 ): Promise<{ id: string; phoneNumber: string }> {
-  const serviceUrls = {
-    "sms-man": `http://api.sms-man.ru/stubs/handler_api.php?action=getNumber&api_key=${API_KEYS.sms_man}&service=${telegramCode}&country=${country}&ref=${API_KEYS.sms_man}`,
-    "5sim": `https://5sim.biz/v1/user/buy/activation/${country}/any/${telegramCode}`,
-    "sms-activate": `https://sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getNumberV2&service=${telegramCode}&country=${country}`,
-    "sms-activation-service": `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getNumber&service=${telegramCode}&operator=any&country=${country}&lang=ru`,
-    "sms-acktiwator": `https://sms-acktiwator.ru/api/getnumber/${API_KEYS.sms_acktiwator}?id=${telegramCode}&code=${country}`,
-    "sms-hub": `https://smshub.org/stubs/handler_api.php?api_key=${API_KEYS.sms_hub}&action=getNumber&service=${telegramCode}&country=${country}`,
-    "vak-sms": `https://vak-sms.com/api/getNumber/?apiKey=${API_KEYS.vak_sms}&service=${telegramCode}&country=${country}`,
-  };
-
-  const url = serviceUrls[service];
-  if (!url) {
-    throw new Error(`Unsupported service: ${service}`);
-  }
-
-  let response;
-  if (service === "5sim") {
-    response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${API_KEYS.five_sim}`,
-        Accept: "application/json",
-      },
-    });
-  } else {
-    response = await axios.get(url);
-  }
-
-  await checkForErrorFromAxiosResponse(response, service);
-
-  let id, phoneNumber;
   switch (service) {
-    case "sms-man":
-    case "sms-hub":
-      [, id, phoneNumber] = response.data.split(":");
-      break;
+    case "sms-man": {
+      const response = await axios.get(
+        `http://api.sms-man.ru/stubs/handler_api.php?action=getNumber&api_key=${API_KEYS.sms_man}&service=${telegramCode}&country=${country}&ref=${API_KEYS.sms_man}`
+      );
 
-    case "5sim":
-      id = response.data.id;
-      phoneNumber = response.data.phone;
-      break;
+      await checkForErrorFromAxiosResponse(response, service);
 
-    case "sms-activate":
-      id = response.data.activationId;
-      phoneNumber = response.data.phoneNumber;
-      break;
+      const [_, id, number] = response.data.split(":");
+      return { id, phoneNumber: number };
+    }
+    case "5sim": {
+      const response = await axios.get(
+        `https://5sim.biz/v1/user/buy/activation/${country}/any/${telegramCode}`,
+        {
+          headers: {
+            Authorization: `Bearer ${API_KEYS.five_sim}`,
+            Accept: "application/json",
+          },
+        }
+      );
 
-    case "sms-activation-service":
-      const [status, activationId, phone] = response.data.split(":");
-      if (status === "ACCESS_NUMBER") {
-        id = activationId;
-        phoneNumber = phone;
-      } else {
-        throw new Error(`Failed to rent phone number: ${response.data}`);
+      await checkForErrorFromAxiosResponse(response, service);
+
+      return { id: response.data.id, phoneNumber: response.data.phone };
       }
-      break;
+    case "sms-activate": {
+      const response = await axios.get(
+        `https://sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getNumberV2&service=${telegramCode}&country=${country}`
+      );
 
-    case "sms-acktiwator":
-      id = response.data.id;
-      phoneNumber = response.data.number;
-      break;
+      await checkForErrorFromAxiosResponse(response, service);
 
-    case "vak-sms":
-      id = response.data.idNum;
-      phoneNumber = response.data.tel.toString();
-      break;
+      return {
+        id: response.data.activationId,
+        phoneNumber: response.data.phoneNumber,
+      };
+    }
+    case "sms-activation-service": {
+      const response = await axios.get(
+        `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getNumber&service=${telegramCode}&operator=any&country=${country}&lang=ru`
+      );
+
+      await checkForErrorFromAxiosResponse(response, service);
+
+      const [status, activationId, phoneNumber] = response.data.split(":");
+      if (status === "ACCESS_NUMBER") {
+        return { id: activationId, phoneNumber };
+      }
+      throw new Error(`Failed to rent phone number: ${response.data}`);
+    }
+    case "sms-acktiwator": {
+      const response = await axios.get(
+        `https://sms-acktiwator.ru/api/getnumber/${API_KEYS.sms_acktiwator}?id=${telegramCode}&code=${country}`
+      );
+
+      await checkForErrorFromAxiosResponse(response, service);
+
+      return { id: response.data.id, phoneNumber: response.data.number };
+    }
+    case "sms-hub": {
+      const response = await axios.get(
+        `https://smshub.org/stubs/handler_api.php?api_key=${API_KEYS.sms_hub}&action=getNumber&service=${telegramCode}&country=${country}`
+      );
+
+      await checkForErrorFromAxiosResponse(response, service);
+
+      const [status1, id1, number1] = response.data.split(":");
+      if (status1 === "ACCESS_NUMBER") {
+        return { id: id1, phoneNumber: number1 };
+      }
+      throw new Error(`Failed to rent phone number: ${response.data}`);
+    }
+
+    case "vak-sms": {
+      const response = await axios.get(
+        `https://vak-sms.com/api/getNumber/?apiKey=${API_KEYS.vak_sms}&service=${telegramCode}&country=${country}`
+      );
+
+      await checkForErrorFromAxiosResponse(response, service);
+
+      return {
+        id: response.data.idNum,
+        phoneNumber: response.data.tel.toString(),
+      };
+    }
 
     default:
       throw new Error(`Unsupported service: ${service}`);
   }
-
-  return { id, phoneNumber };
 }
 
 export async function getRegistrationCodes(
