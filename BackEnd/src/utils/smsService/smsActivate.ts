@@ -7,6 +7,8 @@ const API_KEYS = {
   sms_activate: process.env.SMS_ACTIVATE_API_KEY,
   sms_activation_service: process.env.SMS_ACTIVATION_SERVICE_API_KEY,
   sms_acktiwator: process.env.SMS_ACKTIWATOR_API_KEY,
+  sms_hub: process.env.SMS_HUB_API_KEY,
+  vak_sms: process.env.VAK_SMS_API_KEY,
 };
 
 export type Service =
@@ -14,9 +16,9 @@ export type Service =
   | "5sim"
   | "sms-activate"
   | "sms-activation-service"
-  | "sms-acktiwator";
-
-type CheckerService = Service | string;
+  | "sms-acktiwator"
+  | "sms-hub"
+  | "vak-sms";
 
 export const serviceList: Service[] = [
   "sms-man",
@@ -24,17 +26,9 @@ export const serviceList: Service[] = [
   "sms-activate",
   "sms-activation-service",
   "sms-acktiwator",
+  "sms-hub",
+  "vak-sms",
 ];
-
-export async function checkService(
-  service: CheckerService
-): Promise<Service | null> {
-  if (!service || !serviceList.includes(service as Service)) {
-    return null;
-  }
-
-  return service as Service;
-}
 
 export async function getTelegramCode(service: Service): Promise<string> {
   switch (service) {
@@ -45,11 +39,7 @@ export async function getTelegramCode(service: Service): Promise<string> {
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      const telegramService = response.data.find(
-        (s: any) => s.title === "Telegram"
-      );
-
-      return telegramService.id;
+      return response.data.find((s: any) => s.title === "Telegram").id;
 
     case "5sim":
     case "sms-acktiwator":
@@ -57,6 +47,8 @@ export async function getTelegramCode(service: Service): Promise<string> {
 
     case "sms-activate":
     case "sms-activation-service":
+    case "sms-hub":
+    case "vak-sms":
       return "tg";
 
     default:
@@ -71,7 +63,6 @@ export interface Country {
 
 export async function getCountry(service: Service): Promise<Country[]> {
   let response: any;
-  let countries: Country[] = [];
 
   switch (service) {
     case "sms-man":
@@ -81,21 +72,21 @@ export async function getCountry(service: Service): Promise<Country[]> {
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      countries = Object.keys(response.data).map((key) => ({
-        id: response.data[key].id,
-        name: response.data[key].name,
+      return Object.values(response.data).map((country: any) => ({
+        id: country.id,
+        name: country.name,
       }));
-      break;
+
     case "5sim":
       response = await axios.get("https://5sim.biz/v1/guest/countries");
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      countries = Object.keys(response.data).map((key) => ({
+      return Object.entries(response.data).map(([key, value]: any) => ({
         id: key,
-        name: response.data[key].text_en,
+        name: value.text_en,
       }));
-      break;
+
     case "sms-acktiwator":
       response = await axios.get(
         `https://sms-acktiwator.ru/api/countries/${API_KEYS.sms_acktiwator}`
@@ -103,23 +94,21 @@ export async function getCountry(service: Service): Promise<Country[]> {
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      countries = response.data.map((country: any) => ({
+      return response.data.map((country: any) => ({
         id: country.code,
         name: country.name,
       }));
-      break;
+
     case "sms-activate":
       response = await axios.get(
         `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getCountries`
       );
-
       await checkForErrorFromAxiosResponse(response, service);
-
-      countries = Object.keys(response.data).map((key) => ({
-        id: response.data[key].id,
-        name: response.data[key].rus,
+      return Object.values(response.data).map((country: any) => ({
+        id: country.id,
+        name: country.rus,
       }));
-      break;
+
     case "sms-activation-service":
       response = await axios.get(
         `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getCountryAndOperators&lang=ru`
@@ -127,21 +116,18 @@ export async function getCountry(service: Service): Promise<Country[]> {
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      countries = response.data.map((country: any) => ({
+      return response.data.map((country: any) => ({
         id: country.id,
         name: country.name,
       }));
-      break;
+
     default:
       throw new Error("Invalid service.");
   }
-
-  return countries;
 }
 
 export async function getBalance(service: Service): Promise<number> {
   let response: any;
-  let balance: number;
 
   switch (service) {
     case "sms-man":
@@ -151,8 +137,8 @@ export async function getBalance(service: Service): Promise<number> {
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      balance = parseFloat(response.data.split(":")[1]);
-      break;
+      return parseFloat(response.data.split(":")[1]);
+
     case "5sim":
       response = await axios.get("https://5sim.biz/v1/user/profile", {
         headers: {
@@ -163,8 +149,8 @@ export async function getBalance(service: Service): Promise<number> {
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      balance = response.data.balance;
-      break;
+      return response.data.balance;
+
     case "sms-acktiwator":
       response = await axios.get(
         `https://sms-acktiwator.ru/api/getbalance/${API_KEYS.sms_acktiwator}`
@@ -172,8 +158,8 @@ export async function getBalance(service: Service): Promise<number> {
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      balance = parseFloat(response.data);
-      break;
+      return parseFloat(response.data);
+
     case "sms-activate":
       response = await axios.get(
         `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getBalance`
@@ -181,8 +167,8 @@ export async function getBalance(service: Service): Promise<number> {
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      balance = parseFloat(response.data.split(":")[1]);
-      break;
+      return parseFloat(response.data.split(":")[1]);
+
     case "sms-activation-service":
       response = await axios.get(
         `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getBalance&lang=ru`
@@ -190,12 +176,29 @@ export async function getBalance(service: Service): Promise<number> {
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      balance = parseFloat(response.data);
-      break;
+      return parseFloat(response.data);
+
+    case "sms-hub":
+      response = await axios.get(
+        `https://smshub.org/stubs/handler_api.php?api_key=${API_KEYS.sms_hub}&action=getBalance`
+      );
+
+      await checkForErrorFromAxiosResponse(response, service);
+
+      return parseFloat(response.data.split(":")[1]);
+
+    case "vak-sms":
+      response = await axios.get(
+        `https://vak-sms.com/api/getBalance/?apiKey=${API_KEYS.vak_sms}`
+      );
+
+      await checkForErrorFromAxiosResponse(response, service);
+
+      return response.data.balance;
+
     default:
       throw new Error("Invalid service.");
   }
-  return balance;
 }
 
 export interface PhoneInfo {
@@ -209,7 +212,6 @@ export async function getAvailablePhones(
 ): Promise<Record<string, PhoneInfo>> {
   const telegramCode = await getTelegramCode(service);
   let response: any;
-  let phones: Record<string, PhoneInfo> = {};
 
   switch (service) {
     case "sms-man":
@@ -219,13 +221,12 @@ export async function getAvailablePhones(
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      Object.keys(response.data).forEach((key) => {
-        phones["telegram"] = {
-          cost: parseInt(response.data[key].cost, 10),
-          count: parseInt(response.data[key].count, 10),
-        };
-      });
-      break;
+      return {
+        telegram: {
+          cost: parseInt(response.data[telegramCode].cost, 10),
+          count: parseInt(response.data[telegramCode].count, 10),
+        },
+      };
 
     case "5sim":
       response = await axios.get(
@@ -239,13 +240,12 @@ export async function getAvailablePhones(
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      phones = {
+      return {
         telegram: {
           cost: parseInt(response.data.telegram.Price, 10),
           count: parseInt(response.data.telegram.Qty, 10),
         },
       };
-      break;
 
     case "sms-activate":
       response = await axios.get(
@@ -254,11 +254,12 @@ export async function getAvailablePhones(
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      phones["telegram"] = {
-        cost: parseInt(response.data[country.id][telegramCode].cost, 10),
-        count: parseInt(response.data[country.id][telegramCode].count, 10),
+      return {
+        telegram: {
+          cost: parseInt(response.data[country.id][telegramCode].cost, 10),
+          count: parseInt(response.data[country.id][telegramCode].count, 10),
+        },
       };
-      break;
 
     case "sms-acktiwator":
       response = await axios.get(
@@ -267,15 +268,16 @@ export async function getAvailablePhones(
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      response.data.forEach((service: any) => {
-        if (service.name.toLowerCase() === telegramCode) {
-          phones["telegram"] = {
-            cost: parseInt(service.cost, 10),
-            count: parseInt(service.count, 10),
-          };
-        }
-      });
-      break;
+      const telegramService = response.data.find(
+        (service: any) => service.name.toLowerCase() === telegramCode
+      );
+
+      return {
+        telegram: {
+          cost: parseInt(telegramService.cost, 10),
+          count: parseInt(telegramService.count, 10),
+        },
+      };
 
     case "sms-activation-service":
       response = await axios.get(
@@ -284,21 +286,76 @@ export async function getAvailablePhones(
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      response.data.forEach((service: any) => {
-        if (service.id.toLowerCase() === telegramCode) {
-          phones["telegram"] = {
-            cost: parseFloat(service.price),
-            count: parseInt(service.quantity, 10),
-          };
+      const tgService = response.data.find(
+        (service: any) => service.id.toLowerCase() === telegramCode
+      );
+
+      return {
+        telegram: {
+          cost: parseFloat(tgService.price),
+          count: parseInt(tgService.quantity, 10),
+        },
+      };
+
+    // Cost is rounded value
+    case "sms-hub":
+      response = await axios.get(
+        `https://smshub.org/stubs/handler_api.php?api_key=${API_KEYS.sms_hub}&action=getPrices&service=${telegramCode}&country=${country.id}`
+      );
+
+      await checkForErrorFromAxiosResponse(response, service);
+
+      const smsHubData: Record<string, number> =
+        response.data[country.id][telegramCode];
+      const totalPhones: number = Object.values(smsHubData).reduce(
+        (sum: number, count: number) => sum + count,
+        0
+      );
+      const averageCost: number =
+        Object.keys(smsHubData).reduce(
+          (sum: number, price: string) =>
+            sum + parseFloat(price) * smsHubData[price],
+          0
+        ) / totalPhones;
+      const roundedCost: number = Math.round(averageCost * 100) / 100;
+
+      let lowestPriceOver20 = Number.MAX_VALUE;
+      for (const price in smsHubData) {
+        const count = smsHubData[price];
+        if (count > 20 && parseFloat(price) < lowestPriceOver20) {
+          lowestPriceOver20 = parseFloat(price);
         }
-      });
-      break;
+      }
+
+      return {
+        telegram: {
+          cost:
+            lowestPriceOver20 === Number.MAX_VALUE
+              ? roundedCost
+              : lowestPriceOver20,
+          count: totalPhones,
+        },
+      };
+
+    case "vak-sms":
+      response = await axios.get(
+        `https://vak-sms.com/api/getCountNumberList/?apiKey=${API_KEYS.vak_sms}&country=${country.id}`
+      );
+
+      await checkForErrorFromAxiosResponse(response, service);
+
+      const vakTelegramService = response.data[telegramCode];
+
+      return {
+        telegram: {
+          cost: parseFloat(vakTelegramService.price),
+          count: parseInt(vakTelegramService.count, 10),
+        },
+      };
 
     default:
       throw new Error("Invalid service.");
   }
-
-  return phones;
 }
 
 export async function rentPhoneRegistration(
@@ -306,69 +363,77 @@ export async function rentPhoneRegistration(
   telegramCode: string,
   country: string
 ): Promise<{ id: string; phoneNumber: string }> {
+  const serviceUrls = {
+    "sms-man": `http://api.sms-man.ru/stubs/handler_api.php?action=getNumber&api_key=${API_KEYS.sms_man}&service=${telegramCode}&country=${country}&ref=${API_KEYS.sms_man}`,
+    "5sim": `https://5sim.biz/v1/user/buy/activation/${country}/any/${telegramCode}`,
+    "sms-activate": `https://sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getNumberV2&service=${telegramCode}&country=${country}`,
+    "sms-activation-service": `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getNumber&service=${telegramCode}&operator=any&country=${country}&lang=ru`,
+    "sms-acktiwator": `https://sms-acktiwator.ru/api/getnumber/${API_KEYS.sms_acktiwator}?id=${telegramCode}&code=${country}`,
+    "sms-hub": `https://smshub.org/stubs/handler_api.php?api_key=${API_KEYS.sms_hub}&action=getNumber&service=${telegramCode}&country=${country}`,
+    "vak-sms": `https://vak-sms.com/api/getNumber/?apiKey=${API_KEYS.vak_sms}&service=${telegramCode}&country=${country}`,
+  };
+
+  const url = serviceUrls[service];
+  if (!url) {
+    throw new Error(`Unsupported service: ${service}`);
+  }
+
+  let response;
+  if (service === "5sim") {
+    response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${API_KEYS.five_sim}`,
+        Accept: "application/json",
+      },
+    });
+  } else {
+    response = await axios.get(url);
+  }
+
+  await checkForErrorFromAxiosResponse(response, service);
+
+  let id, phoneNumber;
   switch (service) {
     case "sms-man":
-      const response = await axios.get(
-        `http://api.sms-man.ru/stubs/handler_api.php?action=getNumber&api_key=${API_KEYS.sms_man}&service=${telegramCode}&country=${country}&ref=${API_KEYS.sms_man}`
-      );
-
-      await checkForErrorFromAxiosResponse(response, service);
-
-      const [_, id, number] = response.data.split(":");
-      return { id, phoneNumber: number };
+    case "sms-hub":
+      [, id, phoneNumber] = response.data.split(":");
+      break;
 
     case "5sim":
-      const response2 = await axios.get(
-        `https://5sim.biz/v1/user/buy/activation/${country}/any/${telegramCode}`,
-        {
-          headers: {
-            Authorization: `Bearer ${API_KEYS.five_sim}`,
-            Accept: "application/json",
-          },
-        }
-      );
-
-      await checkForErrorFromAxiosResponse(response2, service);
-
-      return { id: response2.data.id, phoneNumber: response2.data.phone };
+      id = response.data.id;
+      phoneNumber = response.data.phone;
+      break;
 
     case "sms-activate":
-      const response3 = await axios.get(
-        `https://sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getNumberV2&service=${telegramCode}&country=${country}`
-      );
-
-      await checkForErrorFromAxiosResponse(response3, service);
-
-      return {
-        id: response3.data.activationId,
-        phoneNumber: response3.data.phoneNumber,
-      };
+      id = response.data.activationId;
+      phoneNumber = response.data.phoneNumber;
+      break;
 
     case "sms-activation-service":
-      const response4 = await axios.get(
-        `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getNumber&service=${telegramCode}&operator=any&country=${country}&lang=ru`
-      );
-
-      await checkForErrorFromAxiosResponse(response4, service);
-
-      const [status, activationId, phoneNumber] = response4.data.split(":");
+      const [status, activationId, phone] = response.data.split(":");
       if (status === "ACCESS_NUMBER") {
-        return { id: activationId, phoneNumber };
+        id = activationId;
+        phoneNumber = phone;
+      } else {
+        throw new Error(`Failed to rent phone number: ${response.data}`);
       }
-      throw new Error(`Failed to rent phone number: ${response4.data}`);
+      break;
 
     case "sms-acktiwator":
-      const response5 = await axios.get(
-        `https://sms-acktiwator.ru/api/getnumber/${API_KEYS.sms_acktiwator}?id=${telegramCode}&code=${country}`
-      );
+      id = response.data.id;
+      phoneNumber = response.data.number;
+      break;
 
-      await checkForErrorFromAxiosResponse(response5, service);
-
-      return { id: response5.data.id, phoneNumber: response5.data.number };
+    case "vak-sms":
+      id = response.data.idNum;
+      phoneNumber = response.data.tel.toString();
+      break;
 
     default:
       throw new Error(`Unsupported service: ${service}`);
   }
+
+  return { id, phoneNumber };
 }
 
 export async function getRegistrationCodes(
