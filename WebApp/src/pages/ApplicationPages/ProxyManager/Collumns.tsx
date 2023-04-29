@@ -1,5 +1,5 @@
 import type { ColumnsType } from 'antd/es/table';
-import proxyFolders from '../../images/proxyFolder.svg'
+import proxyFolders from '../../../images/proxyFolder.svg'
 import { Typography, Button } from 'antd'
 import { useDispatch } from 'react-redux';
 import { setProxyManagerFolder } from '../../../store/appSlice';

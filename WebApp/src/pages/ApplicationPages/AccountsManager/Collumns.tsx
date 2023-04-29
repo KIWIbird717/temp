@@ -1,5 +1,5 @@
 import type { ColumnsType } from 'antd/es/table';
-import tableCard from '../../images/tableCard.svg'
+import tableCard from '../../../images/tableCard.svg'
 import { Typography, Button, Input } from 'antd'
 import { useDispatch } from 'react-redux';
 import { setAccountsManagerFolder } from '../../../store/appSlice';

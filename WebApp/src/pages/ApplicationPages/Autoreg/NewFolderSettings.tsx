@@ -36,7 +36,7 @@ export const NewFolderSettings = ({key, current, value}: propsType) => {
         </div>
         <div className="w-full flex flex-col gap-1">
           <div className="flex gap-2 items-center">
-            <Title level={5} style={{ margin: '0 0' }}>Выбор оператора</Title>
+            <Title level={5} style={{ margin: '0 0' }}>Оператора</Title>
             <Popover className='cursor-pointer' title="Оператор" content='Тут может быть описание операторов'>
               <InfoCircleOutlined />
             </Popover>
@@ -48,7 +48,7 @@ export const NewFolderSettings = ({key, current, value}: propsType) => {
       <div className="flex gap-3 mb-5">
         <div className="w-full flex flex-col gap-1">
           <div className="flex gap-2 items-center">
-            <Title level={5} style={{ margin: '0 0' }}>Выбор оператора</Title>
+            <Title level={5} style={{ margin: '0 0' }}>Выбор страны</Title>
             <Popover className='cursor-pointer' title="Страна" content='Тут может быть описание выбора стран'>
               <InfoCircleOutlined />
             </Popover>
@@ -57,7 +57,7 @@ export const NewFolderSettings = ({key, current, value}: propsType) => {
         </div>
         <div className="w-full flex flex-col gap-1">
           <div className="flex gap-2 items-center">
-            <Title level={5} style={{ margin: '0 0' }}>Выбор оператора</Title>
+            <Title level={5} style={{ margin: '0 0' }}>Proxy</Title>
             <Popover className='cursor-pointer' title="Proxy" content='Тут может быть описание proxy'>
               <InfoCircleOutlined />
             </Popover>

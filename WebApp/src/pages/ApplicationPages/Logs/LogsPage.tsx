@@ -6,6 +6,7 @@ import { MCard } from '../../../components/Card/MCard'
 import { useContainerDimensions } from '../../../hooks/useContainerDimention'
 import { SelectOptions } from './SelectOptions'
 import { formatDate } from '../../../utils/formatDate'
+import styles from '../../../global-style/scroll-bar-style.module.css'
 
 const { Content } = Layout
 const { Search } = Input
@@ -74,7 +75,10 @@ export const LogsPage = () => {
               className='max-w-[300px]'
             />
           </div>
-          <div style={{ maxHeight: `calc(100vh - ${height + globalPadding + 140}px)` }} className='w-full overflow-y-scroll overflow-x-hidden'>
+          <div 
+            style={{ maxHeight: `calc(100vh - ${height + globalPadding + 140}px)` }} 
+            className={`w-full overflow-y-scroll overflow-x-hidden mr-8 ${styles.scroll_bar_style}`}
+          >
             <List
               bordered
               dataSource={data}
