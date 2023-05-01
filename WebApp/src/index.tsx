@@ -31,8 +31,6 @@ const theme = {
     lineHeightHeading4: 1.4,
     lineHeightHeading5: 1.5,
     marginXS: 8,
-    // Divider
-    colorSplit: colors.dopFont
   }
 }
 

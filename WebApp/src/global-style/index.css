@@ -10,6 +10,7 @@
   --white: #fff;
   --success: rgb(137, 217, 127);
   --warning: rgb(231, 218, 103);
+  --font: #393D55;
 }
 
 /* Global Styles for antd Table component */

@@ -47,6 +47,9 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
     message.info(`Click on item ${key}`)
   }
 
+  /**
+   * Setting table body for `folders`table
+   */
   const tableHeaders: ColumnsType<IHeaderType> = [
     {
       title: 'Папка',
@@ -76,11 +79,13 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
         <div className="flex gap-1 items-center">
           <Title style={{ margin: '0px 0px' }} level={5}>{accounts}</Title>
           <Divider type="vertical"/>
-          <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
+          <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }} maxPopoverTrigger="focus">
             <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
             <Avatar style={{ backgroundColor: colors.accent }}>K</Avatar>
             <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-            <Avatar style={{ backgroundColor: '#1890ff' }} icon={<AntDesignOutlined />} />
+            {new Array(accounts-3).fill(0).map(() => (
+              <Avatar style={{ backgroundColor: '#1890ff' }} icon={<AntDesignOutlined />} />
+            ))}
           </Avatar.Group>
         </div>
       ),

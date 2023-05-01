@@ -5,6 +5,8 @@ import { motion } from 'framer-motion'
 import { IHeaderType, TableHeaders, tableData } from './Collumns'
 import { CloseOutlined, ContainerOutlined, EditOutlined } from '@ant-design/icons'
 import { notificationHandler } from '../../../components/notification'
+import { MSelect } from '../../../components/Select/MSelect'
+import { MSearch } from '../../../components/Search/MSearch'
 
 
 const { Search } = Input
@@ -42,16 +44,14 @@ export const Folders = () => {
         <div className="flex flex-col gap-7">
           <div className="flex items-center justify-between">
             <div className="flex gap-3 mr-2">
-              <Select
-                className='w-[300px]'
+              <MSelect 
                 size='large'
                 defaultValue="Страна"
-                // onChange={handleChange}
                 style={{ width: 200 }}
+                // onChange={handleChange}
                 // options={options}
               />
-              <Search
-                className='w-[300px]'
+              <MSearch 
                 placeholder="Поиск по папкам"
                 allowClear
                 enterButton="Поиск"

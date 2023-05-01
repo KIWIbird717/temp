@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { Card, Layout, Segmented } from 'antd'
 import { contentStyle } from '../../../global-style/layoutStyle'
 import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
@@ -13,7 +13,6 @@ import { useContainerDimensions } from '../../../hooks/useContainerDimention'
 import { RecentActivities } from './RecentActivities'
 
 
-
 const { Content } = Layout
 
 interface ISegment {
@@ -24,7 +23,7 @@ interface ISegment {
 
 type segmentValueType = number | string
 
-export const AutoRegPage = () => {
+export const AutoRegPage: React.FC = () => {
   const [segmentValue, setSegmentValue] = useState<segmentValueType>(0)
 
   const Segment: ISegment[] = [
@@ -78,8 +77,8 @@ export const AutoRegPage = () => {
 
       <Content className='flex flex-col gap-8'>
         <div className="w-full h-[400px]">
-          <Card className='w-full h-full bg-[#d29ded]'>
-            
+          <Card className='w-full h-full bg-[#d29ded] flex items-center justify-center rounded-[20px]'>
+            <h1 className='text-[#e4b8e5] text-8xl font-black uppercase'>Тут будет банер</h1>
           </Card>
         </div>
         <div className="flex gap-8">
@@ -89,8 +88,9 @@ export const AutoRegPage = () => {
               dopTitle='Создайте новую папку с аккаунтами или обновите существующую' 
             />
             <div ref={mainCard} className="flex flex-col">
-              <div className="w-full flex items-center justify-center">
-                <Segmented value={segmentValue} onChange={setSegmentValue} block options={Segment} className='mb-8 w-full'/>
+              <div className="w-full flex items-start justify-center flex-col mb-8 ">
+                <Segmented style={{ borderRadius: '12px' }} value={segmentValue} onChange={setSegmentValue} block options={Segment} className='w-full'/>
+                <p>Парсинг и регистрация с смс сервисов</p>
               </div>
               <div ref={container} className="flex overflow-hidden">
                 <AnimatePresence>

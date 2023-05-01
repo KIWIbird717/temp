@@ -9,8 +9,27 @@ import {
   generateRandomDate,
   generateRandomStatus
  } from './generateTempData';
-import { Tag, InputRef, Space, Input, Button, Dropdown, message, Avatar } from 'antd';
-import { AntDesignOutlined, CheckSquareOutlined, ClockCircleTwoTone, DeleteOutlined, EditOutlined, EnterOutlined, FieldTimeOutlined, MoreOutlined, SearchOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { 
+  Tag, 
+  InputRef, 
+  Space, 
+  Input, 
+  Button, 
+  Dropdown, 
+  message, 
+  Avatar,
+  Badge
+} from 'antd';
+import { 
+  CheckSquareOutlined, 
+  ClockCircleTwoTone, 
+  DeleteOutlined, 
+  EditOutlined, 
+  EnterOutlined, 
+  MoreOutlined, 
+  SearchOutlined, 
+  UploadOutlined 
+} from '@ant-design/icons';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
 import type { MenuProps } from 'antd';
@@ -112,7 +131,9 @@ const GetColumnSearchProps = (data: DataIndex) => {
 }
 
 export const TableHeaders = () => {
-  
+  /**
+   * Items for `dropdown menu` of each table column
+   */
   const dropDownItems: MenuProps['items'] = [
     {
       key: '0',
@@ -145,15 +166,18 @@ export const TableHeaders = () => {
     },
   ]
   
+  /**
+   * Setting table body for `accounts`table
+   */
   const tableHeaders: any = [
     {
       title: 'Аватар',
       dataIndex: 'avatar',
-      render: (tag: any) => (
-        <span>
-          {[tag].map((el: string) => (
-            <Avatar src={tag} />
-          ))}
+      render: (avatar: string, record: any) => (
+        <span className='w-full h-full'>
+          <Badge dot={record.status === 'active' ? true : false} status='success' offset={[-7, 28]}>
+            <Avatar src={avatar} />
+          </Badge>
         </span>
       ),
     },

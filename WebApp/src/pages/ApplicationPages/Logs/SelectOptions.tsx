@@ -35,6 +35,7 @@ export const SelectOptions = () => {
       onChange={handleChange}
       style={{ width: 540 }}
       options={options}
+      defaultValue={['error', 'srvice', 'telegram', 'message']}
     />
   )
 }

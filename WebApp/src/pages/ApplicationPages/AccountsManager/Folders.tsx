@@ -9,7 +9,8 @@ import {
   ContainerOutlined, 
   DeleteOutlined, 
   DragOutlined, 
-  EditOutlined 
+  EditOutlined, 
+  SearchOutlined
 } from '@ant-design/icons'
 import { notificationHandler } from '../../../components/notification'
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
@@ -17,6 +18,9 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
 import { FolderRow } from './FolderRow'
 import { ColumnsType } from 'antd/es/table'
+import { colors } from '../../../global-style/style-colors.module'
+import { MSelect } from '../../../components/Select/MSelect'
+import { MSearch } from '../../../components/Search/MSearch'
 
 const { Search } = Input
 
@@ -107,16 +111,14 @@ export const Folders = () => {
       <div className="flex flex-col gap-7">
         <div className="flex items-center justify-between">
           <div className="flex gap-3 mr-2">
-            <Select
-              className='w-[300px]'
+            <MSelect 
               size='large'
               defaultValue="Страна"
-              // onChange={handleChange}
               style={{ width: 200 }}
+              // onChange={handleChange}
               // options={options}
             />
-            <Search
-              className='w-[300px]'
+            <MSearch 
               placeholder="Поиск по папкам"
               allowClear
               enterButton="Поиск"
