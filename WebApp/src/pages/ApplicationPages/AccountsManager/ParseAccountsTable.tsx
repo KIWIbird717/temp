@@ -10,7 +10,7 @@ import {
   generateRandomStatus
  } from './generateTempData';
 import { Tag, InputRef, Space, Input, Button, Dropdown, message, Avatar } from 'antd';
-import { CheckSquareOutlined, ClockCircleTwoTone, DeleteOutlined, EditOutlined, EnterOutlined, FieldTimeOutlined, MoreOutlined, SearchOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { AntDesignOutlined, CheckSquareOutlined, ClockCircleTwoTone, DeleteOutlined, EditOutlined, EnterOutlined, FieldTimeOutlined, MoreOutlined, SearchOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
 import type { MenuProps } from 'antd';
@@ -152,7 +152,7 @@ export const TableHeaders = () => {
       render: (tag: any) => (
         <span>
           {[tag].map((el: string) => (
-            <Avatar icon={<UserOutlined />} />
+            <Avatar src={tag} />
           ))}
         </span>
       ),
@@ -244,7 +244,7 @@ export const ParseAccountsTable = () => {
   useEffect(() => {
     const dummyAll = new Array(35).fill(0).map((_, index) => { return {
       key: index,
-      avatar: 'e',
+      avatar: "https://xsgames.co/randomusers/avatar.php?g=pixel&key=2",
       phoneNumber: generateRandomPhoneNumber(),
       resting: generateRandomResting(),
       fullName: generateRandomName(),

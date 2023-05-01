@@ -1,9 +1,9 @@
 import type { ColumnsType } from 'antd/es/table';
 import tableCard from '../../../images/tableCard.svg'
-import { Typography, Button, Input } from 'antd'
+import { Typography, Button, Input, Dropdown, MenuProps, message, Avatar, Divider } from 'antd'
 import { useDispatch } from 'react-redux';
 import { setAccountsManagerFolder } from '../../../store/appSlice';
-import { FolderOpenOutlined, IdcardTwoTone } from '@ant-design/icons';
+import { AntDesignOutlined, CheckSquareOutlined, DeleteOutlined, EditOutlined, EnterOutlined, FolderOpenOutlined, IdcardTwoTone, MoreOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { colors } from '../../../global-style/style-colors.module';
 
 export interface IHeaderType {
@@ -20,6 +20,32 @@ const { Title } = Typography
 
 export const TableHeaders = (): ColumnsType<IHeaderType> => {
   const dispatch = useDispatch()
+
+  // Dropdown menu items & onClick function
+  const dropDownItems: MenuProps['items'] = [
+    {
+      key: '0',
+      label: 'Переименовать',
+      icon: <EditOutlined />
+    },
+    {
+      key: '2',
+      label: 'Экспорт"',
+      icon: <UploadOutlined />,
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: '4',
+      label: 'Удалить',
+      icon: <DeleteOutlined />,
+      danger: true,
+    },
+  ]
+  const onClick: MenuProps['onClick'] = ({ key }) => {
+    message.info(`Click on item ${key}`)
+  }
 
   const tableHeaders: ColumnsType<IHeaderType> = [
     {
@@ -47,9 +73,15 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
       title: 'Аккаунты',
       dataIndex: 'accounts',
       render: (accounts: number) => (
-        <div className="flex gap-2">
+        <div className="flex gap-1 items-center">
           <Title style={{ margin: '0px 0px' }} level={5}>{accounts}</Title>
-          <IdcardTwoTone twoToneColor={colors.accent}/>
+          <Divider type="vertical"/>
+          <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
+            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
+            <Avatar style={{ backgroundColor: colors.accent }}>K</Avatar>
+            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+            <Avatar style={{ backgroundColor: '#1890ff' }} icon={<AntDesignOutlined />} />
+          </Avatar.Group>
         </div>
       ),
     },
@@ -63,7 +95,15 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
     },
     {
       title: 'Заблокировано',
-      dataIndex: 'banned'
+      dataIndex: 'banned',
+      render: (banned: number) => (
+        <div className="w-full flex justify-between">
+          {banned}
+          <Dropdown menu={{ items: dropDownItems, onClick }} trigger={['click']}>
+            <Button style={{ borderWidth: '0px', boxShadow: 'inherit' }} shape="circle" icon={<MoreOutlined />} />
+          </Dropdown>
+        </div>
+      )
     }
   ]
 
@@ -74,11 +114,11 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
 export const tableData: IHeaderType[] = [
   {
     key: '1',
-    folder: 'Telegram',
-    dopTitle: 'Аккаунты для прогрева',
+    folder: 'Чаты',
+    dopTitle: 'Аккаунты для чатов',
     accounts: 12,
-    country: 'Finland',
-    latestActivity: '22 апреля',
+    country: 'Финляндия',
+    latestActivity: '21 апреля',
     banned: 0,
   },
   {
@@ -86,16 +126,16 @@ export const tableData: IHeaderType[] = [
     folder: 'Telegram',
     dopTitle: 'Аккаунты для каналов',
     accounts: 24,
-    country: 'Finland',
+    country: 'Германия',
     latestActivity: '22 апреля',
     banned: 0
   },
   {
     key: '3',
-    folder: 'Telegram',
-    dopTitle: 'Аккаунты для переписок',
+    folder: 'Telegram каналы',
+    dopTitle: 'Боты для телеграм каналов',
     accounts: 24,
-    country: 'Finland',
+    country: 'Канада',
     latestActivity: '22 апреля',
     banned: 0
   },

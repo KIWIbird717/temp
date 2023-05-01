@@ -31,12 +31,8 @@ const theme = {
     lineHeightHeading4: 1.4,
     lineHeightHeading5: 1.5,
     marginXS: 8,
-    // Table
-    // controlItemBgHover: colors.white,
-    // controlItemBgActiveHover: colors.white,
-    // colorFillContent: colors.white,
-    // colorFillSecondary: colors.white,
-    // colorSplit: colors.white
+    // Divider
+    colorSplit: colors.dopFont
   }
 }
 

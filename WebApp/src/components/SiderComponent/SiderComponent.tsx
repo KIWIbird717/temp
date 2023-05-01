@@ -10,7 +10,8 @@ import {
   LogoutOutlined,
   LockOutlined,
   ExclamationCircleFilled,
-  CodeOutlined
+  CodeOutlined,
+  ContactsTwoTone
 } from '@ant-design/icons';
 import { colors } from '../../global-style/style-colors.module';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,7 +25,7 @@ const menuItemsStyle: React.CSSProperties = {
   height: '50px'
 }
 
-export const SiderComponent = () => {
+export const SiderComponent: React.FC = () => {
   const { confirm } = Modal
   
   const dispatch = useDispatch()

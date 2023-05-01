@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { Layout, Segmented } from 'antd'
+import { Card, Layout, Segmented } from 'antd'
 import { contentStyle } from '../../../global-style/layoutStyle'
 import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
 import { MCard } from '../../../components/Card/MCard'
@@ -76,35 +76,42 @@ export const AutoRegPage = () => {
     <Layout style={contentStyle}>
       <HeaderComponent title='Авторегистратор'/>
 
-      <Content className='flex gap-8'>
-        <MCard className='px-2 py-2 w-full max-w-[800px] z-10'>
-          <AutoregHeader 
-            title='Установка параметров регистрации' 
-            dopTitle='Создайте новую папку с аккаунтами или обновите существующую' 
-          />
-          <div ref={mainCard} className="flex flex-col">
-            <div className="w-full flex items-center justify-center">
-              <Segmented value={segmentValue} onChange={setSegmentValue} block options={Segment} className='mb-8 w-full'/>
+      <Content className='flex flex-col gap-8'>
+        <div className="w-full h-[400px]">
+          <Card className='w-full h-full bg-[#d29ded]'>
+            
+          </Card>
+        </div>
+        <div className="flex gap-8">
+          <MCard className='px-2 py-2 w-full max-w-[800px] z-10'>
+            <AutoregHeader 
+              title='Установка параметров регистрации' 
+              dopTitle='Создайте новую папку с аккаунтами или обновите существующую' 
+            />
+            <div ref={mainCard} className="flex flex-col">
+              <div className="w-full flex items-center justify-center">
+                <Segmented value={segmentValue} onChange={setSegmentValue} block options={Segment} className='mb-8 w-full'/>
+              </div>
+              <div ref={container} className="flex overflow-hidden">
+                <AnimatePresence>
+                  <motion.div
+                    animate={{
+                      x: -segmentValue * width,
+                      transition: {type: "spring", bounce: 0.1, duration: 0.6}
+                    }}
+                    className='w-full flex'
+                  >
+                    <NewFolderSettings key={0} current={0} value={segmentValue} />
+                    <NewFolderSettings key={1} current={1} value={segmentValue} />
+                    <NewFolderSettings key={2} current={2} value={segmentValue} />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </div>
-            <div ref={container} className="flex overflow-hidden">
-              <AnimatePresence>
-                <motion.div
-                  animate={{
-                    x: -segmentValue * width,
-                    transition: {type: "spring", bounce: 0.1, duration: 0.6}
-                  }}
-                  className='w-full flex'
-                >
-                  <NewFolderSettings key={0} current={0} value={segmentValue} />
-                  <NewFolderSettings key={1} current={1} value={segmentValue} />
-                  <NewFolderSettings key={2} current={2} value={segmentValue} />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        </MCard>
+          </MCard>
 
-        <RecentActivities height={height}/>
+          <RecentActivities height={height}/>
+        </div>
       </Content>
     </Layout>
   )

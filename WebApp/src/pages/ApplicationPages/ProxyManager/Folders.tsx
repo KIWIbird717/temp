@@ -37,8 +37,8 @@ export const Folders = () => {
   }
 
   return (
-    <div className="h-full flex gap-8">
-      <MCard className='h-full w-full px-2 py-2'>
+    <div className="flex gap-8">
+      <MCard className='w-full px-2 py-2'>
         <div className="flex flex-col gap-7">
           <div className="flex items-center justify-between">
             <div className="flex gap-3 mr-2">
