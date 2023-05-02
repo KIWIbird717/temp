@@ -1,7 +1,4 @@
-import React, { useState } from 'react'
 import { Select } from 'antd'
-import type { SizeType } from 'antd/es/config-provider/SizeContext'
-import type { SelectProps, RadioChangeEvent } from 'antd'
 
 export const SelectOptions = () => {
 
@@ -12,19 +9,19 @@ export const SelectOptions = () => {
   const options = [
     {
       label: 'Ошибки',
-      value: 'error'
+      value: 'error',
     },
     {
       label: 'СМС сервис',
-      value: 'srvice'
+      value: 'srvice',
     },
     {
       label: 'Телеграм',
-      value: 'telegram'
+      value: 'telegram',
     },
     {
       label: 'Сообщение',
-      value: 'message'
+      value: 'message',
     }
   ]
 

@@ -61,19 +61,19 @@ const EditableCell: React.FC<EditableCellProps> = ({
 };
 
 export const Messages: React.FC = () => {
-  const [form] = Form.useForm();
-  const [data, setData] = useState(originData);
-  const [editingKey, setEditingKey] = useState('');
+  const [form] = Form.useForm()
+  const [data, setData] = useState(originData)
+  const [editingKey, setEditingKey] = useState('')
 
-  const isEditing = (record: Item) => record.key === editingKey;
+  const isEditing = (record: Item) => record.key === editingKey
 
   const edit = (record: Partial<Item> & { key: React.Key }) => {
-    form.setFieldsValue({ question: '', answer: '', ...record });
-    setEditingKey(record.key);
+    form.setFieldsValue({ question: '', answer: '', ...record })
+    setEditingKey(record.key)
   };
 
   const cancel = () => {
-    setEditingKey('');
+    setEditingKey('')
   };
 
   const save = async (key: React.Key) => {

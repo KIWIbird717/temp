@@ -10,7 +10,7 @@ interface IProps {
 export const RecentActivities = ({height}: IProps): JSX.Element => {
 
   return (
-    <MCard className='px-2 py-2 w-full max-w-[800px]'>
+    <MCard className='px-2 py-2 w-full'>
       <AutoregHeader 
         title='Недавние действия' 
         dopTitle='Последняя информация об аккаунтах' 

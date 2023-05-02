@@ -1,3 +1,8 @@
+export const generateRandomNumber = (num: number): string => {
+  const randomNum1 = Math.floor(Math.random() * 1000).toString().padStart(num, '0')
+  return `${randomNum1}`
+}
+
 export const generateRandomPhoneNumber = (): string => {
   const prefix = '+7'
   const randomNum1 = Math.floor(Math.random() * 1000).toString().padStart(3, '0')
@@ -52,6 +57,24 @@ export const generateRandomDate = (startYear: number, endYear: number): string =
   const minutes = Math.floor(Math.random() * 60);
   return formatDate(new Date(year, month - 1, day, hours, minutes))
 }
+
+export const generateRandomHour = () => {
+
+}
+
+export const getRandomDateInCurrentMonth = (): Date => {
+    const now: Date = new Date(); // get the current date and time
+    const currentYear: number = now.getFullYear(); // get the current year
+    const currentMonth: number = now.getMonth(); // get the current month (zero-indexed)
+    
+    const randomDay: number = Math.floor(Math.random() * 31) + 1; // generate a random day between 1 and 31
+    const randomHour: number = Math.floor(Math.random() * 24); // generate a random hour between 0 and 23
+    const randomMinute: number = Math.floor(Math.random() * 60); // generate a random minute between 0 and 59
+    
+    const randomDate: Date = new Date(currentYear, currentMonth, randomDay, randomHour, randomMinute); // create a new date object with the random values
+    
+    return randomDate; // return the random date as a Date object
+  }
 
 export const generateRandomStatus = (): string => {
   const options = ['active', 'banned', 'resting'];

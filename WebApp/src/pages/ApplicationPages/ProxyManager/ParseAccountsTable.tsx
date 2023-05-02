@@ -4,7 +4,7 @@ import {
   generateRandomString,
   generateRandomStatus,
   generateRandomNumber
- } from './generateTempData';
+ } from '../../../utils/generateTempData';
 import { Tag, InputRef, Space, Input, Button, Dropdown, message, Avatar } from 'antd';
 import { CheckSquareOutlined, ClockCircleTwoTone, DeleteOutlined, EditOutlined, EnterOutlined, FieldTimeOutlined, HddTwoTone, MoreOutlined, SearchOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
