@@ -12,6 +12,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useContainerDimensions } from '../../../hooks/useContainerDimention'
 import { RecentActivities } from './RecentActivities'
 import { Col, Row } from 'antd';
+import { AddToFolderSettings } from './AddToFolderSettings'
+import { ManualSettings } from './ManualSettings'
 
 
 const { Content } = Layout
@@ -92,7 +94,6 @@ export const AutoRegPage: React.FC = () => {
               <div ref={mainCard} className="flex flex-col">
                 <div className="w-full flex items-start justify-center flex-col mb-8 ">
                   <Segmented style={{ borderRadius: '12px' }} value={segmentValue} onChange={setSegmentValue} block options={Segment} className='w-full'/>
-                  <p>Парсинг и регистрация с смс сервисов</p>
                 </div>
                 <div ref={container} className="flex overflow-hidden">
                   <AnimatePresence>
@@ -104,8 +105,8 @@ export const AutoRegPage: React.FC = () => {
                       className='w-full flex'
                     >
                       <NewFolderSettings key={0} current={0} value={segmentValue} />
-                      <NewFolderSettings key={1} current={1} value={segmentValue} />
-                      <NewFolderSettings key={2} current={2} value={segmentValue} />
+                      <AddToFolderSettings key={1} current={1} value={segmentValue} />
+                      <ManualSettings key={2} current={2} value={segmentValue} />
                     </motion.div>
                   </AnimatePresence>
                 </div>

@@ -167,7 +167,7 @@ export const TableHeaders = () => {
   ]
   
   /**
-   * Setting table body for `accounts`table
+   * Setting table body for `accounts` table
    */
   const tableHeaders: any = [
     {

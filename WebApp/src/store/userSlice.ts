@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { IUserState } from "./types"
+import { IHeaderType } from "../pages/ApplicationPages/AccountsManager/Collumns"
 
 const initialState: IUserState = {
   nick: null,
   mail: null,
   id: null,
-  isUserLogined: false
+  isUserLogined: false,
+  userManagerFolders: []
 }
 
 export const userSlice = createSlice({
@@ -23,6 +25,10 @@ export const userSlice = createSlice({
     },
     setUserIsLogined: (state, action: PayloadAction<boolean>) => {
       state.isUserLogined = action.payload
+    },
+    /**Could be empty */
+    setUserManagerFolders: (state, action: PayloadAction<IHeaderType[]>) => {
+      state.userManagerFolders = action.payload
     }
   }
 })
@@ -32,5 +38,6 @@ export const {
   setUserMail,
   setUserId,
   setUserIsLogined,
+  setUserManagerFolders,
 } = userSlice.actions
 export default userSlice.reducer

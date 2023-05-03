@@ -11,6 +11,7 @@
   --success: rgb(137, 217, 127);
   --warning: rgb(231, 218, 103);
   --font: #393D55;
+  --dopFont2: #f6f6f6;
 }
 
 /* Global Styles for antd Table component */

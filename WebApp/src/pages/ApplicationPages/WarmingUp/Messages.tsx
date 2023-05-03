@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
-import { Form, Input, InputNumber, Popconfirm, Table, Typography } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import React, { useRef, useState } from 'react';
+import { Button, Form, Input, InputNumber, InputRef, Popconfirm, Space, Table, Typography } from 'antd';
+import { EditOutlined, SearchOutlined } from '@ant-design/icons';
+import { ColumnTitleProps, ColumnType, FilterConfirmProps } from 'antd/es/table/interface';
+import Highlighter from 'react-highlight-words';
 
 interface Item {
   key: string;
@@ -9,11 +11,11 @@ interface Item {
 }
 
 const originData: Item[] = [];
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    question: `Edward ${i}`,
-    answer: `London Park no. ${i}`,
+  for (let i = 0; i < 100; i++) {
+    originData.push({
+      key: i.toString(),
+      question: `Привет! (${i})`,
+      answer: `И тебе привет! Как дела? (${i})`,
   });
 }
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
@@ -60,10 +62,93 @@ const EditableCell: React.FC<EditableCellProps> = ({
   );
 };
 
+type DataIndex = keyof Item;
+
+const GetColumnSearchProps = (data: DataIndex): ColumnType<Item> => {
+  const [searchText, setSearchText] = useState<string>('')
+  const [searchedColumn, setSearchedColumn] = useState<string>('')
+  const searchInput = useRef<InputRef>(null)
+
+  const handleSearch = (
+    selectedKeys: string[],
+    confirm: (param?: FilterConfirmProps) => void,
+    dataIndex: DataIndex,
+  ) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+  
+  const handleReset = (clearFilters: () => void) => {
+    clearFilters();
+    setSearchText('');
+  };
+  
+  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<Item> => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
+      <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+        <Input
+          ref={searchInput}
+          placeholder="Поиск предложения"
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+          style={{ marginBottom: 8, display: 'block' }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Поиск
+          </Button>
+          <Button
+            onClick={() => {clearFilters && handleReset(clearFilters); handleSearch([''] as string[], confirm, dataIndex)}}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Вернуть
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => (
+      <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex]
+        .toString()
+        .toLowerCase()
+        .includes((value as string).toLowerCase()),
+    onFilterDropdownOpenChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  return getColumnSearchProps(data)
+}
+
 export const Messages: React.FC = () => {
   const [form] = Form.useForm()
   const [data, setData] = useState(originData)
   const [editingKey, setEditingKey] = useState('')
+
 
   const isEditing = (record: Item) => record.key === editingKey
 
@@ -75,6 +160,7 @@ export const Messages: React.FC = () => {
   const cancel = () => {
     setEditingKey('')
   };
+
 
   const save = async (key: React.Key) => {
     try {
@@ -100,21 +186,30 @@ export const Messages: React.FC = () => {
     }
   };
 
-  const columns = [
+  interface IColumn {
+    title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | React.ReactFragment | ((props: ColumnTitleProps<Item>) => React.ReactNode) | null,
+    dataIndex: DataIndex | string | number,
+    width?: string,
+    editable?: boolean,
+    [key: string]: any
+  }
+  const columns: any = [
     {
       title: 'Вопрос',
       dataIndex: 'question',
       width: '40%',
       editable: true,
+      ...GetColumnSearchProps('question')
     },
     {
       title: 'Ответ',
       dataIndex: 'answer',
       width: '40%',
       editable: true,
+      ...GetColumnSearchProps('answer')
     },
     {
-      title: 'operation',
+      title: 'Действия',
       dataIndex: 'operation',
       render: (_: any, record: Item) => {
         const editable = isEditing(record);
@@ -137,8 +232,8 @@ export const Messages: React.FC = () => {
     },
   ];
 
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
+  const mergedColumns = columns.map((col: any) => {
+    if (!col?.editable) {
       return col;
     }
     return {
@@ -156,20 +251,19 @@ export const Messages: React.FC = () => {
   return (
     <Form form={form} component={false}>
       <Table
-      size='small'
+        size='middle'
         components={{
           body: {
             cell: EditableCell,
           },
         }}
-        bordered
         dataSource={data}
         columns={mergedColumns}
         rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-          pageSize: 9
-        }}
+        // pagination={{
+        //   onChange: cancel,
+        //   pageSize: 9
+        // }}
       />
     </Form>
   );
