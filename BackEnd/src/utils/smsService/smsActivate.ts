@@ -305,6 +305,15 @@ export async function getAvailablePhones(
 
       await checkForErrorFromAxiosResponse(response, service);
 
+      if (
+        !response.data[country.id] ||
+        !response.data[country.id][telegramCode]
+      ) {
+        throw new Error(
+          `Invalid response from SMS-Hub: ${JSON.stringify(response.data)}`
+        );
+      }
+
       const smsHubData: Record<string, number> =
         response.data[country.id][telegramCode];
       const totalPhones: number = Object.values(smsHubData).reduce(
@@ -388,7 +397,7 @@ export async function rentPhoneRegistration(
       await checkForErrorFromAxiosResponse(response, service);
 
       return { id: response.data.id, phoneNumber: response.data.phone };
-      }
+    }
     case "sms-activate": {
       const response = await axios.get(
         `https://sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getNumberV2&service=${telegramCode}&country=${country}`
@@ -539,14 +548,43 @@ export async function getRegistrationCodes(
           }
           break;
 
+        case "vak-sms":
+          const response6 = await axios.get(
+            `https://vak-sms.com/api/getSmsCode/?apiKey=${API_KEYS.vak_sms}&idNum=${rentedPhone.id}&all`
+          );
+
+          await checkForErrorFromAxiosResponse(response6, service);
+
+          if (response6.data.smsCode) {
+            if (Array.isArray(response6.data.smsCode)) {
+              code = response6.data.smsCode[0];
+            } else {
+              code = response6.data.smsCode;
+            }
+          }
+          break;
+
+        case "sms-hub":
+          const response7 = await axios.get(
+            `https://smshub.org/stubs/handler_api.php?api_key=${API_KEYS.sms_hub}&action=getStatus&id=${rentedPhone.id}`
+          );
+
+          await checkForErrorFromAxiosResponse(response7, service);
+
+          if (response7.data.startsWith("STATUS_OK")) {
+            code = response7.data.split(":")[1];
+          }
+          break;
+
         default:
           throw new Error(`Unsupported service: ${service}`);
       }
 
       if (!code) {
-        await submitPhone(service, rentedPhone.id);
+        await submitPhone(service, rentedPhone.id, false); // No code received, request another SMS
       } else {
         codes[rentedPhone.phoneNumber] = code;
+        await submitPhone(service, rentedPhone.id, true); // Code received, complete activation
       }
     }
   }
@@ -556,12 +594,14 @@ export async function getRegistrationCodes(
 
 async function submitPhone(
   service: Service,
-  id: string | number
+  id: string | number,
+  codeReceived: boolean
 ): Promise<void> {
   switch (service) {
     case "sms-man":
+      const smsManStatus = codeReceived ? 6 : 3;
       const response = await axios.get(
-        `http://api.sms-man.ru/stubs/handler_api.php?action=setStatus&api_key=${API_KEYS.sms_man}&id=${id}&status=6`
+        `http://api.sms-man.ru/stubs/handler_api.php?action=setStatus&api_key=${API_KEYS.sms_man}&id=${id}&status=${smsManStatus}`
       );
 
       await checkForErrorFromAxiosResponse(response, service);
@@ -584,8 +624,9 @@ async function submitPhone(
       break;
 
     case "sms-activate":
+      const smsActivateStatus = codeReceived ? 6 : 3;
       const response3 = await axios.get(
-        `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=setStatus&status=6&id=${id}`
+        `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=setStatus&status=${smsActivateStatus}&id=${id}`
       );
 
       await checkForErrorFromAxiosResponse(response3, service);
@@ -593,8 +634,9 @@ async function submitPhone(
       break;
 
     case "sms-activation-service":
+      const smsActivationServiceStatus = codeReceived ? 6 : 3;
       const response4 = await axios.get(
-        `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=setStatus&id=${id}&status=6&lang=ru`
+        `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=setStatus&id=${id}&status=${smsActivationServiceStatus}&lang=ru`
       );
 
       await checkForErrorFromAxiosResponse(response4, service);
@@ -602,11 +644,37 @@ async function submitPhone(
       break;
 
     case "sms-acktiwator":
+      const smsAcktiwatorStatus = codeReceived ? 6 : 3;
       const response5 = await axios.get(
-        `https://sms-acktiwator.ru/stubs/handler_api.php?api_key=${API_KEYS.sms_acktiwator}&action=setStatus&status=6&id=${id}`
+        `https://sms-acktiwator.ru/stubs/handler_api.php?api_key=${API_KEYS.sms_acktiwator}&action=setStatus&status=${smsAcktiwatorStatus}&id=${id}`
       );
 
       await checkForErrorFromAxiosResponse(response5, service);
+
+      break;
+
+    case "vak-sms":
+      const vakStatus = codeReceived ? "end" : "send";
+      const response6 = await axios.get(
+        `https://vak-sms.com/api/setStatus/?apiKey=${API_KEYS.vak_sms}&status=${vakStatus}&idNum=${id}`
+      );
+
+      await checkForErrorFromAxiosResponse(response6, service);
+
+      break;
+
+    case "sms-hub":
+      let smsHubStatus;
+      if (codeReceived) {
+        smsHubStatus = 6; // Activation completed successfully
+      } else {
+        smsHubStatus = 3; // Request another SMS
+      }
+      const response7 = await axios.get(
+        `https://smshub.org/stubs/handler_api.php?api_key=${API_KEYS.sms_hub}&action=setStatus&status=${smsHubStatus}&id=${id}`
+      );
+
+      await checkForErrorFromAxiosResponse(response7, service);
 
       break;
 
