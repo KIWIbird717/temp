@@ -6,7 +6,6 @@ import { dbConnection, dbDisconnection } from './servises/MongoDB/mongoDb.servis
 import dotenv from 'dotenv';
 import path from "path";
 
-
 dotenv.config();
 
 
