@@ -6,9 +6,6 @@ import { dbConnection, dbDisconnection } from './servises/MongoDB/mongoDb.servis
 import dotenv from 'dotenv';
 import path from "path";
 
-import { TelegramRegistration } from './utils/telegram/telegramRegister';
-new TelegramRegistration(12312031230232, "dsadasdasdsa")
-
 dotenv.config();
 
 

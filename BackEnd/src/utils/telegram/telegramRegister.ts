@@ -4,11 +4,12 @@ import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
 import { getTelegramVersionSync } from "./utils";
 import os from "os";
 
-import * as speakeasy from "speakeasy";
 import {
   Service,
   rentPhoneRegistration,
-  getRegistrationCodes,
+  getRegistrationCode,
+  Country,
+  getTelegramCode,
 } from "../smsService/smsActivate";
 
 interface WaitingForVerify {
@@ -22,10 +23,17 @@ interface DeviceInfo {
   appVersion: string | "last";
 }
 
+interface phoneVerify {
+  service?: Service;
+  manual?: boolean;
+  phone?: number | string;
+}
+
 interface UserSettings {
   language?: "ru" | "en";
   device?: DeviceInfo;
   proxy?: ProxyInterface;
+  phone: phoneVerify;
 }
 
 let waitingForVerify: WaitingForVerify[] = [];
@@ -33,10 +41,28 @@ let waitingForVerify: WaitingForVerify[] = [];
 class telegramUser {
   private apiId: number;
   private apiHash: string;
+  public statistic: {
+    userError: string[];
+    phone: string;
+    utils: {
+      phoneId?: string;
+      servicePhone?: Service;
+      country?: Country;
+    };
+    manual?: boolean;
+  };
   public client: TelegramClient;
   constructor(apiId: number, apiHash: string, params: UserSettings) {
     this.apiId = apiId;
     this.apiHash = apiHash;
+
+    this.statistic.manual =
+      !params.phone.manual && !params.phone.service
+        ? true
+        : params.phone.manual;
+    this.statistic.utils.servicePhone =
+      params.phone.manual == true ? null : params.phone.service;
+
     const deviceInfo = params.device ?? {
       os: os.release().toString(),
       device: os.type().toString(),
@@ -70,21 +96,67 @@ class telegramUser {
     );
   }
 
-  public async createTelegramUser() {}
+  public async createTelegramUser() {
+    const phone = rentPhoneRegistration(
+      this.statistic.utils.servicePhone,
+      await getTelegramCode(this.statistic.utils.servicePhone),
+      this.statistic.utils.country.id
+    );
+
+    const isAvalible = await this.autoRegister();
+
+    if (isAvalible == "reg") {
+      this.statistic.userError.push(
+        `User was registered with name: ${await this.client.getMe()}`
+      );
+    } else if (isAvalible == "val-code") {
+      this.statistic.userError.push(``);
+    }
+  }
 
   public async enableTwoFactor() {}
 
-  private async checkAndRegister() {
-    try {
-      const me = await this.client.getMe();
-      console.log("User is registered:", me);
-    } catch (err) {
-      if (err instanceof Api.errors.PhoneNumberInvalid) {
-      } else {
-        throw new Error(`When checking user happend error: ${err}`);
+  private async autoRegister(): Promise<string> {
+    return new Promise(async (res) => {
+      try {
+        const user = await this.client.start({
+          phoneNumber: async () => this.statistic.phone,
+          password: async () => {
+            throw new Error("PASSWORD_REQUIRED");
+          },
+          phoneCode: async () => {
+            const code = await getRegistrationCode(
+              this.statistic.utils.servicePhone,
+              {
+                id: this.statistic.utils.phoneId,
+                phoneNumber: this.statistic.phone,
+              }
+            );
+            return code.code;
+          },
+          onError: (err: Error) => {
+            console.error(
+              "An error occurred during the authentication process:",
+              err
+            );
+          },
+        });
+        res("reg");
+      } catch (err) {
+        if (err.message.includes("PHONE_NUMBER_INVALID")) {
+          // User not registered (Good)
+          res("non-reg");
+        } else if (err.message.includes("PHONE_CODE_INVALID")) {
+          // Valid code from sms
+          res("val-code");
+        } else if (err.message === "PASSWORD_REQUIRED") {
+          res("reg");
+        } else {
+          throw new Error(`When checking user happend error: ${err}`);
+        }
+      } finally {
+        await this.client.disconnect();
       }
-    } finally {
-      await this.client.disconnect();
-    }
+    });
   }
 }

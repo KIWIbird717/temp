@@ -428,3 +428,9 @@ export const countryListMap: Record<string, any[]> = {
     { id: 196, name: "Singapore" },
   ],
 };
+let tgCodeForSmsMan: string;
+const setTgCodeForSmsMan = (params: string) => {tgCodeForSmsMan =  params}
+export {
+  tgCodeForSmsMan,
+  setTgCodeForSmsMan
+}

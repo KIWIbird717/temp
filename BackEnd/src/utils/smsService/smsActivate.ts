@@ -1,5 +1,6 @@
 import { checkForErrorFromAxiosResponse } from "./smsHandler";
 import axios from "axios";
+import { setTgCodeForSmsMan, tgCodeForSmsMan } from "./utils";
 
 const API_KEYS = {
   sms_man: process.env.SMS_MAN_API_KEY,
@@ -33,13 +34,18 @@ export const serviceList: Service[] = [
 export async function getTelegramCode(service: Service): Promise<string> {
   switch (service) {
     case "sms-man":
-      const response = await axios.get(
-        `http://api.sms-man.ru/stubs/handler_api.php?action=getServices&api_key=${API_KEYS.sms_man}`
-      );
+      if (tgCodeForSmsMan == ""){
+        const response = await axios.get(
+          `http://api.sms-man.ru/stubs/handler_api.php?action=getServices&api_key=${API_KEYS.sms_man}`
+        );
 
-      await checkForErrorFromAxiosResponse(response, service);
+        await checkForErrorFromAxiosResponse(response, service);
 
-      return response.data.find((s: any) => s.title === "Telegram").id;
+        setTgCodeForSmsMan(response.data.find((s: any) => s.title === "Telegram").id) 
+
+        return tgCodeForSmsMan;
+      }
+      return tgCodeForSmsMan;
 
     case "5sim":
     case "sms-acktiwator":
@@ -464,132 +470,128 @@ export async function rentPhoneRegistration(
   }
 }
 
-export async function getRegistrationCodes(
+export async function getRegistrationCode(
   service: Service,
-  rentedPhones: Array<any>
-): Promise<{ [phone: string]: string }> {
-  const codes: { [phone: string]: string } = {};
+  rentedPhone: {id: string, phoneNumber: string}
+): Promise<{ phoneNumber: string; code: string } | null> {
+  let code: string | null = null;
+  let attempts = 0;
 
-  for (const rentedPhone of rentedPhones) {
-    let code: string | null = null;
-    let attempts = 0;
+  while (!code && attempts < 6) {
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    attempts++;
 
-    while (!code && attempts < 6) {
-      await new Promise((resolve) => setTimeout(resolve, 10000));
-      attempts++;
+    switch (service) {
+      case "sms-man":
+        const response = await axios.get(
+          `http://api.sms-man.ru/stubs/handler_api.php?action=getStatus&api_key=${API_KEYS.sms_man}&id=${rentedPhone.id}`
+        );
 
-      switch (service) {
-        case "sms-man":
-          const response = await axios.get(
-            `http://api.sms-man.ru/stubs/handler_api.php?action=getStatus&api_key=${API_KEYS.sms_man}&id=${rentedPhone.id}`
-          );
+        await checkForErrorFromAxiosResponse(response, service);
 
-          await checkForErrorFromAxiosResponse(response, service);
-
-          if (response.data.startsWith("STATUS_OK")) {
-            code = response.data.split(":")[1];
+        if (response.data.startsWith("STATUS_OK")) {
+          code = response.data.split(":")[1];
+        }
+        break;
+      case "5sim":
+        const response2 = await axios.get(
+          `https://5sim.biz/v1/user/check/${rentedPhone.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${API_KEYS.five_sim}`,
+              Accept: "application/json",
+            },
           }
-          break;
-        case "5sim":
-          const response2 = await axios.get(
-            `https://5sim.biz/v1/user/check/${rentedPhone.id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${API_KEYS.five_sim}`,
-                Accept: "application/json",
-              },
-            }
-          );
+        );
 
-          await checkForErrorFromAxiosResponse(response2, service);
+        await checkForErrorFromAxiosResponse(response2, service);
 
-          if (
-            response2.data.status === "RECEIVED" &&
-            response2.data.sms &&
-            response2.data.sms.length > 0
-          ) {
-            code = response2.data.sms[0].code;
+        if (
+          response2.data.status === "RECEIVED" &&
+          response2.data.sms &&
+          response2.data.sms.length > 0
+        ) {
+          code = response2.data.sms[0].code;
+        }
+        break;
+
+      case "sms-activate":
+        const response3 = await axios.get(
+          `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getStatus&id=${rentedPhone.id}`
+        );
+
+        await checkForErrorFromAxiosResponse(response3, service);
+
+        if (response3.data.startsWith("STATUS_OK")) {
+          code = response3.data.split(":")[1];
+        }
+        break;
+
+      case "sms-activation-service":
+        const response4 = await axios.get(
+          `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getStatus&id=${rentedPhone.id}&lang=ru`
+        );
+
+        await checkForErrorFromAxiosResponse(response4, service);
+
+        if (response4.data.startsWith("STATUS_OK")) {
+          code = response4.data.split(":")[1];
+        }
+        break;
+
+      case "sms-acktiwator":
+        const response5 = await axios.get(
+          `https://sms-acktiwator.ru/api/getlatestcode/${API_KEYS.sms_acktiwator}?id=${rentedPhone.id}`
+        );
+
+        await checkForErrorFromAxiosResponse(response5, service);
+
+        if (response5.data) {
+          code = response5.data;
+        }
+        break;
+
+      case "vak-sms":
+        const response6 = await axios.get(
+          `https://vak-sms.com/api/getSmsCode/?apiKey=${API_KEYS.vak_sms}&idNum=${rentedPhone.id}&all`
+        );
+
+        await checkForErrorFromAxiosResponse(response6, service);
+
+        if (response6.data.smsCode) {
+          if (Array.isArray(response6.data.smsCode)) {
+            code = response6.data.smsCode[0];
+          } else {
+            code = response6.data.smsCode;
           }
-          break;
+        }
+        break;
 
-        case "sms-activate":
-          const response3 = await axios.get(
-            `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=getStatus&id=${rentedPhone.id}`
-          );
+      case "sms-hub":
+        const response7 = await axios.get(
+          `https://smshub.org/stubs/handler_api.php?api_key=${API_KEYS.sms_hub}&action=getStatus&id=${rentedPhone.id}`
+        );
 
-          await checkForErrorFromAxiosResponse(response3, service);
+        await checkForErrorFromAxiosResponse(response7, service);
 
-          if (response3.data.startsWith("STATUS_OK")) {
-            code = response3.data.split(":")[1];
-          }
-          break;
+        if (response7.data.startsWith("STATUS_OK")) {
+          code = response7.data.split(":")[1];
+        }
+        break;
 
-        case "sms-activation-service":
-          const response4 = await axios.get(
-            `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=getStatus&id=${rentedPhone.id}&lang=ru`
-          );
+      default:
+        throw new Error(`Unsupported service: ${service}`);
+    }
 
-          await checkForErrorFromAxiosResponse(response4, service);
-
-          if (response4.data.startsWith("STATUS_OK")) {
-            code = response4.data.split(":")[1];
-          }
-          break;
-
-        case "sms-acktiwator":
-          const response5 = await axios.get(
-            `https://sms-acktiwator.ru/api/getlatestcode/${API_KEYS.sms_acktiwator}?id=${rentedPhone.id}`
-          );
-
-          await checkForErrorFromAxiosResponse(response5, service);
-
-          if (response5.data) {
-            code = response5.data;
-          }
-          break;
-
-        case "vak-sms":
-          const response6 = await axios.get(
-            `https://vak-sms.com/api/getSmsCode/?apiKey=${API_KEYS.vak_sms}&idNum=${rentedPhone.id}&all`
-          );
-
-          await checkForErrorFromAxiosResponse(response6, service);
-
-          if (response6.data.smsCode) {
-            if (Array.isArray(response6.data.smsCode)) {
-              code = response6.data.smsCode[0];
-            } else {
-              code = response6.data.smsCode;
-            }
-          }
-          break;
-
-        case "sms-hub":
-          const response7 = await axios.get(
-            `https://smshub.org/stubs/handler_api.php?api_key=${API_KEYS.sms_hub}&action=getStatus&id=${rentedPhone.id}`
-          );
-
-          await checkForErrorFromAxiosResponse(response7, service);
-
-          if (response7.data.startsWith("STATUS_OK")) {
-            code = response7.data.split(":")[1];
-          }
-          break;
-
-        default:
-          throw new Error(`Unsupported service: ${service}`);
-      }
-
-      if (!code) {
-        await submitPhone(service, rentedPhone.id, false); // No code received, request another SMS
-      } else {
-        codes[rentedPhone.phoneNumber] = code;
-        await submitPhone(service, rentedPhone.id, true); // Code received, complete activation
-      }
+    if (!code) {
+      await submitPhone(service, rentedPhone.id, false); // No code received, request another SMS
+    } else {
+      await submitPhone(service, rentedPhone.id, true); // Code received, complete activation
+      return { phoneNumber: rentedPhone.phoneNumber, code };
     }
   }
 
-  return codes;
+  return null;
 }
 
 async function submitPhone(
