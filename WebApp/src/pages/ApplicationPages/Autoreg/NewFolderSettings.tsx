@@ -18,7 +18,7 @@ export const NewFolderSettings = ({key, current, value}: propsType) => {
   return (
     <motion.div 
       className='min-w-full'
-      initial={{ opacity: 0, scale: 0.8 }}
+      initial={value === current ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
       animate={value === current ? { opacity: 1, scale: 1 } : 'null'}
       transition={{ duration: 0.2 }}
     >
