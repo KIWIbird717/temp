@@ -14,7 +14,7 @@ import {
 
 interface WaitingForVerify {
   phoneNumber: string;
-  account: Object;
+  code: string | number;
 }
 
 interface DeviceInfo {
@@ -26,7 +26,7 @@ interface DeviceInfo {
 interface phoneVerify {
   service?: Service;
   manual?: boolean;
-  phone?: number | string;
+  phone?: string;
 }
 
 interface UserSettings {
@@ -35,8 +35,6 @@ interface UserSettings {
   proxy?: ProxyInterface;
   phone: phoneVerify;
 }
-
-let waitingForVerify: WaitingForVerify[] = [];
 
 class telegramUser {
   private apiId: number;
@@ -50,6 +48,11 @@ class telegramUser {
       country?: Country;
     };
     manual?: boolean;
+    userExists: boolean;
+    tgUserStats: {
+      username: string;
+      description: string;
+    };
   };
   public client: TelegramClient;
   constructor(apiId: number, apiHash: string, params: UserSettings) {
@@ -60,8 +63,14 @@ class telegramUser {
       !params.phone.manual && !params.phone.service
         ? true
         : params.phone.manual;
-    this.statistic.utils.servicePhone =
-      params.phone.manual == true ? null : params.phone.service;
+
+
+    if (this.statistic.manual == true){
+      this.statistic.phone = params.phone.phone 
+      this.statistic.utils.servicePhone = null 
+    } else {
+      this.statistic.utils.servicePhone = params.phone.service
+    }
 
     const deviceInfo = params.device ?? {
       os: os.release().toString(),
@@ -97,20 +106,49 @@ class telegramUser {
   }
 
   public async createTelegramUser() {
-    const phone = rentPhoneRegistration(
-      this.statistic.utils.servicePhone,
-      await getTelegramCode(this.statistic.utils.servicePhone),
-      this.statistic.utils.country.id
-    );
+    if (this.statistic.manual == true) {
+      const phone = await rentPhoneRegistration(
+        this.statistic.utils.servicePhone,
+        await getTelegramCode(this.statistic.utils.servicePhone),
+        this.statistic.utils.country.id
+      );
+      this.statistic.utils.phoneId = phone.id;
+      this.statistic.phone = phone.phoneNumber;
+    }
+
+    
 
     const isAvalible = await this.autoRegister();
 
-    if (isAvalible == "reg") {
+    if (isAvalible == "reg-noacc") {
       this.statistic.userError.push(
         `User was registered with name: ${await this.client.getMe()}`
       );
     } else if (isAvalible == "val-code") {
-      this.statistic.userError.push(``);
+      this.statistic.userError.push(
+        `Valid sms code from service: ${this.statistic.utils.servicePhone} and phone number is: ${this.statistic.phone}`
+      );
+    }
+
+    if (isAvalible == "reg") {
+      try {
+        const currentUser = (await this.client.getMe()) as Api.User;
+        const inputPeer = new Api.InputPeerUser({
+          userId: currentUser.id,
+          accessHash: currentUser.accessHash!,
+        });
+        const userFull = await this.client.invoke(
+          new Api.users.GetFullUser({ id: inputPeer })
+        );
+        this.statistic.tgUserStats.username = currentUser.username;
+        this.statistic.tgUserStats.description = userFull.fullUser.about;
+
+        this.statistic.userExists = true;
+      } catch (err) {
+        this.statistic.userError.push(`Error when fetch data from registered user, error: ${err}`);
+      }
+    } else if (isAvalible == "non-reg") {
+      // Implemets for registration
     }
   }
 
@@ -119,29 +157,37 @@ class telegramUser {
   private async autoRegister(): Promise<string> {
     return new Promise(async (res) => {
       try {
-        const user = await this.client.start({
+        await this.client.start({
           phoneNumber: async () => this.statistic.phone,
           password: async () => {
             throw new Error("PASSWORD_REQUIRED");
           },
-          phoneCode: async () => {
-            const code = await getRegistrationCode(
-              this.statistic.utils.servicePhone,
-              {
-                id: this.statistic.utils.phoneId,
-                phoneNumber: this.statistic.phone,
-              }
-            );
-            return code.code;
+          phoneCode: async (isCodeViaApp = false) => {
+            if (isCodeViaApp) {
+              throw new Error('CODE_VIA_APP');
+            }
+            if (this.statistic.manual) {
+              const codeGenerator = waitForCode(this.statistic.phone);
+              const code = await codeGenerator.next();
+              return code.value;
+            } else {
+              const code = await getRegistrationCode(
+                this.statistic.utils.servicePhone,
+                {
+                  id: this.statistic.utils.phoneId,
+                  phoneNumber: this.statistic.phone,
+                }
+              );
+              return code.code;
+            }
           },
           onError: (err: Error) => {
-            console.error(
-              "An error occurred during the authentication process:",
-              err
-            );
+            throw new Error(`Telegram register error: ${err}`);
           },
         });
+        // Have access to user (Good)
         res("reg");
+        await this.client.disconnect();
       } catch (err) {
         if (err.message.includes("PHONE_NUMBER_INVALID")) {
           // User not registered (Good)
@@ -149,14 +195,34 @@ class telegramUser {
         } else if (err.message.includes("PHONE_CODE_INVALID")) {
           // Valid code from sms
           res("val-code");
-        } else if (err.message === "PASSWORD_REQUIRED") {
-          res("reg");
+          await this.client.disconnect();
+        } else if (err.message === "PASSWORD_REQUIRED" || err.message === "CODE_VIA_APP") {
+          res("reg-noacc");
+          await this.client.disconnect();
         } else {
           throw new Error(`When checking user happend error: ${err}`);
         }
-      } finally {
-        await this.client.disconnect();
       }
     });
   }
+}
+
+
+let waitingForVerify: WaitingForVerify[] = [];
+
+async function* waitForCode(phoneNumber: string): AsyncGenerator<string | number | undefined> {
+  while (true) {
+    const foundEntry = waitingForVerify.find(entry => entry.phoneNumber === phoneNumber);
+    if (foundEntry) {
+      // Remove the entry from the waitingForVerify list after using the code
+      waitingForVerify = waitingForVerify.filter(entry => entry.phoneNumber !== phoneNumber);
+      yield foundEntry.code;
+      return;
+    }
+    await new Promise(resolve => setTimeout(resolve, 1000));
+  }
+}
+
+export function addCodeToWaitingForVerify(phoneNumber: string, code: string | number): void {
+  waitingForVerify.push({ phoneNumber, code });
 }
