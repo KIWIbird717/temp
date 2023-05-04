@@ -1,10 +1,11 @@
 import type { ColumnsType } from 'antd/es/table';
 import tableCard from '../../../images/tableCard.svg'
-import { Typography, Button, Input, Dropdown, MenuProps, message, Avatar, Divider } from 'antd'
+import { Typography, Button, Dropdown, MenuProps, message, Avatar, Divider } from 'antd'
 import { useDispatch } from 'react-redux';
 import { setAccountsManagerFolder } from '../../../store/appSlice';
-import { AntDesignOutlined, CheckSquareOutlined, DeleteOutlined, EditOutlined, EnterOutlined, FolderOpenOutlined, IdcardTwoTone, MoreOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
+import { AntDesignOutlined, DeleteOutlined, EditOutlined, FolderOpenOutlined, MoreOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { colors } from '../../../global-style/style-colors.module';
+import styles from './style.module.css'
 
 export interface IHeaderType {
   key: React.Key,
@@ -56,7 +57,10 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
       dataIndex: 'folder',
       render: (_, record) => (
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-5">
+          <div 
+            className={`${styles.folder_style} flex items-center gap-5 p-2 rounded-md hover:bg-slate-50`}
+            onClick={() => dispatch(setAccountsManagerFolder(record.key))}
+          >
             <div className='h-[110px] object-contain'>
               <img className='w-full h-full' src={tableCard} alt='icon'/>
             </div>
