@@ -63,13 +63,13 @@ export const WarmingUpPage = () => {
               <Card style={{ padding: '0px 0px', borderColor: colors.dopFont2, borderRadius: '15px' }} className="shadow-md felx items-center justify-center w-full">
                 <div className="flex w-full items-center justify-between">
                   <Avatar icon={<ApiTwoTone twoToneColor={colors.primary}/>} size='large' style={{backgroundColor: colors.dopFont2}} />
-                  <Title level={3} style={{ margin: '0 0' }}>123</Title>
+                  <Title level={3} style={{ margin: '0 0' }}>{21}</Title>
                 </div>
               </Card>
               <Card style={{ padding: '0px 0px', borderColor: colors.dopFont2, borderRadius: '15px' }} className="shadow-md felx items-center justify-center w-full">
                 <div className="flex w-full items-center justify-between">
                   <Avatar icon={<BugTwoTone twoToneColor={colors.accent}/>} size='large' style={{backgroundColor: colors.dopFont2}}/>
-                  <Title level={3} style={{ margin: '0 0' }}>18</Title>
+                  <Title level={3} style={{ margin: '0 0' }}>{76}</Title>
                 </div>
               </Card>
             </div>

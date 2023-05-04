@@ -116,33 +116,3 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
 }
 
 
-export const tableData: IHeaderType[] = [
-  {
-    key: '1',
-    folder: 'Чаты',
-    dopTitle: 'Аккаунты для чатов',
-    accounts: 12,
-    country: 'Финляндия',
-    latestActivity: '21 апреля',
-    banned: 0,
-  },
-  {
-    key: '2',
-    folder: 'Telegram',
-    dopTitle: 'Аккаунты для каналов',
-    accounts: 24,
-    country: 'Германия',
-    latestActivity: '22 апреля',
-    banned: 0
-  },
-  {
-    key: '3',
-    folder: 'Telegram каналы',
-    dopTitle: 'Боты для телеграм каналов',
-    accounts: 24,
-    country: 'Канада',
-    latestActivity: '22 апреля',
-    banned: 0
-  },
-]
-

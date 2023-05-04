@@ -111,7 +111,7 @@ export const Registration = () => {
             </div>
           </Form.Item>
           <Form.Item>
-            <Title level={5}>Создайте свой аккаунт в AutoReg</Title>
+            <Title level={5}>Создайте свой аккаунт в TeleSpace</Title>
           </Form.Item>
           
           <Form.Item

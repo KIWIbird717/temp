@@ -6,6 +6,7 @@ const initialState: IAppState = {
   accountsManagerFolder: null,
   proxyManagerFolder: null,
   userAvatar: null,
+  
 }
 
 export const appSlice = createSlice({

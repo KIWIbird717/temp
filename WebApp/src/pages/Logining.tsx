@@ -107,7 +107,7 @@ export const Logining = () => {
             </div>
           </Form.Item>
           <Form.Item>
-            <Title level={5}>Войдите в свой аккаунт AutoReg</Title> 
+            <Title level={5}>Войдите в свой аккаунт TeleSpace</Title> 
           </Form.Item>
 
           <Form.Item

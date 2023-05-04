@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { MCard } from '../../../components/Card/MCard'
-import { Select, Input, Table, Tooltip, Button, message } from 'antd'
+import { Table, Tooltip, Button, message } from 'antd'
 import { motion } from 'framer-motion'
-import { IHeaderType, TableHeaders, tableData } from './Collumns'
+import { IHeaderType, TableHeaders } from './Collumns'
 import { 
   AppstoreAddOutlined, 
   CloseOutlined, 
@@ -10,7 +10,6 @@ import {
   DeleteOutlined, 
   DragOutlined, 
   EditOutlined, 
-  SearchOutlined
 } from '@ant-design/icons'
 import { notificationHandler } from '../../../components/notification'
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable'
@@ -18,11 +17,11 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
 import { FolderRow } from './FolderRow'
 import { ColumnsType } from 'antd/es/table'
-import { colors } from '../../../global-style/style-colors.module'
 import { MSelect } from '../../../components/Select/MSelect'
 import { MSearch } from '../../../components/Search/MSearch'
+import { useSelector } from 'react-redux'
+import { StoreState } from '../../../store/store'
 
-const { Search } = Input
 
 interface IEditButton {
   id: React.Key,
@@ -33,6 +32,8 @@ interface IEditButton {
 }
 
 export const Folders = () => {
+  const tableData = useSelector((state: StoreState) => state.user.userManagerFolders)
+
   const [selectionType, setSelectionType] = useState<boolean>(false)
   const [selectedFolders, setSelectedFolders] = useState<IHeaderType[]>([])
   const [dataSource, setDataSource] = useState<IHeaderType[]>(tableData)

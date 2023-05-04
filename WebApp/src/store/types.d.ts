@@ -1,9 +1,11 @@
+import { IHeaderType } from "../pages/ApplicationPages/AccountsManager/Collumns"
 
 export interface IUserState {
   nick: string | null,
   mail: string | null,
   id: number | null,
   isUserLogined: boolean,
+  userManagerFolders: IHeaderType[]
 }
 
 export interface IAppState {

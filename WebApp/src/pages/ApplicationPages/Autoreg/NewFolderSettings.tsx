@@ -17,11 +17,12 @@ export const NewFolderSettings = ({key, current, value}: propsType) => {
 
   return (
     <motion.div 
-      className='min-w-full'
+      className='min-w-full flex flex-col justify-between'
       initial={value === current ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
       animate={value === current ? { opacity: 1, scale: 1 } : 'null'}
       transition={{ duration: 0.2 }}
     >
+      <div>
       <FolserSelection className='mb-5'/>
 
       <div className="w-full flex gap-3 mb-5">
@@ -36,18 +37,6 @@ export const NewFolderSettings = ({key, current, value}: propsType) => {
         </div>
         <div className="w-full flex flex-col gap-1">
           <div className="flex gap-2 items-center">
-            <Title level={5} style={{ margin: '0 0' }}>Оператора</Title>
-            <Popover className='cursor-pointer' title="Оператор" content='Тут может быть описание операторов'>
-              <InfoCircleOutlined />
-            </Popover>
-          </div>
-          <Cascader placeholder="Оператор" size='large' className='w-full'/>
-        </div>
-      </div>
-
-      <div className="flex gap-3 mb-5">
-        <div className="w-full flex flex-col gap-1">
-          <div className="flex gap-2 items-center">
             <Title level={5} style={{ margin: '0 0' }}>Выбор страны</Title>
             <Popover className='cursor-pointer' title="Страна" content='Тут может быть описание выбора стран'>
               <InfoCircleOutlined />
@@ -55,6 +44,9 @@ export const NewFolderSettings = ({key, current, value}: propsType) => {
           </div>
           <Cascader placeholder="Страна" size='large' className='w-full'/>
         </div>
+      </div>
+
+      <div className="flex gap-3 mb-5">
         <div className="w-full flex flex-col gap-1">
           <div className="flex gap-2 items-center">
             <Title level={5} style={{ margin: '0 0' }}>Proxy</Title>
@@ -64,19 +56,19 @@ export const NewFolderSettings = ({key, current, value}: propsType) => {
           </div>
           <Cascader placeholder="Proxy" size='large' className='w-full'/>
         </div>
-      </div>
-
-      <div className="flex gap-3 mb-7">
-        <div className="w-[40%] flex flex-col gap-1">
-          <div className="flex gap-2 items-center">
-            <Title level={5} style={{ margin: '0 0' }}>Кол-во аккаунтов</Title>
-            <Popover className='cursor-pointer' title="Кол-во аккаунтов" content='Тут может быть описание кол-ва аккаунтов'>
-              <InfoCircleOutlined />
-            </Popover>
+        <div className="w-full flex gap-3 mb-7">
+          <div className="w-full flex flex-col gap-1">
+            <div className="flex gap-2 items-center">
+              <Title level={5} style={{ margin: '0 0' }}>Кол-во аккаунтов</Title>
+              <Popover className='cursor-pointer' title="Кол-во аккаунтов" content='Тут может быть описание кол-ва аккаунтов'>
+                <InfoCircleOutlined />
+              </Popover>
+            </div>
+            <InputNumber size='large' defaultValue={0} min={0} addonBefore={<UserOutlined />} className='w-full' />
           </div>
-          <InputNumber size='large' defaultValue={0} min={0} addonBefore={<UserOutlined />} className='w-full' />
+          <Statistic valueStyle={{ color: colors.primary }} className='w-full' title="Доступно номеров" value={1128} prefix={<UserSwitchOutlined />} />
         </div>
-        <Statistic valueStyle={{ color: colors.primary }} className='w-full' title="Доступно номеров" value={1128} prefix={<UserSwitchOutlined />} />
+      </div>
       </div>
 
       <div className="w-full flex justify-between items-center">

@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react'
-import { Popover, Typography, Button } from 'antd'
-import { DownOutlined, InfoCircleOutlined } from '@ant-design/icons'
-import { SliderDriwer, IDataSourceType } from '../../../components/SliderDrawer/SliderDriwer'
+import { Popover, Typography, Button, Avatar } from 'antd'
+import { BugTwoTone, DownOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import { SliderDriwer } from '../../../components/SliderDrawer/SliderDriwer'
 import { getRandomDateInCurrentMonth } from '../../../utils/generateTempData'
 import { colors } from '../../../global-style/style-colors.module'
 
@@ -11,6 +11,14 @@ const { Title } = Typography
 interface IProps {
   title: string,
   icon: ReactNode,
+}
+
+interface IDataSourceType {
+  key: React.Key,
+  avatar: string,
+  title: string,
+  date: Date,
+  bots: number
 }
 
 export const Groups = ({title, icon}: IProps) => {
@@ -87,7 +95,20 @@ export const Groups = ({title, icon}: IProps) => {
         </Button>
       </div>
 
-      <SliderDriwer dataSource={dummyData} open={groupOpen}/>
+      <SliderDriwer 
+        dataSource={dummyData} 
+        open={groupOpen}
+        visibleAmount={4}
+        render={(el) => (
+          <div className='flex gap-4 items-enter w-full px-2'>
+            <Avatar size={50} style={{ minWidth: '50px' }} src={el.avatar} />
+            <div className=" w-full flex justify-between items-center">
+              <Title level={5} style={{ margin: '0 0' }}>{el.title}</Title>
+              <p className='m-0 flex gap-1 font-[]'>{el.bots} <BugTwoTone twoToneColor={colors.accent}/></p>
+            </div>
+          </div>
+        )}
+      />
     </div>
   )
 }
