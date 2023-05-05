@@ -2,6 +2,7 @@ import { TelegramClient, Api } from "telegram";
 import { StringSession } from "telegram/sessions";
 import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
 import { getTelegramVersionSync } from "./utils";
+import { signInUser } from "telegram/client/auth";
 import os from "os";
 
 import {
@@ -10,6 +11,7 @@ import {
   getRegistrationCode,
   Country,
   getTelegramCode,
+  submitPhone,
 } from "../smsService/smsActivate";
 
 interface WaitingForVerify {
@@ -25,8 +27,14 @@ interface DeviceInfo {
 
 interface phoneVerify {
   service?: Service;
-  manual?: boolean;
   phone?: string;
+}
+
+interface userStatistic {
+  firstName: string;
+  lastName: string;
+  userName: string;
+  photoUrl: string;
 }
 
 interface UserSettings {
@@ -34,6 +42,8 @@ interface UserSettings {
   device?: DeviceInfo;
   proxy?: ProxyInterface;
   phone: phoneVerify;
+  telegramUser: userStatistic;
+  manual?: boolean;
 }
 
 class telegramUser {
@@ -51,6 +61,8 @@ class telegramUser {
     userExists: boolean;
     tgUserStats: {
       username: string;
+      fisrtName: string;
+      lastName: string;
       description: string;
     };
   };
@@ -60,17 +72,18 @@ class telegramUser {
     this.apiHash = apiHash;
 
     this.statistic.manual =
-      !params.phone.manual && !params.phone.service
-        ? true
-        : params.phone.manual;
+      !params.manual && !params.phone.service ? true : params.manual;
 
-
-    if (this.statistic.manual == true){
-      this.statistic.phone = params.phone.phone 
-      this.statistic.utils.servicePhone = null 
+    if (this.statistic.manual == true) {
+      this.statistic.phone = params.phone.phone;
+      this.statistic.utils.servicePhone = null;
     } else {
-      this.statistic.utils.servicePhone = params.phone.service
+      this.statistic.utils.servicePhone = params.phone.service;
     }
+
+    this.statistic.tgUserStats.fisrtName = params.telegramUser.firstName;
+    this.statistic.tgUserStats.lastName = params.telegramUser.lastName;
+    this.statistic.tgUserStats.username = params.telegramUser.userName;
 
     const deviceInfo = params.device ?? {
       os: os.release().toString(),
@@ -103,6 +116,8 @@ class telegramUser {
         proxy: params.proxy,
       }
     );
+
+    this.statistic.userExists = true;
   }
 
   public async createTelegramUser() {
@@ -116,21 +131,9 @@ class telegramUser {
       this.statistic.phone = phone.phoneNumber;
     }
 
-    
-
     const isAvalible = await this.autoRegister();
 
-    if (isAvalible == "reg-noacc") {
-      this.statistic.userError.push(
-        `User was registered with name: ${await this.client.getMe()}`
-      );
-    } else if (isAvalible == "val-code") {
-      this.statistic.userError.push(
-        `Valid sms code from service: ${this.statistic.utils.servicePhone} and phone number is: ${this.statistic.phone}`
-      );
-    }
-
-    if (isAvalible == "reg") {
+    if (this.statistic.userExists == true) {
       try {
         const currentUser = (await this.client.getMe()) as Api.User;
         const inputPeer = new Api.InputPeerUser({
@@ -142,13 +145,66 @@ class telegramUser {
         );
         this.statistic.tgUserStats.username = currentUser.username;
         this.statistic.tgUserStats.description = userFull.fullUser.about;
-
-        this.statistic.userExists = true;
       } catch (err) {
-        this.statistic.userError.push(`Error when fetch data from registered user, error: ${err}`);
+        this.statistic.userError.push(
+          `Error when fetch data from registered user, error: ${err}`
+        );
       }
-    } else if (isAvalible == "non-reg") {
-      // Implemets for registration
+    } else {
+      // Check if the username is available
+      const usernameAvailable = await this.client.invoke(
+        new Api.account.CheckUsername({
+          username: this.statistic.tgUserStats.username,
+        })
+      );
+
+      // If the username is available, set it for the new user
+      if (usernameAvailable) {
+        await this.client.invoke(
+          new Api.account.UpdateUsername({
+            username: this.statistic.tgUserStats.username,
+          })
+        );
+      } else {
+        await this.client.invoke(
+          new Api.account.UpdateUsername({
+            username:
+              this.statistic.tgUserStats.username +
+              `_${Math.floor(Math.random() * 100)}`,
+          })
+        );
+      }
+    }
+
+    if (
+      this.statistic.userError === undefined ||
+      this.statistic.userError.length == 0
+    ) {
+      await submitPhone(
+        this.statistic.utils.servicePhone,
+        this.statistic.utils.phoneId,
+        true
+      ); // Code received, complete activation
+    } else if (isAvalible == "reg-noacc") {
+      await submitPhone(
+        this.statistic.utils.servicePhone,
+        this.statistic.utils.phoneId,
+        false,
+        false
+      ); // No access for acount, deny
+
+      this.statistic.userError.push(
+        `User was registered with name: ${await this.client.getMe()}`
+      );
+    } else if (isAvalible == "val-code") {
+      await submitPhone(
+        this.statistic.utils.servicePhone,
+        this.statistic.utils.phoneId,
+        false
+      );
+      this.statistic.userError.push(
+        `Valid sms code from service: ${this.statistic.utils.servicePhone} and phone number is: ${this.statistic.phone}`
+      );
     }
   }
 
@@ -157,46 +213,51 @@ class telegramUser {
   private async autoRegister(): Promise<string> {
     return new Promise(async (res) => {
       try {
-        await this.client.start({
-          phoneNumber: async () => this.statistic.phone,
-          password: async () => {
-            throw new Error("PASSWORD_REQUIRED");
-          },
-          phoneCode: async (isCodeViaApp = false) => {
-            if (isCodeViaApp) {
-              throw new Error('CODE_VIA_APP');
-            }
-            if (this.statistic.manual) {
-              const codeGenerator = waitForCode(this.statistic.phone);
-              const code = await codeGenerator.next();
-              return code.value;
-            } else {
-              const code = await getRegistrationCode(
-                this.statistic.utils.servicePhone,
-                {
-                  id: this.statistic.utils.phoneId,
-                  phoneNumber: this.statistic.phone,
-                }
-              );
-              return code.code;
-            }
-          },
-          onError: (err: Error) => {
-            throw new Error(`Telegram register error: ${err}`);
-          },
-        });
-        // Have access to user (Good)
-        res("reg");
-        await this.client.disconnect();
+        await signInUser(
+          this.client,
+          { apiHash: this.apiHash, apiId: this.apiId },
+          {
+            firstAndLastNames: async () => {
+              this.statistic.userExists = false;
+              return [
+                this.statistic.tgUserStats.fisrtName,
+                this.statistic.tgUserStats.lastName,
+              ];
+            },
+            phoneNumber: async () => this.statistic.phone,
+            phoneCode: async (isCodeViaApp = false) => {
+              if (isCodeViaApp) {
+                throw new Error("CODE_VIA_APP");
+              }
+              if (this.statistic.manual) {
+                const codeGenerator = waitForCode(this.statistic.phone);
+                const code = await codeGenerator.next();
+                return code.value;
+              } else {
+                const code = await getRegistrationCode(
+                  this.statistic.utils.servicePhone,
+                  {
+                    id: this.statistic.utils.phoneId,
+                    phoneNumber: this.statistic.phone,
+                  }
+                );
+                return code.code;
+              }
+            },
+            onError: (err: Error) => {
+              throw new Error(`Telegram register error: ${err}`);
+            },
+          }
+        );
       } catch (err) {
-        if (err.message.includes("PHONE_NUMBER_INVALID")) {
-          // User not registered (Good)
-          res("non-reg");
-        } else if (err.message.includes("PHONE_CODE_INVALID")) {
+        if (err.message.includes("Code is empty")) {
           // Valid code from sms
           res("val-code");
           await this.client.disconnect();
-        } else if (err.message === "PASSWORD_REQUIRED" || err.message === "CODE_VIA_APP") {
+        } else if (
+          err.message === "CODE_VIA_APP" ||
+          err.message === "AUTH_USER_CANCEL"
+        ) {
           res("reg-noacc");
           await this.client.disconnect();
         } else {
@@ -207,22 +268,30 @@ class telegramUser {
   }
 }
 
-
 let waitingForVerify: WaitingForVerify[] = [];
 
-async function* waitForCode(phoneNumber: string): AsyncGenerator<string | number | undefined> {
+async function* waitForCode(
+  phoneNumber: string
+): AsyncGenerator<string | number | undefined> {
   while (true) {
-    const foundEntry = waitingForVerify.find(entry => entry.phoneNumber === phoneNumber);
+    const foundEntry = waitingForVerify.find(
+      (entry) => entry.phoneNumber === phoneNumber
+    );
     if (foundEntry) {
       // Remove the entry from the waitingForVerify list after using the code
-      waitingForVerify = waitingForVerify.filter(entry => entry.phoneNumber !== phoneNumber);
+      waitingForVerify = waitingForVerify.filter(
+        (entry) => entry.phoneNumber !== phoneNumber
+      );
       yield foundEntry.code;
       return;
     }
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
   }
 }
 
-export function addCodeToWaitingForVerify(phoneNumber: string, code: string | number): void {
+export function addCodeToWaitingForVerify(
+  phoneNumber: string,
+  code: string | number
+): void {
   waitingForVerify.push({ phoneNumber, code });
 }
