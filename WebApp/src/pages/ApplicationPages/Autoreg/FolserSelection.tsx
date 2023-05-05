@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import tableCard from '../../../images/tableCard.svg'
-import { Typography } from 'antd'
+import { Input, Typography } from 'antd'
 import { colors } from '../../../global-style/style-colors.module'
 import styles from './folder-selection-style.module.css'
+import TextArea from 'antd/es/input/TextArea'
 
 const { Title } = Typography
 
@@ -12,7 +13,12 @@ interface IProps {
 
 export const FolserSelection = ({className}: IProps): JSX.Element => {
   const [folderTitle, setFolderTitle] = useState<string>('Название папки')
-  const [folderDescription, setFolderDescription] = useState<string>('Описание папки')
+  const [folderDescription, setFolderDescription] = useState<string>('')
+
+  const cancelAllChanges = () => {
+    setFolderTitle('')
+    setFolderDescription('')
+  }
 
   const handleFolderTitle = (string: string): void => {
     const titleLen = string.length
@@ -59,12 +65,12 @@ export const FolserSelection = ({className}: IProps): JSX.Element => {
   }
 
   return (
-    <div className={`w-full flex items-center gap-4 ${className}`}>
+    <div className={`w-[60%] flex items-center gap-4 ${className}`}>
       <div className="object-contain h-[130px]">
         <img className='h-full' src={tableCard} alt='table card'/>
       </div>
       <div className="flex flex-col gap-3 w-full">
-        <Title 
+        {/* <Title 
           editable={{
             maxLength: 20,
             onChange: handleFolderTitle,
@@ -75,8 +81,13 @@ export const FolserSelection = ({className}: IProps): JSX.Element => {
           className={styles.folder_styles}
         >
             {folderTitle}
-        </Title>
-        <Title 
+        </Title> */}
+        <Input 
+          size="large" 
+          placeholder="Название папки" 
+          onChange={(e) => handleFolderTitle(e.currentTarget.value)}
+        />
+        {/* <Title 
           editable={{
             maxLength: 50,
             onChange: handleFolderDescription,
@@ -86,7 +97,15 @@ export const FolserSelection = ({className}: IProps): JSX.Element => {
           style={{margin: '5px 5px', fontWeight: 'normal', width: '100%', color: colors.dopFont}}
           >
             {folderDescription}
-        </Title>
+        </Title> */}
+        <TextArea
+          value={folderDescription}
+          onChange={(e) => setFolderDescription(e.target.value)}
+          placeholder="Добавьте описание"
+          autoSize={{ minRows: 2, maxRows: 5 }}
+          showCount
+          maxLength={50}
+        />
       </div>
     </div>
   )
