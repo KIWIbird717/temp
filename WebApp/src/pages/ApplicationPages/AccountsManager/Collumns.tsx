@@ -6,15 +6,17 @@ import { setAccountsManagerFolder } from '../../../store/appSlice';
 import { AntDesignOutlined, DeleteOutlined, EditOutlined, FolderOpenOutlined, MoreOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { colors } from '../../../global-style/style-colors.module';
 import styles from './style.module.css'
+import { IAccountsData } from './ParseAccountsTable';
 
 export interface IHeaderType {
   key: React.Key,
   folder: string,
   dopTitle: string,
-  accounts: number,
+  accountsAmount: number,
   country: string,
   latestActivity: string,
-  banned: number
+  banned: number,
+  accounts: IAccountsData[]
 }
 
 const { Title } = Typography
@@ -78,16 +80,16 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
     },
     {
       title: 'Аккаунты',
-      dataIndex: 'accounts',
-      render: (accounts: number) => (
+      dataIndex: 'accountsAmount',
+      render: (accountsAmount: number) => (
         <div className="flex gap-1 items-center">
-          <Title style={{ margin: '0px 0px' }} level={5}>{accounts}</Title>
+          <Title style={{ margin: '0px 0px' }} level={5}>{accountsAmount}</Title>
           <Divider type="vertical"/>
           <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }} maxPopoverTrigger="focus">
             <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
             <Avatar style={{ backgroundColor: colors.accent }}>K</Avatar>
             <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-            {new Array(accounts-3).fill(0).map(() => (
+            {new Array(accountsAmount).fill(0).map(() => (
               <Avatar style={{ backgroundColor: '#1890ff' }} icon={<AntDesignOutlined />} />
             ))}
           </Avatar.Group>

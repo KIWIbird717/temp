@@ -6,3 +6,7 @@
 .slider_driwer_folder:hover {
   background-color: var(--dopFont2);
 }
+
+.avatar_uploader {
+  width: fit-content !important;
+}

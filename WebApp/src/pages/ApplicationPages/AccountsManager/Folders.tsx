@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { MCard } from '../../../components/Card/MCard'
 import { Table, Tooltip, Button, message } from 'antd'
 import { motion } from 'framer-motion'
@@ -19,8 +19,9 @@ import { FolderRow } from './FolderRow'
 import { ColumnsType } from 'antd/es/table'
 import { MSelect } from '../../../components/Select/MSelect'
 import { MSearch } from '../../../components/Search/MSearch'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { StoreState } from '../../../store/store'
+import { setUserManagerFolders } from '../../../store/userSlice'
 
 
 interface IEditButton {
@@ -32,11 +33,13 @@ interface IEditButton {
 }
 
 export const Folders = () => {
+  const dispatch = useDispatch()
   const tableData = useSelector((state: StoreState) => state.user.userManagerFolders)
+  const changedFoldersRef = useRef<IHeaderType[] | null>(null)
 
   const [selectionType, setSelectionType] = useState<boolean>(false)
   const [selectedFolders, setSelectedFolders] = useState<IHeaderType[]>([])
-  const [dataSource, setDataSource] = useState<IHeaderType[]>(tableData)
+  const [dataSource, setDataSource] = useState<IHeaderType[] | null>(tableData)
   const [headers, setHeaders] = useState<ColumnsType<IHeaderType>>(TableHeaders())
   const [dragHandler, setDragHandler] = useState<boolean>(false)
 
@@ -100,10 +103,19 @@ export const Folders = () => {
   const onDragEnd = ({ active, over }: DragEndEvent) => {
     if (active.id !== over?.id) {
       setDataSource((previous) => {
-        const activeIndex = previous.findIndex((i) => i.key === active.id);
-        const overIndex = previous.findIndex((i) => i.key === over?.id);
-        return arrayMove(previous, activeIndex, overIndex);
-      });
+        if (!previous) return null
+        const previousIndex = previous.findIndex((i) => i.key === active.id)  // Index of prev element of array
+        const overIndex = previous.findIndex((i) => i.key === over?.id) // Current index of element
+
+        const currentArray = arrayMove(previous, previousIndex, overIndex) // Array with changed index
+        const changeArrayKey: IHeaderType[] = currentArray.map((el, index) => ({...el, key: index})) // Set key prop of changed array
+        changedFoldersRef.current = changeArrayKey
+
+        return currentArray
+      })
+    }
+    if (changedFoldersRef.current !== null) {
+      setTimeout(() => {dispatch(setUserManagerFolders(changedFoldersRef.current))}, 2000)
     }
   };
 
@@ -165,7 +177,7 @@ export const Folders = () => {
         <div>
           <DndContext onDragEnd={onDragEnd}>
             <SortableContext
-              items={dataSource.map((i) => i.key)}
+              items={dataSource?.map((i) => i.key) || []}
               strategy={verticalListSortingStrategy}
             >
               <Table
@@ -177,7 +189,7 @@ export const Folders = () => {
                 size='large'
                 rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
                 columns={headers}
-                dataSource={dataSource}
+                dataSource={dataSource || []}
               />
             </SortableContext>
           </DndContext>

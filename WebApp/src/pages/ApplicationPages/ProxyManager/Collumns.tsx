@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { setProxyManagerFolder } from '../../../store/appSlice';
 import { FolderOpenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { colors } from '../../../global-style/style-colors.module';
+import styles from './style.module.css'
 
 export interface IHeaderType {
   key: React.Key,
@@ -27,7 +28,10 @@ export const TableHeaders = () => {
       dataIndex: 'folder',
       render: (_, record) => (
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-5">
+          <div 
+            className={`${styles.folder_style} flex items-center gap-5 p-2 rounded-md hover:bg-slate-50`}
+            onClick={() => dispatch(setProxyManagerFolder(record.key))}
+          >
             <div className='h-[110px] object-contain'>
               <img className='w-full h-full' src={proxyFolders} alt='icon'/>
             </div>

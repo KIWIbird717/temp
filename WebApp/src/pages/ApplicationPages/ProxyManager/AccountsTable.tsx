@@ -20,7 +20,7 @@ export const AccountsTable = () => {
   const rowSelection = {
     onChange: (selectedRowKey: React.Key[], selectedRows: IProxyData[]) => {
       setSelectedFolders(selectedRows)
-      console.log(`selectedRowKeys: ${selectedRowKey}, selectedRows: ${selectedRows}`)
+      // console.log(`selectedRowKeys: ${selectedRowKey}, selectedRows: ${selectedRows}`)
     },
     getCheckboxProps: (record: IProxyData) => ({
       disabled: record.key === 'Disabled User', // Column configuration not to be checked
@@ -117,7 +117,7 @@ export const AccountsTable = () => {
         </div>
         <Table
           size='large'
-          pagination={{ pageSize: 9 }}
+          pagination={{ pageSize: 999 }}
           rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
           columns={TableHeaders()}
           dataSource={ParseAccountsTable()}

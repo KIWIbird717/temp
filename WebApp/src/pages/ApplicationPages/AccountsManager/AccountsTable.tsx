@@ -9,12 +9,14 @@ import {
 } from '@ant-design/icons'
 import { MCard } from '../../../components/Card/MCard'
 import { Table, Button, Tooltip, Modal, message } from 'antd'
-import { ParseAccountsTable, TableHeaders } from './ParseAccountsTable'
+import { TableHeaders } from './ParseAccountsTable'
 import { useDispatch } from 'react-redux'
 import { setAccountsManagerFolder } from '../../../store/appSlice'
 import { IAccountsData } from './ParseAccountsTable'
 import { AnimatePresence, motion } from 'framer-motion'
 import { notificationHandler } from '../../../components/notification'
+import { useSelector } from 'react-redux'
+import { StoreState } from '../../../store/store'
 
 
 const { confirm } = Modal
@@ -24,10 +26,14 @@ export const AccountsTable = () => {
   const [selectedFolders, setSelectedFolders] = useState<IAccountsData[]>([])
   const [selectionType, setSelectionType] = useState<boolean>(false)
 
+  const openedAccountsFolder = useSelector((state: StoreState) => state.app.accountsManagerFolder)
+  const accountsManagerTableData = useSelector((state: StoreState) => state.user.userManagerFolders)
+  const currentFolderData = accountsManagerTableData?.find((folder) => folder.key === openedAccountsFolder)
+
   const rowSelection = {
     onChange: (selectedRowKey: React.Key[], selectedRows: IAccountsData[]) => {
       setSelectedFolders(selectedRows)
-      console.log(`selectedRowKeys: ${selectedRowKey}, selectedRows: ${selectedRows}`)
+      // console.log(`selectedRowKeys: ${selectedRowKey}, selectedRows: ${selectedRows}`)
     },
     getCheckboxProps: (record: IAccountsData) => ({
       disabled: record.key === 'Disabled User', // Column configuration not to be checked
@@ -142,10 +148,10 @@ export const AccountsTable = () => {
         </div>
         <Table
           size='large'
-          pagination={{ pageSize: 9 }}
+          pagination={{ pageSize: 999 }}
           rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
           columns={TableHeaders()}
-          dataSource={ParseAccountsTable()}
+          dataSource={ currentFolderData?.accounts || []}
           className='h-full'
         />
       </div>

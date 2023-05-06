@@ -6,7 +6,7 @@ const initialState: IAppState = {
   accountsManagerFolder: null,
   proxyManagerFolder: null,
   userAvatar: null,
-  
+  smsServisies: null,
 }
 
 export const appSlice = createSlice({
@@ -30,6 +30,9 @@ export const appSlice = createSlice({
     },
     setUserAvatar: (state, action:PayloadAction<IAppState["userAvatar"]>) => {
       state.userAvatar = action.payload
+    },
+    setSmsServisies: (state, action: PayloadAction<IAppState["smsServisies"]>) => {
+      state.smsServisies = action.payload
     }
   }
 })
@@ -38,6 +41,7 @@ export const {
   setAppPage,
   setAccountsManagerFolder,
   setProxyManagerFolder,
-  setUserAvatar
+  setUserAvatar,
+  setSmsServisies,
 } = appSlice.actions
 export default appSlice.reducer

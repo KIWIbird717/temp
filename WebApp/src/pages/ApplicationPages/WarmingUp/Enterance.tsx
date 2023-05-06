@@ -16,7 +16,7 @@ export const Enterance = () => {
               <InfoCircleOutlined />
             </Popover>
           </div>
-          <TimePicker placeholder='Установить время' size='large' className='w-full' onChange={() => console.log()} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
+          <TimePicker placeholder='Установить время' size='large' className='w-full' onChange={() => console.log()} defaultValue={dayjs('00:00:00', 'HH:mm:ss')} />
         </div>
         <div className="w-full flex flex-col gap-1">
           <div className="flex gap-2 items-center">
@@ -25,7 +25,7 @@ export const Enterance = () => {
               <InfoCircleOutlined />
             </Popover>
           </div>
-          <TimePicker placeholder='Установить время' size='large' className='w-full' onChange={() => console.log()} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
+          <TimePicker placeholder='Установить время' size='large' className='w-full' onChange={() => console.log()} defaultValue={dayjs('00:00:00', 'HH:mm:ss')} />
         </div>
       </div>
 
@@ -37,7 +37,7 @@ export const Enterance = () => {
               <InfoCircleOutlined />
             </Popover>
           </div>
-          <TimePicker placeholder='Установить время' size='large' className='w-full' onChange={() => console.log()} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
+          <TimePicker placeholder='Установить время' size='large' className='w-full' onChange={() => console.log()} defaultValue={dayjs('00:00:00', 'HH:mm:ss')} />
         </div>
         <div className="w-full flex flex-col gap-1">
           <div className="flex gap-2 items-center">
@@ -46,7 +46,7 @@ export const Enterance = () => {
               <InfoCircleOutlined />
             </Popover>
           </div>
-          <TimePicker placeholder='Установить время' size='large' className='w-full' onChange={() => console.log()} defaultOpenValue={dayjs('00:00:00', 'HH:mm:ss')} />
+          <TimePicker placeholder='Установить время' size='large' className='w-full' onChange={() => console.log()} defaultValue={dayjs('00:00:00', 'HH:mm:ss')} />
         </div>
       </div>
     </div>

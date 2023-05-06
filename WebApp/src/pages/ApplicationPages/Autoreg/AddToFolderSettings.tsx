@@ -20,7 +20,7 @@ type propsType = {
 }
 
 export const AddToFolderSettings = ({key, current, value}: propsType) => {
-  const accaountsFolders: IHeaderType[] = useSelector((state: StoreState) => state.user.userManagerFolders)
+  const accaountsFolders: IHeaderType[] | null = useSelector((state: StoreState) => state.user.userManagerFolders)
   const [modal, setModal] = useState<boolean>(false)
   const [selectedFolder, setSelectedFolder] = useState<null | IHeaderType>(null)
 
@@ -35,21 +35,27 @@ export const AddToFolderSettings = ({key, current, value}: propsType) => {
       <Modal style={{ borderRadius: 20 }} title="Выбор папку с аккаунтами" open={modal} onOk={() => setModal(false)} onCancel={() => setModal(false)}>
         <div className="flex flex-col gap-3 my-5">
           <SliderDriwer 
-            dataSource={accaountsFolders}
+            dataSource={accaountsFolders || []}
             open={true}
             visibleAmount={3}
             render={(el) => (
               <div 
                 key={el.key} 
-                className={`${styles.slider_driwer_folder} flex items-center gap-5 w-full rounded-2xl p-3 bg-white`}
+                className={`${styles.slider_driwer_folder} flex justify-between w-full rounded-2xl p-3 bg-white`}
                 onClick={() => {setSelectedFolder(el); setModal(false)}}
               >
-                <div className='h-[110px] object-contain'>
-                  <img className='w-full h-full' src={tableCard} alt='icon'/>
-                </div>
-                <div className="flex flex-col gap-1">
-                  <Title style={{ margin: '0px 0px' }} level={4}>{el.folder}</Title>
-                  <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
+                <div className="flex items-center gap-5">
+                  <div className='h-[110px] object-contain'>
+                    <img className='w-full h-full' src={tableCard} alt='icon'/>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Title style={{ margin: '0px 0px' }} level={4}>{el.folder}</Title>
+                    <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
+                    <div className="flex gap-1 items-start">
+                      <Title className='m-0' level={5}>{el.accountsAmount}</Title>
+                      <UserOutlined className='my-1 mt-[5px]' />
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

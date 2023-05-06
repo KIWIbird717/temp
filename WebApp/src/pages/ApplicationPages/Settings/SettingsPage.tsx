@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
-import { Typography, Layout, Avatar, Upload, message, Button, Statistic, Input } from 'antd'
+import { Typography, Layout, Avatar, Button, Statistic, Input } from 'antd'
 import { contentStyle } from '../../../global-style/layoutStyle'
 import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
 import { MCard } from '../../../components/Card/MCard'
 import { useSelector } from 'react-redux'
 import { StoreState } from '../../../store/store'
-import { BookOutlined, CheckOutlined, KeyOutlined, LinkOutlined, PlusOutlined, TagOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons'
+import { BookOutlined, CheckOutlined, KeyOutlined, LinkOutlined, PlusOutlined, TagOutlined, UserOutlined } from '@ant-design/icons'
 import { ProxySettingsInput } from './ProxySettingsInput'
 import { Progress } from 'antd'
 import { colors } from '../../../global-style/style-colors.module'
@@ -13,6 +13,7 @@ import { AvatarUploadComponent } from './AvatarUploadComponent'
 import { AutoregHeader } from '../Autoreg/AutoregHeader'
 import { StaticMessage } from '../../../components/StaticMessage/StaticMessage'
 import styles from '../../../global-style/scroll-bar-style.module.css'
+import { smsServicesTypes } from '../../../store/types'
 
 
 const { Title } = Typography
@@ -22,34 +23,13 @@ const { Content } = Layout
 export const SettingsPage = () => {
   const userName = useSelector((state: StoreState) => state.user.nick)
   const userAvatar = useSelector((state: StoreState) => state.app.userAvatar)
+  const smsServicesList = useSelector((state: StoreState) => state.app.smsServisies)
+
   const [accountsUsage, setAccountsUsage] = useState<number>(0)
 
   useEffect(() => {
     setAccountsUsage(9.3)
   })
-
-  type smsServicesTypes = {
-    title: string,
-    type: "error" | "warning" | "success" | "service"
-  }
-  const smsServicesList: smsServicesTypes[] = [
-    {
-      title: 'SMS-Activate API',
-      type: 'service'
-    },
-    {
-      title: 'SMS-Activator',
-      type: 'service'
-    },
-    {
-      title: 'SMS-Service',
-      type: 'service'
-    },
-    {
-      title: 'SMS-Phones',
-      type: 'service'
-    }
-  ]
 
   return (
     <>
@@ -127,7 +107,7 @@ export const SettingsPage = () => {
               <div 
                 className={`flex flex-col gap-3 overflow-y-scroll overflow-x-hidden pr-[5px] ${styles.scroll_bar_style}`}
               >
-              {smsServicesList.map((service: smsServicesTypes, index) => (
+              {smsServicesList?.map((service: smsServicesTypes, index) => (
                 <StaticMessage 
                   key={index}
                   title={service.title}

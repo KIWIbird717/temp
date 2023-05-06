@@ -27,7 +27,7 @@ export const userSlice = createSlice({
       state.isUserLogined = action.payload
     },
     /**Could be empty */
-    setUserManagerFolders: (state, action: PayloadAction<IHeaderType[]>) => {
+    setUserManagerFolders: (state, action: PayloadAction<IHeaderType[] | null>) => {
       state.userManagerFolders = action.payload
     }
   }

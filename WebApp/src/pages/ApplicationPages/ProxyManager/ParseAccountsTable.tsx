@@ -26,7 +26,7 @@ export interface IProxyData {
 
 type DataIndex = keyof IProxyData;
 
-const GetColumnSearchProps = (data: DataIndex) => {
+const GetColumnSearchProps = ({data, placeholder}: {data: DataIndex, placeholder: string}) => {
   const [searchText, setSearchText] = useState<string>('')
   const [searchedColumn, setSearchedColumn] = useState<string>('')
   const searchInput = useRef<InputRef>(null)
@@ -36,9 +36,9 @@ const GetColumnSearchProps = (data: DataIndex) => {
     confirm: (param?: FilterConfirmProps) => void,
     dataIndex: DataIndex,
   ) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
+    confirm()
+    setSearchText(selectedKeys[0])
+    setSearchedColumn(dataIndex)
   };
   
   const handleReset = (clearFilters: () => void) => {
@@ -46,18 +46,25 @@ const GetColumnSearchProps = (data: DataIndex) => {
     setSearchText('');
   };
   
-  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<IProxyData> => ({
+  const getColumnSearchProps = ({dataIndex, placeholderProp}: {dataIndex: DataIndex, placeholderProp: string}): ColumnType<IProxyData> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
           ref={searchInput}
-          placeholder="Поиск по номеру"
+          placeholder={placeholderProp}
           value={selectedKeys[0]}
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
           onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
           style={{ marginBottom: 8, display: 'block' }}
         />
         <Space>
+          <Button
+            onClick={() => {clearFilters && handleReset(clearFilters); handleSearch([''] as string[], confirm, dataIndex)}}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Вернуть
+          </Button>
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
@@ -66,13 +73,6 @@ const GetColumnSearchProps = (data: DataIndex) => {
             style={{ width: 90 }}
           >
             Поиск
-          </Button>
-          <Button
-            onClick={() => {clearFilters && handleReset(clearFilters); handleSearch([''] as string[], confirm, dataIndex)}}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Вернуть
           </Button>
         </Space>
       </div>
@@ -103,11 +103,10 @@ const GetColumnSearchProps = (data: DataIndex) => {
       ),
   });
 
-  return getColumnSearchProps(data)
+  return getColumnSearchProps({dataIndex: data, placeholderProp: placeholder})
 }
 
 export const TableHeaders = () => {
-  
   const dropDownItems: MenuProps['items'] = [
     {
       key: '0',
@@ -153,7 +152,8 @@ export const TableHeaders = () => {
           {resting} 
           <HddTwoTone twoToneColor={colors.primary} />
         </div>
-      )
+      ),
+      ...GetColumnSearchProps({data: 'port', placeholder: 'Поиск по порту'})
     },
     {
       title: 'Логин',
@@ -167,7 +167,18 @@ export const TableHeaders = () => {
     {
       title: 'Тип',
       editable: true,
-      dataIndex: 'type'
+      dataIndex: 'type',
+      filters: [
+        {
+          text: 'http',
+          value: 'http'
+        },
+        {
+          text: 'https',
+          value: 'https'
+        }
+      ],
+      onFilter: (value: string, record: any) => record.type.indexOf(value) === 0
     },
     {
       title: 'Задержка',

@@ -1,8 +1,13 @@
-import { Button, Cascader, InputNumber, Statistic, Popover, Typography } from 'antd'
+import { Button, Cascader, InputNumber, Statistic, Popover, Typography, Select } from 'antd'
 import { FolserSelection } from './FolserSelection'
 import { CheckOutlined, InfoCircleOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { colors } from '../../../global-style/style-colors.module'
 import { motion } from 'framer-motion'
+import { useSelector } from 'react-redux'
+import { StoreState } from '../../../store/store'
+import { smsServicesTypes } from '../../../store/types'
+import { useEffect, useState } from 'react'
+import { DefaultOptionType } from 'antd/es/select'
 
 const { Title } = Typography
 
@@ -13,7 +18,13 @@ type propsType = {
 }
 
 export const NewFolderSettings = ({key, current, value}: propsType) => {
-  console.log(`key: ${key}; value: ${value}`)
+  const smsServisiesRaw = useSelector((state: StoreState) => state.app.smsServisies)
+  const [smsServisies, setSmsServisies] = useState<DefaultOptionType[] | null>(null)
+  
+  useEffect(() => {
+    const smsServisies = smsServisiesRaw?.map((el: smsServicesTypes) => ({value: el.title, label: el.title})) || null
+    setSmsServisies(smsServisies)
+  }, [smsServisiesRaw])
 
   return (
     <motion.div 
@@ -33,7 +44,14 @@ export const NewFolderSettings = ({key, current, value}: propsType) => {
               <InfoCircleOutlined />
             </Popover>
           </div>
-          <Cascader placeholder="Смс сервис" size='large' className='w-full'/>
+          <Select 
+            placeholder="Смс сервис" 
+            size='large' 
+            className='w-full'
+            options={smsServisies ? smsServisies : []}
+            dropdownMatchSelectWidth={false}
+            allowClear
+          />
         </div>
         <div className="w-full flex flex-col gap-1">
           <div className="flex gap-2 items-center">

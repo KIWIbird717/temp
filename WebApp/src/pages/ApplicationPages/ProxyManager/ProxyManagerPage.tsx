@@ -16,7 +16,7 @@ export const ProxyManagerPage = () => {
 
   useEffect(() => {
     setOpenFolder(currentFolder)
-    console.log(currentFolder)
+    // console.log(currentFolder)
   }, [currentFolder])
 
   return (

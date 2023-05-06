@@ -16,9 +16,6 @@ export const AvatarUploadComponent = () => {
   const [previewStatus, setPreviewStatus] = useState<PreviewStatus>(null)
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
-  console.log(fileList)
-  console.log(previewImage)
-
   const getBase64 = (file: RcFile): Promise<string> => (
     new Promise((resolve, reject) => {
       const reader = new FileReader()

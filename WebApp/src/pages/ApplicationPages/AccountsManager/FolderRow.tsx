@@ -5,7 +5,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 
 interface RowProps extends React.HTMLAttributes<HTMLTableRowElement> {
-  'data-row-key': string;
+  'data-row-key': string
 }
 
 export const FolderRow = ({ children, ...props }: RowProps) => {
@@ -19,7 +19,7 @@ export const FolderRow = ({ children, ...props }: RowProps) => {
     isDragging,
   } = useSortable({
     id: props['data-row-key'],
-  });
+  })
 
   const style: React.CSSProperties = {
     ...props.style,
@@ -43,10 +43,10 @@ export const FolderRow = ({ children, ...props }: RowProps) => {
                 {...listeners}
               />
             ),
-          });
+          })
         }
-        return child;
+        return child
       })}
     </tr>
-  );
-};
+  )
+}

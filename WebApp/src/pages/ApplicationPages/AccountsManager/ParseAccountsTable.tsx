@@ -1,14 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import type { ColumnType } from 'antd/es/table';
-import { 
-  generateRandomPhoneNumber, 
-  generateRandomResting,
-  generateRandomName,
-  generateRandomString,
-  generateRandomCountry,
-  generateRandomDate,
-  generateRandomStatus
- } from '../../../utils/generateTempData';
 import { 
   Tag, 
   InputRef, 
@@ -50,7 +41,7 @@ export interface IAccountsData {
 
 type DataIndex = keyof IAccountsData;
 
-const GetColumnSearchProps = (data: DataIndex) => {
+const GetColumnSearchProps = ({data, placeholder}: {data: DataIndex, placeholder: string}) => {
   const [searchText, setSearchText] = useState<string>('')
   const [searchedColumn, setSearchedColumn] = useState<string>('')
   const searchInput = useRef<InputRef>(null)
@@ -70,18 +61,25 @@ const GetColumnSearchProps = (data: DataIndex) => {
     setSearchText('');
   };
   
-  const getColumnSearchProps = (dataIndex: DataIndex): ColumnType<IAccountsData> => ({
+  const getColumnSearchProps = ({dataIndex, placeholderProp}: {dataIndex: DataIndex, placeholderProp: string}): ColumnType<IAccountsData> => ({
     filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters, close }) => (
       <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
         <Input
           ref={searchInput}
-          placeholder="Поиск по номеру"
+          placeholder={placeholderProp}
           value={selectedKeys[0]}
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
           onPressEnter={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
           style={{ marginBottom: 8, display: 'block' }}
         />
         <Space>
+          <Button
+            onClick={() => {clearFilters && handleReset(clearFilters); handleSearch([''] as string[], confirm, dataIndex)}}
+            size="small"
+            style={{ width: 90 }}
+          >
+            Вернуть
+          </Button>
           <Button
             type="primary"
             onClick={() => handleSearch(selectedKeys as string[], confirm, dataIndex)}
@@ -90,13 +88,6 @@ const GetColumnSearchProps = (data: DataIndex) => {
             style={{ width: 90 }}
           >
             Поиск
-          </Button>
-          <Button
-            onClick={() => {clearFilters && handleReset(clearFilters); handleSearch([''] as string[], confirm, dataIndex)}}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Вернуть
           </Button>
         </Space>
       </div>
@@ -127,7 +118,7 @@ const GetColumnSearchProps = (data: DataIndex) => {
       ),
   });
 
-  return getColumnSearchProps(data)
+  return getColumnSearchProps({dataIndex: data, placeholderProp: placeholder})
 }
 
 export const TableHeaders = () => {
@@ -185,7 +176,7 @@ export const TableHeaders = () => {
       title: 'Номер',
       dataIndex: 'phoneNumber',
       editable: true,
-      ...GetColumnSearchProps('phoneNumber')
+      ...GetColumnSearchProps({data: 'phoneNumber', placeholder: 'Поиск по номеру'})
     },
     {
       title: 'Отлёжка',
@@ -201,7 +192,7 @@ export const TableHeaders = () => {
       title: 'ФИО',
       dataIndex: 'fullName',
       editable: true,
-      ...GetColumnSearchProps('fullName'),
+      ...GetColumnSearchProps({data: 'fullName', placeholder: 'Поиск по ФИО'}),
     },
     {
       title: '2ФА',
@@ -261,24 +252,3 @@ export const TableHeaders = () => {
   return tableHeaders
 }
 
-
-export const ParseAccountsTable = () => {
-  const [accountsData, setAccountsData] = useState<IAccountsData[]>([])
-
-  useEffect(() => {
-    const dummyAll = new Array(35).fill(0).map((_, index) => { return {
-      key: index,
-      avatar: "https://xsgames.co/randomusers/avatar.php?g=pixel&key=2",
-      phoneNumber: generateRandomPhoneNumber(),
-      resting: generateRandomResting(),
-      fullName: generateRandomName(),
-      secondFacAith: generateRandomString(12),
-      proxy: generateRandomCountry(),
-      latestActivity: generateRandomDate(2023, 2023),
-      status: generateRandomStatus(),
-    }})
-    setAccountsData([...dummyAll])
-  }, [])
-
-  return accountsData
-}
