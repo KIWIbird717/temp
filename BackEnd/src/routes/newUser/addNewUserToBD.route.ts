@@ -1,12 +1,13 @@
 import express, { Router, Request, Response } from "express"
 import CreateNewUser from '../../servises/RegisterUserDB/addRegisterUser.servise'
-import { IRegisterUserSchema, RegisterUserSchema, IUserRes } from '../../servises/RegisterUserDB/registerUserSchema.servise';
+import { RegisterUserSchema, IUserRes, IRegisterUserSchema } from '../../servises/RegisterUserDB/registerUserSchema.servise';
 import { customCompareDecription } from "../../utils/hooks/customCompareDecryption.util";
 
 const router: Router = express.Router()
 
 router.post('/registration', async (req: Request, res: Response) => {
-  const { nick, mail, password } = req.body
+  // Get the data from the request body
+  const { nick, mail, password, accountsManagerFolder, proxyManagerFolder, recentAutoregActivity }: IRegisterUserSchema = req.body
     
   // Check if user already exists
   const existingUser: IUserRes | null = await RegisterUserSchema.findOne({$or: [{ mail }]})
@@ -20,7 +21,14 @@ router.post('/registration', async (req: Request, res: Response) => {
   }
 
   // adding data about new User to MongoDB
-  await CreateNewUser({ nick, mail, password })
+  await CreateNewUser({
+    nick, 
+    mail, 
+    password, 
+    accountsManagerFolder, 
+    proxyManagerFolder, 
+    recentAutoregActivity
+  } as IRegisterUserSchema)
   const existingUserAfterReg: IUserRes = await RegisterUserSchema.findOne({$or: [{ mail }]})
   return res.status(201).json(
     { 
@@ -29,6 +37,9 @@ router.post('/registration', async (req: Request, res: Response) => {
         id: existingUserAfterReg._id,
         nick: existingUserAfterReg.nick,
         mail: existingUserAfterReg.mail,
+        accountsManagerFolder: existingUserAfterReg.accountsManagerFolder,
+        proxyManagerFolder: existingUserAfterReg.proxyManagerFolder,
+        recentAutoregActivity: existingUserAfterReg.recentAutoregActivity,
         createdAt: existingUserAfterReg.createdAt,
         updatedAt: existingUserAfterReg.updatedAt,
         __v: existingUserAfterReg.__v

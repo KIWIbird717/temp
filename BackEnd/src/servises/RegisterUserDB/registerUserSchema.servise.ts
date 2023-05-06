@@ -1,9 +1,77 @@
-import { Schema, Model, model } from "mongoose";
+import { Schema, Model, model, Document } from "mongoose";
 
-export interface IRegisterUserSchema {
+/**
+ * interface for `Менеджер аккаунов` page
+ */
+interface IAccountsManagerFolder extends Document {
+  key: string,
+  folder: string,
+  dopTitle: string,
+  accountsAmount: number,
+  country: string,
+  latestActivity: Date,
+  banned: number,
+  accounts: [
+    {
+      key: string,
+      avatar: string,
+      phoneNumber: string,
+      resting: Date | number,
+      fullName: string,
+      secondFacAith: string,
+      proxy: string,
+      latestActivity: Date,
+      status: string,
+    }
+  ]
+}
+
+/**
+ * interface for `Менеджер proxy` page
+ */
+interface IProxyManagerFolder extends Document {
+  key: string,
+  folder: string,
+  dopTitle: string,
+  proxiesAmount: number,
+  country: string,
+  latestActivity: Date,
+  proxies: [
+    {
+      key: string,
+      ip: string,
+      port: string,
+      login: string,
+      pass: string,
+      type: string,
+      delay: string,
+      status: string
+    }
+  ]
+}
+
+/**
+ * interface for `Авторегистратор` page
+ * Sidebar component with recent user`s registered accounts
+ */
+interface IRecentAutoregActivity extends Document {
+  key: string
+  status: 'success' | 'warning' | 'error'
+  title: string
+  description: string
+  date: Date
+}
+
+/**
+ * Global user interface for MongoDB
+ */
+export interface IRegisterUserSchema extends Document {
   nick: string,
   mail: string,
-  password: string
+  password: string,
+  accountsManagerFolder: IAccountsManagerFolder[],
+  proxyManagerFolder: IProxyManagerFolder[],
+  recentAutoregActivity: IRecentAutoregActivity[],
 }
 
 /**
@@ -15,6 +83,9 @@ export interface IUserRes {
   nick: string,
   mail: string,
   password: string,
+  accountsManagerFolder: IAccountsManagerFolder[],
+  proxyManagerFolder: IProxyManagerFolder[],
+  recentAutoregActivity: IRecentAutoregActivity[],
   createdAt: Date,
   updatedAt: Date,
   __v: number
@@ -22,10 +93,65 @@ export interface IUserRes {
 
 interface IRegisterUserModel extends Model<IRegisterUserSchema> {}
 
+const AccountsManagerFolderSchema = new Schema<IAccountsManagerFolder>({
+  key: String,
+  folder: String,
+  dopTitle: String,
+  accountsAmount: Number,
+  country: String,
+  latestActivity: Date,
+  banned: Number,
+  accounts: [
+    {
+      key: String,
+      avatar: String,
+      phoneNumber: String,
+      resting: Schema.Types.Mixed,
+      fullName: String,
+      secondFacAith: String,
+      proxy: String,
+      latestActivity: Date,
+      status: String,
+    }
+  ],
+})
+
+const ProxyManagerFolderSchema = new Schema<IProxyManagerFolder>({
+  key: String,
+  folder: String,
+  dopTitle: String,
+  proxiesAmount: Number,
+  country: String,
+  latestActivity: Date,
+  proxies: [
+    {
+      key: String,
+      ip: String,
+      port: String,
+      login: String,
+      pass: String,
+      type: String,
+      delay: String,
+      status: String,
+    }
+  ],
+})
+
+const RecentAutoregActivitySchema = new Schema<IRecentAutoregActivity>({
+  key: String,
+  status: { type: String, enum: ['success', 'warning', 'error'] },
+  title: String,
+  description: String,
+  date: Date,
+});
+
 const registerUserSchema: Schema = new Schema({
   nick: {type: String, require: true},
   mail: {type: String, require: true},
-  password: {type: String, require: true}
+  password: {type: String, require: true},
+  accountsManagerFolder: {type: [AccountsManagerFolderSchema], require: false},
+  proxyManagerFolder: {type: [ProxyManagerFolderSchema], require: false},
+  recentAutoregActivity: {type: [RecentAutoregActivitySchema], require: false},
 }, { timestamps: true })
 
 /**
@@ -33,10 +159,5 @@ const registerUserSchema: Schema = new Schema({
  * 
  * @description
  * Registrate new user in application
- * 
- * @arguments
- * - `nick` required
- * - `mail` required
- * - `password` required
  */
 export const RegisterUserSchema: IRegisterUserModel = model<IRegisterUserSchema>('RegisterUserSchema', registerUserSchema)
