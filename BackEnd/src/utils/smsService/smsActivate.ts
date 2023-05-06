@@ -586,7 +586,6 @@ export async function getRegistrationCode(
     if (!code) {
       await submitPhone(service, rentedPhone.id, false); // No code received, request another SMS
     } else {
-      await submitPhone(service, rentedPhone.id, true); // Code received, complete activation
       return { phoneNumber: rentedPhone.phoneNumber, code };
     }
   }
@@ -594,14 +593,16 @@ export async function getRegistrationCode(
   return null;
 }
 
-async function submitPhone(
+export async function submitPhone(
   service: Service,
   id: string | number,
-  codeReceived: boolean
+  codeReceived: boolean,
+  codeNotUsed?: boolean
 ): Promise<void> {
   switch (service) {
     case "sms-man":
-      const smsManStatus = codeReceived ? 6 : 3;
+      let smsManStatus = codeReceived ? 6 : 3;
+      if (codeNotUsed == true) {smsManStatus = 8}
       const response = await axios.get(
         `http://api.sms-man.ru/stubs/handler_api.php?action=setStatus&api_key=${API_KEYS.sms_man}&id=${id}&status=${smsManStatus}`
       );
@@ -626,7 +627,8 @@ async function submitPhone(
       break;
 
     case "sms-activate":
-      const smsActivateStatus = codeReceived ? 6 : 3;
+      let smsActivateStatus = codeReceived ? 6 : 3;
+      if (codeNotUsed == true) {smsActivateStatus = 8}
       const response3 = await axios.get(
         `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=setStatus&status=${smsActivateStatus}&id=${id}`
       );
@@ -636,7 +638,8 @@ async function submitPhone(
       break;
 
     case "sms-activation-service":
-      const smsActivationServiceStatus = codeReceived ? 6 : 3;
+      let smsActivationServiceStatus = codeReceived ? 6 : 3;
+      if (codeNotUsed == true) {smsActivationServiceStatus = 8}
       const response4 = await axios.get(
         `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=setStatus&id=${id}&status=${smsActivationServiceStatus}&lang=ru`
       );
@@ -646,7 +649,7 @@ async function submitPhone(
       break;
 
     case "sms-acktiwator":
-      const smsAcktiwatorStatus = codeReceived ? 6 : 3;
+      let smsAcktiwatorStatus = codeReceived ? 6 : 3;
       const response5 = await axios.get(
         `https://sms-acktiwator.ru/stubs/handler_api.php?api_key=${API_KEYS.sms_acktiwator}&action=setStatus&status=${smsAcktiwatorStatus}&id=${id}`
       );
