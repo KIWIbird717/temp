@@ -3,6 +3,7 @@ import { StringSession } from "telegram/sessions";
 import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
 import { getTelegramVersionSync } from "./utils";
 import { signInUser } from "telegram/client/auth";
+import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import os from "os";
 
 import {
@@ -13,6 +14,15 @@ import {
   getTelegramCode,
   submitPhone,
 } from "../smsService/smsActivate";
+
+let maxIdValue;
+
+maxIdValue = RegisterUserSchema.findOne()
+  .sort({ "accounts.key": -1 })
+  .limit(1)
+  .exec();
+
+console.log(maxIdValue)
 
 interface WaitingForVerify {
   phoneNumber: string;
@@ -103,6 +113,11 @@ class telegramUser {
         : deviceInfo.appVersion;
 
     const systemLanguage = params.language ?? "en";
+
+    if (!params.proxy) {
+      params.proxy = null;
+    }
+
     this.client = new TelegramClient(
       new StringSession(""),
       this.apiId,
@@ -207,8 +222,6 @@ class telegramUser {
       );
     }
   }
-
-  public async enableTwoFactor() {}
 
   private async autoRegister(): Promise<string> {
     return new Promise(async (res) => {

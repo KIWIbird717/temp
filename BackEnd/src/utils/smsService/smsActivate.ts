@@ -1,6 +1,5 @@
 import { checkForErrorFromAxiosResponse } from "./smsHandler";
 import axios from "axios";
-import { setTgCodeForSmsMan, tgCodeForSmsMan } from "./utils";
 
 const API_KEYS = {
   sms_man: process.env.SMS_MAN_API_KEY,
@@ -34,18 +33,14 @@ export const serviceList: Service[] = [
 export async function getTelegramCode(service: Service): Promise<string> {
   switch (service) {
     case "sms-man":
-      if (tgCodeForSmsMan == ""){
-        const response = await axios.get(
-          `http://api.sms-man.ru/stubs/handler_api.php?action=getServices&api_key=${API_KEYS.sms_man}`
-        );
+      const response = await axios.get(
+        `http://api.sms-man.ru/stubs/handler_api.php?action=getServices&api_key=${API_KEYS.sms_man}`
+      );
 
-        await checkForErrorFromAxiosResponse(response, service);
+      await checkForErrorFromAxiosResponse(response, service);
 
-        setTgCodeForSmsMan(response.data.find((s: any) => s.title === "Telegram").id) 
+      return response.data.find((s: any) => s.title === "Telegram").id;
 
-        return tgCodeForSmsMan;
-      }
-      return tgCodeForSmsMan;
 
     case "5sim":
     case "sms-acktiwator":
