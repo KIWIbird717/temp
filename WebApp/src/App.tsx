@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Registration } from './pages/Registration';
 import { Logining } from './pages/Logining';
 import { Application } from './pages/Application';
@@ -13,11 +13,20 @@ import {
   setUserNick, 
   setUserManagerFolders,
 } from './store/userSlice'
-import { setSmsServisies } from './store/appSlice';
+import { setSmsServiciesData, setSmsServisies } from './store/appSlice';
 import { IHeaderType } from './pages/ApplicationPages/AccountsManager/Collumns';
 import { smsServicesTypes } from './store/types';
 import { IAccountsData } from './pages/ApplicationPages/AccountsManager/ParseAccountsTable';
-import { generateRandomCountry, generateRandomDate, generateRandomName, generateRandomPhoneNumber, generateRandomResting, generateRandomStatus, generateRandomString } from './utils/generateTempData';
+import { 
+  generateRandomCountry, 
+  generateRandomDate, 
+  generateRandomName, 
+  generateRandomPhoneNumber, 
+  generateRandomResting, 
+  generateRandomStatus, 
+  generateRandomString 
+} from './utils/generateTempData';
+import axios from 'axios'
 
 
 interface ILocalStorageParced {
@@ -30,6 +39,37 @@ const App: React.FC = () => {
   const dispatch = useDispatch()
   const isUserLogined = useSelector((state: IRootStoreState) => state.user.isUserLogined)
   const navigate = useNavigate()
+
+  const setSmsServiciesFromDB = async (): Promise<void> => {
+    try {
+      const servicies = await axios.get(`${process.env.REACT_APP_SERVER_END_POINT}/telegram/get-service`)
+      const smsServiciesArray: smsServicesTypes[] = servicies.data.map((service: string) => (
+        {
+          title: service,
+        }
+      ))
+      dispatch(setSmsServisies(smsServiciesArray))
+
+      if (servicies.data) {
+        const smsServiciesData = await Promise.all(
+          servicies.data.map(async (service: string) => {
+            try {
+              const countries = await axios.get(`${process.env.REACT_APP_SERVER_END_POINT}/telegram/get-country?service=${service}`);
+              const priceAndPhones = await axios.get(`${process.env.REACT_APP_SERVER_END_POINT}/telegram/get-available-phones?service=${service}&countryId=1`) || null
+              const balance = await axios.get(`${process.env.REACT_APP_SERVER_END_POINT}/telegram/get-balance?service=${service}`)
+              return { title: service, balance: balance.data, countries: countries.data, cost: priceAndPhones.data.telegram.cost, count: priceAndPhones.data.telegram.count };
+            } catch(err) {
+              return { title: service, balance: null, countries: null, cost: null, count: null }
+            }
+          })
+        )
+        dispatch(setSmsServiciesData(smsServiciesData))
+      }
+
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   // Dummy data (temp)
   const ParseAccountsTable = () => {
@@ -103,25 +143,6 @@ const App: React.FC = () => {
     },
   ]
 
-  const dummySmsServisies: smsServicesTypes[] = [
-    {
-      title: 'SMS-Activate API',
-      type: 'service'
-    },
-    {
-      title: 'SMS-Activator',
-      type: 'service'
-    },
-    {
-      title: 'SMS-Service',
-      type: 'service'
-    },
-    {
-      title: 'SMS-Phones',
-      type: 'service'
-    }
-  ]
-
   // Chek if user logedin and stay user logedin after page reload
   useEffect(() => {
     const token = localStorage.getItem('sessionToken')  // contains user email
@@ -133,7 +154,7 @@ const App: React.FC = () => {
       dispatch(setUserNick(tokenData.nick))
       dispatch(setUserIsLogined(true))
       dispatch(setUserManagerFolders(AccountsManagerTableData))
-      dispatch(setSmsServisies(dummySmsServisies))
+      setSmsServiciesFromDB() // get and set sms service from DB
       navigate("/app")
       // From here could be added more user info 
     } else {

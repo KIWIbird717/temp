@@ -8,7 +8,7 @@ const router: Router = express.Router()
 router.post('/registration', async (req: Request, res: Response) => {
   // Get the data from the request body
   const { nick, mail, password, accountsManagerFolder, proxyManagerFolder, recentAutoregActivity }: IRegisterUserSchema = req.body
-    
+
   // Check if user already exists
   const existingUser: IUserRes | null = await RegisterUserSchema.findOne({$or: [{ mail }]})
 

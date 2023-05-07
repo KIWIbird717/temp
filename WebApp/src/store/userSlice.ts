@@ -7,7 +7,7 @@ const initialState: IUserState = {
   mail: null,
   id: null,
   isUserLogined: false,
-  userManagerFolders: []
+  userManagerFolders: [],
 }
 
 export const userSlice = createSlice({

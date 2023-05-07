@@ -11,7 +11,14 @@ export interface IUserState {
 
 export type smsServicesTypes = {
   title: string,
-  type: "error" | "warning" | "success" | "service"
+}
+
+export type smsServiciesDataType = {
+  title: string,
+  balance: number | null,
+  counties: [{ id: number, name: string }] | null,
+  cost: null,
+  count: null
 }
 export interface IAppState {
   appPage: '1' | '2' | '3' | '4' | '5' | '6',
@@ -19,6 +26,7 @@ export interface IAppState {
   proxyManagerFolder: React.Key | null,
   userAvatar: string | null,
   smsServisies: smsServicesTypes[] | null,
+  smsServiciesData: smsServiciesDataType[] | null
 }
 
 export interface IRootStoreState {
