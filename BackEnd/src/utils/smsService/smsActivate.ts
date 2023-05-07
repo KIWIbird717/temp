@@ -41,7 +41,6 @@ export async function getTelegramCode(service: Service): Promise<string> {
 
       return response.data.find((s: any) => s.title === "Telegram").id;
 
-
     case "5sim":
     case "sms-acktiwator":
       return "telegram";
@@ -77,16 +76,28 @@ export async function getCountry(service: Service): Promise<Country[]> {
         id: country.id,
         name: country.name,
       }));
-
     case "5sim":
       response = await axios.get("https://5sim.biz/v1/guest/countries");
 
       await checkForErrorFromAxiosResponse(response, service);
 
-      return Object.entries(response.data).map(([key, value]: any) => ({
-        id: key,
-        name: value.text_en,
-      }));
+      const countries = Object.entries(response.data).map(
+        ([key, value]: any) => ({
+          id: key,
+          name: value.text_en,
+        })
+      );
+
+      // Find Russia and move it to the beginning of the array
+      const russiaIndex = countries.findIndex(
+        (country) => country.id === "russia"
+      );
+      if (russiaIndex >= 0) {
+        const russia = countries.splice(russiaIndex, 1)[0];
+        countries.unshift(russia);
+      }
+
+      return countries;
 
     case "sms-acktiwator":
       response = await axios.get(
@@ -467,7 +478,7 @@ export async function rentPhoneRegistration(
 
 export async function getRegistrationCode(
   service: Service,
-  rentedPhone: {id: string, phoneNumber: string}
+  rentedPhone: { id: string; phoneNumber: string }
 ): Promise<{ phoneNumber: string; code: string } | null> {
   let code: string | null = null;
   let attempts = 0;
@@ -597,7 +608,9 @@ export async function submitPhone(
   switch (service) {
     case "sms-man":
       let smsManStatus = codeReceived ? 6 : 3;
-      if (codeNotUsed == true) {smsManStatus = 8}
+      if (codeNotUsed == true) {
+        smsManStatus = 8;
+      }
       const response = await axios.get(
         `http://api.sms-man.ru/stubs/handler_api.php?action=setStatus&api_key=${API_KEYS.sms_man}&id=${id}&status=${smsManStatus}`
       );
@@ -623,7 +636,9 @@ export async function submitPhone(
 
     case "sms-activate":
       let smsActivateStatus = codeReceived ? 6 : 3;
-      if (codeNotUsed == true) {smsActivateStatus = 8}
+      if (codeNotUsed == true) {
+        smsActivateStatus = 8;
+      }
       const response3 = await axios.get(
         `https://api.sms-activate.org/stubs/handler_api.php?api_key=${API_KEYS.sms_activate}&action=setStatus&status=${smsActivateStatus}&id=${id}`
       );
@@ -634,7 +649,9 @@ export async function submitPhone(
 
     case "sms-activation-service":
       let smsActivationServiceStatus = codeReceived ? 6 : 3;
-      if (codeNotUsed == true) {smsActivationServiceStatus = 8}
+      if (codeNotUsed == true) {
+        smsActivationServiceStatus = 8;
+      }
       const response4 = await axios.get(
         `https://sms-activation-service.com/stubs/handler_api?api_key=${API_KEYS.sms_activation_service}&action=setStatus&id=${id}&status=${smsActivationServiceStatus}&lang=ru`
       );

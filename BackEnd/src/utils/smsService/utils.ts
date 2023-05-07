@@ -210,6 +210,7 @@ export const countryListMap: Record<string, any[]> = {
   "sms-activation-service": [],
   "sms-acktiwator": [],
   "vak-sms": [
+    { id: "ru", name: "Russia" },
     { id: "dk", name: "Denmark" },
     { id: "fi", name: "Finland" },
     { id: "fr", name: "France" },
@@ -229,7 +230,6 @@ export const countryListMap: Record<string, any[]> = {
     { id: "pl", name: "Poland" },
     { id: "pt", name: "Portugal" },
     { id: "ro", name: "Romania" },
-    { id: "ru", name: "Russia" },
     { id: "es", name: "Spain" },
     { id: "se", name: "Sweden" },
     { id: "th", name: "Thailand" },
