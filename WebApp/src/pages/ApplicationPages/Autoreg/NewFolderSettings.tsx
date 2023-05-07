@@ -33,9 +33,14 @@ const getAvaliablePhones = async (service: string | null, countryId: string | nu
 }
 
 export const NewFolderSettings = ({current, value}: propsType) => {
+  // SMS servicies
   const smsServicies = useSelector((state: StoreState) => state.app.smsServiciesData)
   const smsServiciesData = smsServicies?.filter((service: smsServiciesDataType) => service.countries?.length)
   const smsServisiesRaw = useSelector((state: StoreState) => state.app.smsServisies)
+
+  // Proxies
+  const proxiesRawData = useSelector((state: StoreState) => state.app.proxyManagerFolder)
+  console.log({proxiesRawData})
 
   const [avaliablePhonesLoading, setAvaliablePhonesLoading] = useState<boolean>(false)
 

@@ -4,6 +4,8 @@ import {
   telegramUser,
   UserSettings,
 } from "../../utils/telegram/telegramRegister";
+import { IUserRes } from "src/servises/RegisterUserDB/registerUserSchema.servise";
+import { RegisterUserSchema } from "src/servises/RegisterUserDB/registerUserSchema.servise";
 
 const router: Router = express.Router();
 
@@ -32,11 +34,13 @@ What need to containe inside body:
 */
 
 router.post("/manual/register-user", async (req: Request, res: Response) => {
+  const { mail } = req.body.user
   let apiId = 0;
   let apiHash = "";
 
-  if (req.body.apiId === "me") {
-    
+  if (req.body.user.apiId === "me") {
+    const userData: IUserRes = await RegisterUserSchema.findOne({ $or: [{ mail }] }) // All data about user
+
   } else {
 
   }
