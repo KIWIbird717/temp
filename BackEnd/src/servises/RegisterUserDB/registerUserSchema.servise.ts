@@ -5,6 +5,8 @@ import { Schema, Model, model, Document } from "mongoose";
  */
 interface IAccountsManagerFolder extends Document {
   key: string,
+  apiHash: string,
+  apiId?: number
   folder: string,
   dopTitle: string,
   accountsAmount: number,
@@ -22,6 +24,8 @@ interface IAccountsManagerFolder extends Document {
       proxy: string,
       latestActivity: Date,
       status: string,
+      telegramSession: string,
+
     }
   ]
 }
@@ -95,6 +99,8 @@ interface IRegisterUserModel extends Model<IRegisterUserSchema> {}
 
 const AccountsManagerFolderSchema = new Schema<IAccountsManagerFolder>({
   key: String,
+  apiHash: String,
+  apiId: {type: Number, require: false},
   folder: String,
   dopTitle: String,
   accountsAmount: Number,
@@ -112,6 +118,7 @@ const AccountsManagerFolderSchema = new Schema<IAccountsManagerFolder>({
       proxy: String,
       latestActivity: Date,
       status: String,
+      telegramSession: String,
     }
   ],
 })

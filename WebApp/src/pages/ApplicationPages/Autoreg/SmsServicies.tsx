@@ -38,12 +38,12 @@ export const SmsServicies = ({height}: IProps): JSX.Element => {
         className={`flex flex-col gap-3 overflow-y-scroll overflow-x-hidden pr-[5px] ${styles.scroll_bar_style}`}
       >
       {loading ? (
-        <div className="w-full h-full items-center justify-center">
+        <div className="flex w-full h-full items-center justify-center">
           <Spin size="large" />
         </div>
       ) : (
         smsServicesList?.map((service: smsServiciesDataType) => (
-          <div className='flex justify-between p-4 border-[1px] border-solid border-[#d9d9d9] rounded-[15px]'>
+          <div key={service.title} className='flex justify-between p-4 border-[1px] border-solid border-[#d9d9d9] rounded-[15px]'>
             {service.balance ? (
               <div className="flex flex-col justify-between gap-2">
                 <Title className='m-0' level={5}>{service.title}</Title>

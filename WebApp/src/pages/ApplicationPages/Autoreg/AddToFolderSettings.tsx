@@ -235,7 +235,14 @@ export const AddToFolderSettings = ({current, value}: propsType) => {
                 <InfoCircleOutlined />
               </Popover>
             </div>
-            <InputNumber size='large' defaultValue={0} min={0} addonBefore={<UserOutlined />} className='w-full' />
+            <InputNumber 
+              size='large' 
+              defaultValue={0} 
+              min={0} 
+              max={avaliablePhones?.count !== undefined ? avaliablePhones?.count : 0} 
+              addonBefore={<UserOutlined />} 
+              className='w-full' 
+            />
           </div>
           {avaliablePhonesLoading ? (
             <Statistic 
