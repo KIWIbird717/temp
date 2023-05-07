@@ -6,7 +6,7 @@ import { Schema, Model, model, Document } from "mongoose";
 interface IAccountsManagerFolder extends Document {
   key: string,
   apiHash: string,
-  apiId?: number
+  apiId: number
   folder: string,
   dopTitle: string,
   accountsAmount: number,
@@ -25,7 +25,7 @@ interface IAccountsManagerFolder extends Document {
       latestActivity: Date,
       status: string,
       telegramSession: string,
-
+      apiId?: number
     }
   ]
 }
@@ -119,6 +119,7 @@ const AccountsManagerFolderSchema = new Schema<IAccountsManagerFolder>({
       latestActivity: Date,
       status: String,
       telegramSession: String,
+      apiId: {type: Number, require: false}
     }
   ],
 })
