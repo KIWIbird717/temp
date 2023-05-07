@@ -10,9 +10,11 @@ const router: Router = express.Router();
 router.get("/info/device", async (req: Request, res: Response) => {});
 
 /*
+Need generate user profile
+
 What need to containe inside body:
 {
-    telegramUser: {
+  telegramUser: {
         phone: "",     REQUIRED
         auto: true,    IF TRUE ANYTHING ELSE NOT REQUIRED, ONLY PHONE
         firstName: "", REQUIRED
@@ -20,12 +22,24 @@ What need to containe inside body:
         userName: "",  NON REQUIRED
         photoUrl: "",  NON REQUIRED    
     }
+    user: {
+      email: "",
+      folderKey: "",
+      apiId: 0 | "me"
+      apiHash: "" | "me"
+    }
 }
 */
 
 router.post("/manual/register-user", async (req: Request, res: Response) => {
-  let apiId = "";
+  let apiId = 0;
   let apiHash = "";
+
+  if (req.body.apiId === "me") {
+    
+  } else {
+
+  }
 
   const userSettings: UserSettings = {
     telegramUser: {
@@ -44,7 +58,7 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
 
   const autoGenerate = req.body.telegramUser.auto ?? true;
 
-  if (autoGenerate == true) {
+  if (autoGenerate === true) {
     // Implement for auto generating telegramUser
   } 
 
@@ -52,7 +66,7 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
     throw new Error("Not correct username or it's containe non latin alphabet");
   }
 
-  const newUser = new telegramUser(parseInt(apiId), apiHash, userSettings);
+  const newUser = new telegramUser(apiId, apiHash, userSettings);
 
   await newUser.createTelegramUser()
 });

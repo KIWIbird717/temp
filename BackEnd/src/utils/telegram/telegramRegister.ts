@@ -95,7 +95,7 @@ export class telegramUser {
     this.statistic.manual =
       !params.manual && !params.phone.service ? true : params.manual;
 
-    if (this.statistic.manual == true) {
+    if (this.statistic.manual === true) {
       this.statistic.phone = params.phone.phone;
       this.statistic.utils.servicePhone = null;
     } else {
@@ -119,7 +119,7 @@ export class telegramUser {
     );
 
     const appVersion =
-      deviceInfo.appVersion == "last" || deviceInfo.appVersion == ""
+      deviceInfo.appVersion === "last" || deviceInfo.appVersion === ""
         ? last_version
         : deviceInfo.appVersion;
 
@@ -147,7 +147,7 @@ export class telegramUser {
   }
 
   public async createTelegramUser() {
-    if (this.statistic.manual == true) {
+    if (this.statistic.manual === true) {
       const phone = await rentPhoneRegistration(
         this.statistic.utils.servicePhone,
         await getTelegramCode(this.statistic.utils.servicePhone),
@@ -159,7 +159,7 @@ export class telegramUser {
 
     const isAvalible = await this.autoRegister();
 
-    if (this.statistic.userExists == true) {
+    if (this.statistic.userExists === true) {
       try {
         const currentUser = (await this.client.getMe()) as Api.User;
         const inputPeer = new Api.InputPeerUser({
@@ -204,14 +204,14 @@ export class telegramUser {
 
     if (
       this.statistic.userError === undefined ||
-      this.statistic.userError.length == 0
+      this.statistic.userError.length === 0
     ) {
       await submitPhone(
         this.statistic.utils.servicePhone,
         this.statistic.utils.phoneId,
         true
       ); // Code received, complete activation
-    } else if (isAvalible == "reg-noacc") {
+    } else if (isAvalible === "reg-noacc") {
       await submitPhone(
         this.statistic.utils.servicePhone,
         this.statistic.utils.phoneId,
@@ -222,7 +222,7 @@ export class telegramUser {
       this.statistic.userError.push(
         `User was registered with name: ${await this.client.getMe()}`
       );
-    } else if (isAvalible == "val-code") {
+    } else if (isAvalible === "val-code") {
       await submitPhone(
         this.statistic.utils.servicePhone,
         this.statistic.utils.phoneId,
@@ -232,6 +232,10 @@ export class telegramUser {
         `Valid sms code from service: ${this.statistic.utils.servicePhone} and phone number is: ${this.statistic.phone}`
       );
     }
+
+    await this.client.connect();
+    const session = this.client.session.save();
+    await this.client.disconnect();
   }
 
   private async autoRegister(): Promise<string> {
@@ -289,6 +293,7 @@ export class telegramUser {
         }
       }
     });
+    
   }
 }
 
