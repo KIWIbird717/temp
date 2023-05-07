@@ -22,8 +22,6 @@ maxIdValue = RegisterUserSchema.findOne()
   .limit(1)
   .exec();
 
-console.log(maxIdValue)
-
 interface WaitingForVerify {
   phoneNumber: string;
   code: string | number;
@@ -44,10 +42,10 @@ interface userStatistic {
   firstName: string;
   lastName: string;
   userName: string;
-  photoUrl: string;
+  photoUrl?: string;
 }
 
-interface UserSettings {
+export interface UserSettings {
   language?: "ru" | "en";
   device?: DeviceInfo;
   proxy?: ProxyInterface;
@@ -56,7 +54,7 @@ interface UserSettings {
   manual?: boolean;
 }
 
-class telegramUser {
+export class telegramUser {
   private apiId: number;
   private apiHash: string;
   public statistic: {
@@ -80,6 +78,19 @@ class telegramUser {
   constructor(apiId: number, apiHash: string, params: UserSettings) {
     this.apiId = apiId;
     this.apiHash = apiHash;
+
+    this.statistic = {
+      userError: [],
+      phone: '',
+      utils: {},
+      userExists: false,
+      tgUserStats: {
+        username: '',
+        fisrtName: '',
+        lastName: '',
+        description: '',
+      },
+    };
 
     this.statistic.manual =
       !params.manual && !params.phone.service ? true : params.manual;
