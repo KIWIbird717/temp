@@ -12,7 +12,7 @@ router.get("/get-country", async (req: Request, res: Response) => {
   const service = await checkService(req.query.service as string);
 
   if (service === null) {
-    return res.status(400).json({ message: "Incorrect service" });
+    return res.status(400).json({ error: "Incorrect service" });
   }
 
   // If the list is not empty for the given service, return the list from the map
@@ -31,7 +31,7 @@ router.get("/get-country", async (req: Request, res: Response) => {
 router.get("/get-balance", async (req: Request, res: Response) => {
   const service = await checkService(req.query.service as string);
   if (service === null) {
-    return res.status(400).json({ message: "Incorrect service" });
+    return res.status(400).json({ error: "Incorrect service" });
   }
 
   const balance = await smsService.getBalance(service);
@@ -42,7 +42,7 @@ router.get("/get-balance", async (req: Request, res: Response) => {
 router.get("/get-available-phones", async (req: Request, res: Response) => {
   const service = await checkService(req.query.service as string);
   if (service === null) {
-    return res.status(400).json({ message: "Incorrect service" });
+    return res.status(400).json({ error: "Incorrect service" });
   }
 
   const country: smsService.Country = {
@@ -51,7 +51,7 @@ router.get("/get-available-phones", async (req: Request, res: Response) => {
   };
 
   if (country.id === "") {
-    return res.status(400).json({ message: "Invalid or missing Country ID" });
+    return res.status(400).json({ error: "Invalid or missing Country ID" });
   }
 
   const phones = await smsService.getAvailablePhones(service, country);
