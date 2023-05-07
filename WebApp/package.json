@@ -13,6 +13,7 @@
     "antd": "^5.4.2",
     "dayjs": "^1.11.7",
     "framer-motion": "^7.10.3",
+    "lodash.debounce": "^4.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-highlight-words": "^0.20.0",
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "@types/jest": "^27.5.2",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/node": "^16.18.23",
     "@types/react": "^18.0.35",
     "@types/react-dom": "^18.0.11",
@@ -57,6 +59,7 @@
     "@vitejs/plugin-react-refresh": "^1.3.6",
     "axios": "^1.3.5",
     "cors": "^2.8.5",
+    "lodash": "^4.17.21",
     "react-redux": "^8.0.5",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",

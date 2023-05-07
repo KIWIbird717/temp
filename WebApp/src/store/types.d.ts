@@ -16,7 +16,7 @@ export type smsServicesTypes = {
 export type smsServiciesDataType = {
   title: string,
   balance: number | null,
-  counties: [{ id: number, name: string }] | null,
+  countries: [{ id: number | string, name: string }] | null,
   cost: null,
   count: null
 }

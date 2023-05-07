@@ -10,7 +10,7 @@ import { AutoregHeader } from './AutoregHeader'
 import { NewFolderSettings } from './NewFolderSettings'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useContainerDimensions } from '../../../hooks/useContainerDimention'
-import { RecentActivities } from './RecentActivities'
+import { SmsServicies } from './SmsServicies'
 import { Col, Row } from 'antd';
 import { AddToFolderSettings } from './AddToFolderSettings'
 import { ManualSettings } from './ManualSettings'
@@ -114,7 +114,7 @@ export const AutoRegPage: React.FC = () => {
             </MCard>
           </Col>
           <Col span={9}>
-            <RecentActivities height={height}/>
+            <SmsServicies height={height}/>
           </Col>
         </Row>
       </Content>
