@@ -4,8 +4,8 @@ import {
   telegramUser,
   UserSettings,
 } from "../../utils/telegram/telegramRegister";
-import { IUserRes } from "src/servises/RegisterUserDB/registerUserSchema.servise";
-import { RegisterUserSchema } from "src/servises/RegisterUserDB/registerUserSchema.servise";
+import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise"
+import { RegisterUserSchema } from "../..//servises/RegisterUserDB/registerUserSchema.servise";
 
 const router: Router = express.Router();
 
@@ -40,7 +40,7 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
 
   if (req.body.apiId === "me") {
     const userData: IUserRes = await RegisterUserSchema.findOne({ $or: [{ mail }] }) // All data about user
-    
+
   } else {
     apiHash = req.body.user.apiHash;
   }
