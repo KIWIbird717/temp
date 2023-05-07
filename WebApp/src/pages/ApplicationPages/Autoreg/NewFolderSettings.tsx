@@ -52,11 +52,11 @@ export const NewFolderSettings = ({current, value}: propsType) => {
     setAvaliablePhones(null)
   }
   
-  // Pase clear data to sms servicies
+  // Paste clear data to sms servicies
   useEffect(() => {
     const smsServisies = smsServiciesData?.map((el: smsServicesTypes) => ({value: el.title, label: el.title})) || null
     setSmsServisies(smsServisies)
-  }, [smsServisiesRaw])
+  }, [smsServicies])
 
   // Parce avaliable countries
   useEffect(() => {

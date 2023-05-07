@@ -67,7 +67,7 @@ export const AddToFolderSettings = ({current, value}: propsType) => {
   useEffect(() => {
     const smsServisies = smsServiciesData?.map((el: smsServicesTypes) => ({value: el.title, label: el.title})) || null
     setSmsServisies(smsServisies)
-  }, [smsServisiesRaw])
+  }, [smsServicies])
 
   // Parce avaliable countries
   useEffect(() => {
