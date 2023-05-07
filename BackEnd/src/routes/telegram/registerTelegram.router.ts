@@ -35,10 +35,14 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
   let apiId = 0;
   let apiHash = "";
 
-  if (req.body.apiId === "me") {
-    
+  if (req.body.user.apiId === "me") {
   } else {
+    apiId = req.body.user.apiId;
+  }
 
+  if (req.body.user.apiHash === "me") {
+  } else {
+    apiHash = req.body.user.apiHash;
   }
 
   const userSettings: UserSettings = {
@@ -51,7 +55,7 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
       photoUrl: req.body.telegramUser.photoUrl ?? null,
     },
     phone: {
-        phone: req.body.telegramUser.phone
+      phone: req.body.telegramUser.phone,
     },
     manual: true,
   };
@@ -60,7 +64,7 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
 
   if (autoGenerate === true) {
     // Implement for auto generating telegramUser
-  } 
+  }
 
   if (!/^[a-zA-Z_]+$/.test(userSettings.telegramUser.userName)) {
     throw new Error("Not correct username or it's containe non latin alphabet");
@@ -68,7 +72,7 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
 
   const newUser = new telegramUser(apiId, apiHash, userSettings);
 
-  await newUser.createTelegramUser()
+  await newUser.createTelegramUser();
 });
 
 router.post("/manual/add-code", async (req: Request, res: Response) => {
