@@ -1,19 +1,22 @@
 import { useState } from 'react'
 import { MCard } from '../../../components/Card/MCard'
-import { Select, Input, Table, Tooltip, Button, message } from 'antd'
+import { Input, Table, Tooltip, Button, message } from 'antd'
 import { motion } from 'framer-motion'
-import { IHeaderType, TableHeaders, tableData } from './Collumns'
+import { IProxyHeaderType, TableHeaders } from './Collumns'
 import { CloseOutlined, ContainerOutlined, EditOutlined } from '@ant-design/icons'
 import { notificationHandler } from '../../../components/notification'
 import { MSelect } from '../../../components/Select/MSelect'
 import { MSearch } from '../../../components/Search/MSearch'
+import { StoreState } from '../../../store/store'
+import { useSelector } from 'react-redux'
 
-
-const { Search } = Input
 
 export const Folders = () => {
+  const tableData: IProxyHeaderType[] | null = useSelector((state: StoreState) => state.user.userProxyFolders)
+  console.log({tableData})
+
   const [selectionType, setSelectionType] = useState<boolean>(false)
-  const [selectedFolders, setSelectedFolders] = useState<IHeaderType[]>([])
+  const [selectedFolders, setSelectedFolders] = useState<IProxyHeaderType[]>([])
 
   const exportSelectedFolders = () => {
     if (selectedFolders.length) {
@@ -28,11 +31,11 @@ export const Folders = () => {
   }
 
   const rowSelection = {
-    onChange: (selectedRowKey: React.Key[], selectedRows: IHeaderType[]) => {
+    onChange: (selectedRowKey: React.Key[], selectedRows: IProxyHeaderType[]) => {
       setSelectedFolders(selectedRows)
       // console.log(`selectedRowKeys: ${selectedRowKey}, selectedRows: ${selectedRows}`)
     },
-    getCheckboxProps: (record: IHeaderType) => ({
+    getCheckboxProps: (record: IProxyHeaderType) => ({
       disabled: record.folder === 'Disabled User', // Column configuration not to be checked
       folder: record.folder,
     }),
@@ -88,7 +91,7 @@ export const Folders = () => {
               size='large'
               rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
               columns={TableHeaders()}
-              dataSource={tableData}
+              dataSource={tableData || []}
               pagination={{ pageSize: 4 }}
             />
           </div>
@@ -97,3 +100,4 @@ export const Folders = () => {
     </div>
   )
 }
+

@@ -229,24 +229,3 @@ export const TableHeaders = () => {
   
   return tableHeaders
 }
-
-
-export const ParseAccountsTable = () => {
-  const [accountsData, setAccountsData] = useState<IProxyData[]>([])
-
-  useEffect(() => {
-    const dummyAll = new Array(35).fill(0).map((_, index) => { return {
-      key: index,
-      ip: generateRandomString(14),
-      port: generateRandomNumber(4),
-      login: 'country-ms-session',
-      pass: generateRandomString(10),
-      type: 'http',
-      delay: generateRandomNumber(2),
-      status: generateRandomStatus()
-    }})
-    setAccountsData([...dummyAll])
-  }, [])
-
-  return accountsData
-}

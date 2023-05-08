@@ -6,7 +6,8 @@ export interface IUserState {
   mail: string | null,
   id: number | null,
   isUserLogined: boolean,
-  userManagerFolders: IHeaderType[] | null
+  userManagerFolders: IHeaderType[] | null,
+  userProxyFolders: IProxyHeaderType[] | null
 }
 
 export type smsServicesTypes = {

@@ -3,7 +3,7 @@ import { contentStyle } from '../../../global-style/layoutStyle'
 import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
 import { Layout  } from 'antd'
 import { Folders } from './Folders'
-import { AccountsTable } from './AccountsTable'
+import { ProxiesTable } from './ProxiesTable'
 import { useSelector } from 'react-redux'
 import { StoreState } from '../../../store/store'
 
@@ -25,7 +25,7 @@ export const ProxyManagerPage = () => {
 
         <Content className='h-full flex flex-col gap-10'>
           {openFolder ? (
-            <AccountsTable />
+            <ProxiesTable />
             ) : (
             <Folders />
           )}

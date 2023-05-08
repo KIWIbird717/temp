@@ -6,14 +6,16 @@ import { setProxyManagerFolder } from '../../../store/appSlice';
 import { FolderOpenOutlined, SafetyCertificateTwoTone } from '@ant-design/icons';
 import { colors } from '../../../global-style/style-colors.module';
 import styles from './style.module.css'
+import { IProxyData } from './ParseAccountsTable';
 
-export interface IHeaderType {
+export interface IProxyHeaderType {
   key: React.Key,
   folder: string,
   dopTitle: string,
-  peoxies: number,
+  count: number,
   country: string,
   latestActivity: string,
+  proxies: IProxyData[]
 }
 
 
@@ -22,7 +24,7 @@ const { Title } = Typography
 export const TableHeaders = () => {
   const dispatch = useDispatch()
 
-  const tableHeaders: ColumnsType<IHeaderType> = [
+  const tableHeaders: ColumnsType<IProxyHeaderType> = [
     {
       title: 'Папка',
       dataIndex: 'folder',
@@ -46,7 +48,7 @@ export const TableHeaders = () => {
     },
     {
       title: 'Кол-во proxy',
-      dataIndex: 'peoxies',
+      dataIndex: 'count',
       render: (accounts: number) => (
         <div className="flex gap-2">
           <Title style={{ margin: '0px 0px' }} level={5}>{accounts}</Title>
@@ -66,40 +68,4 @@ export const TableHeaders = () => {
 
   return tableHeaders
 }
-
-
-export const tableData: IHeaderType[] = [
-  {
-    key: '1',
-    folder: 'Proxy',
-    dopTitle: 'Аккаунты для прогрева',
-    peoxies: 12,
-    country: 'Финляндия',
-    latestActivity: '22 апреля, 2023',
-  },
-  {
-    key: '2',
-    folder: 'Proxy',
-    dopTitle: 'Аккаунты для каналов',
-    peoxies: 24,
-    country: 'Германия',
-    latestActivity: '22 апреля, 2023',
-  },
-  {
-    key: '3',
-    folder: 'Proxy',
-    dopTitle: 'Аккаунты для переписок',
-    peoxies: 24,
-    country: 'Тайланд',
-    latestActivity: '22 апреля, 2023',
-  },
-  {
-    key: '4',
-    folder: 'Proxy',
-    dopTitle: 'Аккаунты для переписок',
-    peoxies: 24,
-    country: 'Тайланд',
-    latestActivity: '22 апреля, 2023',
-  },
-]
 

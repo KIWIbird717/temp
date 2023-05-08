@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { IUserState } from "./types"
 import { IHeaderType } from "../pages/ApplicationPages/AccountsManager/Collumns"
+import { IProxyHeaderType } from "../pages/ApplicationPages/ProxyManager/Collumns"
 
 const initialState: IUserState = {
   nick: null,
@@ -8,6 +9,7 @@ const initialState: IUserState = {
   id: null,
   isUserLogined: false,
   userManagerFolders: [],
+  userProxyFolders: [],
 }
 
 export const userSlice = createSlice({
@@ -29,6 +31,9 @@ export const userSlice = createSlice({
     /**Could be empty */
     setUserManagerFolders: (state, action: PayloadAction<IHeaderType[] | null>) => {
       state.userManagerFolders = action.payload
+    },
+    setUserProxyFolders: (state, action: PayloadAction<IProxyHeaderType[] | null>) => {
+      state.userProxyFolders = action.payload
     }
   }
 })
@@ -39,5 +44,6 @@ export const {
   setUserId,
   setUserIsLogined,
   setUserManagerFolders,
+  setUserProxyFolders,
 } = userSlice.actions
 export default userSlice.reducer

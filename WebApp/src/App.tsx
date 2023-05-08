@@ -12,6 +12,7 @@ import {
   setUserId, 
   setUserNick, 
   setUserManagerFolders,
+  setUserProxyFolders,
 } from './store/userSlice'
 import { setSmsServiciesData, setSmsServisies } from './store/appSlice';
 import { IHeaderType } from './pages/ApplicationPages/AccountsManager/Collumns';
@@ -21,12 +22,15 @@ import {
   generateRandomCountry, 
   generateRandomDate, 
   generateRandomName, 
+  generateRandomNumber, 
   generateRandomPhoneNumber, 
   generateRandomResting, 
   generateRandomStatus, 
   generateRandomString 
 } from './utils/generateTempData';
 import axios from 'axios'
+import { IProxyData } from './pages/ApplicationPages/ProxyManager/ParseAccountsTable';
+import { IProxyHeaderType } from './pages/ApplicationPages/ProxyManager/Collumns';
 
 
 interface ILocalStorageParced {
@@ -71,7 +75,7 @@ const App: React.FC = () => {
     }
   }
 
-  // Dummy data (temp)
+  // Dummy accounts data (temp)
   const ParseAccountsTable = () => {
     const accountsData = useRef<IAccountsData[]>()
   
@@ -143,6 +147,66 @@ const App: React.FC = () => {
     },
   ]
 
+  // Dummy proxy data (temp)
+  const ParseProxiesTable = () => {
+    const accountsData = useRef<IProxyData[]>()
+  
+    useEffect(() => {
+      const dummyAll = new Array(35).fill(0).map((_, index) => { return {
+        key: index,
+        ip: generateRandomString(14),
+        port: generateRandomNumber(4),
+        login: 'country-ms-session',
+        pass: generateRandomString(10),
+        type: 'http',
+        delay: generateRandomNumber(2),
+        status: generateRandomStatus()
+      }})
+      accountsData.current = [...dummyAll]
+    }, [])
+  
+    return accountsData.current
+  }
+  const ProxiesManagerTableData: IProxyHeaderType[] = [
+    {
+      key: '1',
+      folder: 'Proxy 1',
+      dopTitle: 'Аккаунты для прогрева',
+      count: 12,
+      country: 'Финляндия',
+      latestActivity: '22 апреля, 2023',
+      proxies: [...ParseProxiesTable() || []]
+    },
+    {
+      key: '2',
+      folder: 'Proxy 2',
+      dopTitle: 'Аккаунты для каналов',
+      count: 24,
+      country: 'Германия',
+      latestActivity: '22 апреля, 2023',
+      proxies: [...ParseProxiesTable() || []]
+    },
+    {
+      key: '3',
+      folder: 'Proxy 3',
+      dopTitle: 'Аккаунты для переписок',
+      count: 24,
+      country: 'Тайланд',
+      latestActivity: '22 апреля, 2023',
+      proxies: [...ParseProxiesTable() || []]
+    },
+    {
+      key: '4',
+      folder: 'Proxy 4',
+      dopTitle: 'Аккаунты для переписок',
+      count: 24,
+      country: 'Тайланд',
+      latestActivity: '22 апреля, 2023',
+      proxies: [...ParseProxiesTable() || []]
+    },
+  ]
+  
+
   // Chek if user logedin and stay user logedin after page reload
   useEffect(() => {
     const token = localStorage.getItem('sessionToken')  // contains user email
@@ -153,7 +217,10 @@ const App: React.FC = () => {
       dispatch(setUserId(Number(tokenData.id)))
       dispatch(setUserNick(tokenData.nick))
       dispatch(setUserIsLogined(true))
+
       dispatch(setUserManagerFolders(AccountsManagerTableData))
+      dispatch(setUserProxyFolders(ProxiesManagerTableData))
+      
       setSmsServiciesFromDB() // get and set sms service from DB
       navigate("/app")
       // From here could be added more user info 

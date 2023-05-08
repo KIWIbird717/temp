@@ -1,21 +1,26 @@
 import React, { useState } from 'react'
 import { MCard } from '../../../components/Card/MCard'
 import { Table, Button, Tooltip, Modal, message } from 'antd'
-import { ParseAccountsTable, TableHeaders } from './ParseAccountsTable'
+import { TableHeaders } from './ParseAccountsTable'
 import { ArrowLeftOutlined, CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setProxyManagerFolder } from '../../../store/appSlice'
 import { IProxyData } from './ParseAccountsTable'
 import { AnimatePresence, motion } from 'framer-motion'
 import { notificationHandler } from '../../../components/notification'
+import { StoreState } from '../../../store/store'
 
 
 const { confirm } = Modal
 
-export const AccountsTable = () => {
+export const ProxiesTable = () => {
   const dispatch = useDispatch()
   const [selectedFolders, setSelectedFolders] = useState<IProxyData[]>([])
   const [selectionType, setSelectionType] = useState<boolean>(false)
+
+  const proxyTableData = useSelector((state: StoreState) => state.user.userProxyFolders)
+  const openedProxyFolder = useSelector((state: StoreState) => state.app.proxyManagerFolder)
+  const currentFolderData = proxyTableData?.find((folder) => folder.key === openedProxyFolder)
 
   const rowSelection = {
     onChange: (selectedRowKey: React.Key[], selectedRows: IProxyData[]) => {
@@ -120,7 +125,7 @@ export const AccountsTable = () => {
           pagination={{ pageSize: 999 }}
           rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
           columns={TableHeaders()}
-          dataSource={ParseAccountsTable()}
+          dataSource={currentFolderData?.proxies || []}
           className='h-full'
         />
       </div>
