@@ -6,7 +6,7 @@ import {
 } from "../../utils/telegram/telegramRegister";
 import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
-import { INewTgUserSchema, NewTgUserSchema } from "../../servises/AddTelegramUserToBD/newTgUserSchema.servise"
+import { updateUser } from "../../servises/RegisterUserDB/updateUser.servise";
 
 const router: Router = express.Router();
 
@@ -77,18 +77,26 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
     // Implement for auto generating telegramUser
   }
 
-  if (!/^[a-zA-Z_]+$/.test(userSettings.telegramUser.userName)) {
+  if (!/^[a-zA-Z0-9_]+$/.test(userSettings.telegramUser.userName)) {
     throw new Error("Not correct username or it's containe non latin alphabet");
   }
 
   const newUser = new telegramUser(apiId, apiHash, userSettings);
 
-  const sessionString = await newUser.createTelegramUser();
+  await newUser.createTelegramUser();
 
-  const newTelegramUser = new NewTgUserSchema({
+  const savedUser = await newUser.saveUser();
 
-  })
-  newTelegramUser.save()
+  folderData.accounts.push(savedUser);
+
+  if (!(req.body.user.apiId === "me")) {
+    savedUser.apiId = req.body.user.apiId;
+  }
+  if (!(req.body.user.apiHash === "me")) {
+    savedUser.apiHash = req.body.user.apiHash;
+  }
+
+  updateUser(mail, { accountsManagerFolder: [folderData] });
 });
 
 router.post("/manual/add-code", async (req: Request, res: Response) => {
