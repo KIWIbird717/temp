@@ -48,7 +48,7 @@ const getAvaliablePhones = async (service: string | null, countryId: string | nu
 export const AddToFolderSettings = ({current, value}: propsType) => {
   const accaountsFolders: IHeaderType[] | null = useSelector((state: StoreState) => state.user.userManagerFolders)
   const [modal, setModal] = useState<boolean>(false)
-  const [selectedFolder, setSelectedFolder] = useState<null | IHeaderType>(null)
+  const [selectedFolder, setSelectedFolder] = useState<IHeaderType | null>(null)
 
   // Proxies
   const proxiesRawData = useSelector((state: StoreState) => state.user.userProxyFolders)
@@ -81,6 +81,7 @@ export const AddToFolderSettings = ({current, value}: propsType) => {
     setAvaliableCountries([])
     setAvaliablePhones(null)
     setSelectedProxy(null)
+    setSelectedFolder(null)
   }
 
   // Set proxy clear data
@@ -214,7 +215,7 @@ export const AddToFolderSettings = ({current, value}: propsType) => {
           </div>
         )}
 
-<div className="w-full flex gap-3 mb-5">
+      <div className="w-full flex gap-3 mb-5">
         <div className="w-full flex flex-col gap-1">
           <div className="flex gap-2 items-center">
             <Title level={5} style={{ margin: '0 0' }}>Выбор смс сервиса</Title>
@@ -324,7 +325,7 @@ export const AddToFolderSettings = ({current, value}: propsType) => {
       </div>
 
       <div className="w-full flex justify-between items-center">
-      {selectedSmsService || selectedCountry || selectedProxy ? (
+      {selectedSmsService || selectedCountry || selectedProxy || selectedFolder ? (
           <Button danger type='link' onClick={() => resetFields()}>Отменить</Button>
         ) : (
           <div></div>
