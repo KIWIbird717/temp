@@ -3,7 +3,7 @@ import { StringSession } from "telegram/sessions";
 import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
 import { getTelegramVersionSync } from "./utils";
 import { signInUser } from "telegram/client/auth";
-import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
+import { IAccountsManagerFolder, RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import os from "os";
 
 import {
@@ -14,13 +14,6 @@ import {
   getTelegramCode,
   submitPhone,
 } from "../smsService/smsActivate";
-
-let maxIdValue;
-
-maxIdValue = RegisterUserSchema.findOne()
-  .sort({ "accounts.key": -1 })
-  .limit(1)
-  .exec();
 
 interface WaitingForVerify {
   phoneNumber: string;
@@ -43,6 +36,7 @@ interface userStatistic {
   lastName: string;
   userName: string;
   photoUrl?: string;
+  userString?: string;
 }
 
 export interface UserSettings {
@@ -64,6 +58,7 @@ export class telegramUser {
       phoneId?: string;
       servicePhone?: Service;
       country?: Country;
+      sessionString: any;
     };
     manual?: boolean;
     userExists: boolean;
@@ -72,6 +67,7 @@ export class telegramUser {
       fisrtName: string;
       lastName: string;
       description: string;
+      photoUrl?: string;
     };
   };
   public client: TelegramClient;
@@ -81,14 +77,17 @@ export class telegramUser {
 
     this.statistic = {
       userError: [],
-      phone: '',
-      utils: {},
+      phone: "",
+      utils: {
+        sessionString: new StringSession(params.telegramUser.userString ?? ""),
+      },
       userExists: false,
       tgUserStats: {
-        username: '',
-        fisrtName: '',
-        lastName: '',
-        description: '',
+        username: "",
+        fisrtName: "",
+        lastName: "",
+        description: "",
+        photoUrl: params.telegramUser.photoUrl ?? null
       },
     };
 
@@ -130,7 +129,7 @@ export class telegramUser {
     }
 
     this.client = new TelegramClient(
-      new StringSession(""),
+      this.statistic.utils.sessionString,
       this.apiId,
       this.apiHash,
       {
@@ -233,9 +232,32 @@ export class telegramUser {
       );
     }
 
+  }
+
+  public async saveUser(): Promise<IAccountsManagerFolder["accounts"][0]> {
+    let userId = Number(RegisterUserSchema.findOne()
+    .sort({ "accounts.key": -1 })
+    .limit(1)
+    .exec()) + 1
+
     await this.client.connect();
-    const session = this.client.session.save();
+    const sessionString = this.statistic.utils.sessionString.save();
     await this.client.disconnect();
+    
+    return {
+      key: userId.toString(),
+      avatar: this.statistic.tgUserStats.photoUrl ?? null,
+      phoneNumber: this.statistic.phone,
+      resting: 0,
+      userName: this.statistic.tgUserStats.username,
+      firstName: this.statistic.tgUserStats.fisrtName ?? null, 
+      lastName: this.statistic.tgUserStats.lastName ?? null,
+      secondFacAith: "",
+      proxy: "",
+      latestActivity: new Date(),
+      status: "",
+      telegramSession: sessionString,
+    };
   }
 
   private async autoRegister(): Promise<string> {
@@ -293,9 +315,15 @@ export class telegramUser {
         }
       }
     });
-    
   }
 }
+
+let maxIdValue;
+
+maxIdValue = RegisterUserSchema.findOne()
+  .sort({ "accounts.key": -1 })
+  .limit(1)
+  .exec();
 
 let waitingForVerify: WaitingForVerify[] = [];
 
