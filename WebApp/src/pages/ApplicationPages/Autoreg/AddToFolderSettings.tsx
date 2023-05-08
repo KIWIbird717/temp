@@ -90,8 +90,8 @@ export const AddToFolderSettings = ({current, value}: propsType) => {
       const proxyTableData = proxy.proxies.map((proxyData) => {
         return (
           {
-            value: proxyData.login,
-            label: proxyData.login
+            value: proxyData.userName,
+            label: proxyData.userName
           }
         )
       })

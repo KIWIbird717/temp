@@ -14,7 +14,7 @@ export interface IHeaderType {
   dopTitle: string,
   accountsAmount: number,
   country: string,
-  latestActivity: string,
+  latestActivity: Date | string,
   banned: number,
   accounts: IAccountsData[]
 }

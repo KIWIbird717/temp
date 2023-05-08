@@ -78,7 +78,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
         return (
           {
             value: proxyData.key,
-            label: proxyData.login
+            label: proxyData.userName
           }
         )
       })
