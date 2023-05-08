@@ -4,8 +4,9 @@ import {
   telegramUser,
   UserSettings,
 } from "../../utils/telegram/telegramRegister";
-import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise"
-import { RegisterUserSchema } from "../..//servises/RegisterUserDB/registerUserSchema.servise";
+import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise";
+import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
+import { INewTgUserSchema, NewTgUserSchema } from "../../servises/AddTelegramUserToBD/newTgUserSchema.servise"
 
 const router: Router = express.Router();
 
@@ -34,13 +35,23 @@ What need to containe inside body:
 */
 
 router.post("/manual/register-user", async (req: Request, res: Response) => {
-  const { mail } = req.body.user
+  const { mail, folderKey } = req.body.user;
   let apiId = 0;
   let apiHash = "";
+  const userData: IUserRes = await RegisterUserSchema.findOne({
+    $or: [{ mail }],
+  }); // All data about user
+  const folderData = userData.accountsManagerFolder.find(
+    (folder) => folder.key === folderKey
+  ); // Folder of user
 
-  if (req.body.apiId === "me") {
-    const userData: IUserRes = await RegisterUserSchema.findOne({ $or: [{ mail }] }) // All data about user
-
+  if (req.body.user.apiId === "me") {
+    apiId = folderData.apiId;
+  } else {
+    apiId = req.body.user.apiId;
+  }
+  if (req.body.user.apiHash === "me") {
+    apiHash = folderData.apiHash;
   } else {
     apiHash = req.body.user.apiHash;
   }
@@ -72,7 +83,12 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
 
   const newUser = new telegramUser(apiId, apiHash, userSettings);
 
-  await newUser.createTelegramUser();
+  const sessionString = await newUser.createTelegramUser();
+
+  const newTelegramUser = new NewTgUserSchema({
+
+  })
+  newTelegramUser.save()
 });
 
 router.post("/manual/add-code", async (req: Request, res: Response) => {
