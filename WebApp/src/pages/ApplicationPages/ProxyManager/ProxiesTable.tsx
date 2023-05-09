@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
 import { MCard } from '../../../components/Card/MCard'
-import { Table, Button, Tooltip, Modal, message } from 'antd'
+import { Table, Button, Tooltip, Modal, message, ConfigProvider } from 'antd'
 import { TableHeaders } from './ParseAccountsTable'
-import { ArrowLeftOutlined, CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons'
+import { ArrowLeftOutlined, CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, ExclamationCircleFilled, PlusOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
 import { setProxyManagerFolder } from '../../../store/appSlice'
 import { IProxyData } from './ParseAccountsTable'
 import { AnimatePresence, motion } from 'framer-motion'
 import { notificationHandler } from '../../../components/notification'
 import { StoreState } from '../../../store/store'
+import { NoDataProxies } from '../../../components/CustomNoData/NoDataProxies'
+import { ModalAddNewProxy } from './ModalAddNewProxy'
 
 
 const { confirm } = Modal
@@ -21,6 +23,8 @@ export const ProxiesTable = () => {
   const proxyTableData = useSelector((state: StoreState) => state.user.userProxyFolders)
   const openedProxyFolder = useSelector((state: StoreState) => state.app.proxyManagerFolder)
   const currentFolderData = proxyTableData?.find((folder) => folder.key === openedProxyFolder)
+
+  const [modal, setModal] = useState<boolean>(false)
 
   const rowSelection = {
     onChange: (selectedRowKey: React.Key[], selectedRows: IProxyData[]) => {
@@ -117,17 +121,32 @@ export const ProxiesTable = () => {
               icon={selectionType ? <CloseOutlined /> : <EditOutlined />} 
               onClick={() => setSelectionType(!selectionType)} 
             />
-            <Button type='primary' size='large'>Проверить</Button>
+            <Tooltip title='Добавить proxy'>
+              <Button 
+                className='border-[0px] shadow-md' 
+                size='large' 
+                shape="circle" 
+                icon={<PlusOutlined />}
+                onClick={() => setModal(true)}
+              />
+            </Tooltip>
+            <ModalAddNewProxy 
+              open={modal}
+              onCancel={() => setModal(false)}
+              onOk={() => setModal(false)}
+            />
           </div>
         </div>
-        <Table
-          size='large'
-          pagination={{ pageSize: 999 }}
-          rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
-          columns={TableHeaders()}
-          dataSource={currentFolderData?.proxies || []}
-          className='h-full'
-        />
+        <ConfigProvider renderEmpty={NoDataProxies}>
+          <Table
+            size='large'
+            pagination={{ pageSize: 999 }}
+            rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
+            columns={TableHeaders()}
+            dataSource={currentFolderData?.proxies || []}
+            className='h-full'
+          />
+        </ConfigProvider>
       </div>
     </MCard>
   )

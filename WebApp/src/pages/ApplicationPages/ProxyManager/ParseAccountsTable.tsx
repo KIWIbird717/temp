@@ -17,11 +17,11 @@ export interface IProxyData {
   key: React.Key,
   ip: string,
   port: string,
-  login: string,
+  secret: string,
+  MTProxy: string,
+  timeout: string,
+  userName: string,
   pass: string,
-  type: string,
-  delay: string,
-  status: string
 }
 
 type DataIndex = keyof IProxyData;
@@ -156,8 +156,13 @@ export const TableHeaders = () => {
       ...GetColumnSearchProps({data: 'port', placeholder: 'Поиск по порту'})
     },
     {
-      title: 'Логин',
-      dataIndex: 'login',
+      title: 'Секрет',
+      dataIndex: 'secret',
+      editable: true,
+    },
+    {
+      title: 'MTProxy',
+      dataIndex: 'MTProxy',
       editable: true,
     },
     {
@@ -165,67 +170,17 @@ export const TableHeaders = () => {
       dataIndex: 'pass'
     },
     {
-      title: 'Тип',
-      editable: true,
-      dataIndex: 'type',
-      filters: [
-        {
-          text: 'http',
-          value: 'http'
-        },
-        {
-          text: 'https',
-          value: 'https'
-        }
-      ],
-      onFilter: (value: string, record: any) => record.type.indexOf(value) === 0
-    },
-    {
       title: 'Задержка',
-      dataIndex: 'delay',
+      dataIndex: 'timeout',
       render: (delays: string) => (
         <div className="flex gap-2">
           {delays} 
           <ClockCircleTwoTone twoToneColor={colors.primary} />
         </div>
       )
-    },
-    {
-      title: 'Статус',
-      dataIndex: 'status',
-      render: (tags: any) => (
-        <div className='flex items-center justify-between'>
-          <div>
-            {[tags].map((tag: string) => {
-              let color: string = 'green'
-              if (tag === 'работает') {color = 'green'}
-              if (tag === 'не работает') {color = 'yellow'}
-    
-              return <Tag color={color} key={tag}>{tag}</Tag>
-            })}
-          </div>
-          <Dropdown menu={{ items: dropDownItems, onClick }} trigger={['click']}>
-            <Button style={{ borderWidth: '0px', boxShadow: 'inherit' }} shape="circle" icon={<MoreOutlined />} />
-          </Dropdown>
-        </div>
-      ),
-      filters: [
-        {
-          text: 'работает',
-          value: 'работает'
-        },
-        {
-          text: 'не работает',
-          value: 'не работает'
-        }
-      ],
-      onFilter: (value: any, record: any) => record.status.indexOf(value as string) === 0,
     }
   ]
-  
-  const onClick: MenuProps['onClick'] = ({ key }) => {
-    message.info(`Click on item ${key}`)
-  }
+
   
   return tableHeaders
 }

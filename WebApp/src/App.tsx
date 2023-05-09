@@ -153,13 +153,14 @@ const App: React.FC = () => {
   
     useEffect(() => {
       const dummyAll = new Array(35).fill(0).map((_, index) => { return {
-        key: index,
+        key: index.toString(),
         ip: generateRandomString(14),
         port: generateRandomNumber(4),
-        login: 'country-ms-session',
+        secret: generateRandomString(14),
+        userName: `country-ms-session ${index}`,
+        MTProxy: generateRandomString(14),
         pass: generateRandomString(10),
-        type: 'http',
-        delay: generateRandomNumber(2),
+        timeout: generateRandomNumber(2),
         status: generateRandomStatus()
       }})
       accountsData.current = [...dummyAll]

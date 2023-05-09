@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MCard } from '../../../components/Card/MCard'
 import { Input, Table, Tooltip, Button, message } from 'antd'
 import { motion } from 'framer-motion'
@@ -9,12 +9,12 @@ import { MSelect } from '../../../components/Select/MSelect'
 import { MSearch } from '../../../components/Search/MSearch'
 import { StoreState } from '../../../store/store'
 import { useSelector } from 'react-redux'
-import { ModalAddNewProxy } from './ModalAddNewProxy'
+import { ModalAddNewProxyFolder } from './ModalAddNewProxyFolder'
 
 
 export const Folders = () => {
-  const tableData: IProxyHeaderType[] | null = useSelector((state: StoreState) => state.user.userProxyFolders)
-  console.log({tableData})
+  const tableDataRaw: IProxyHeaderType[] | null = useSelector((state: StoreState) => state.user.userProxyFolders)
+  const [tableData, setTableData] = useState<IProxyHeaderType[] | null>(null)
 
   const [selectionType, setSelectionType] = useState<boolean>(false)
   const [selectedFolders, setSelectedFolders] = useState<IProxyHeaderType[]>([])
@@ -32,6 +32,10 @@ export const Folders = () => {
       message.warning('Не выбрано ниодной папки')
     }
   }
+
+  useEffect(() => {
+    setTableData(tableDataRaw)
+  }, [tableDataRaw])
 
   const rowSelection = {
     onChange: (selectedRowKey: React.Key[], selectedRows: IProxyHeaderType[]) => {
@@ -86,14 +90,16 @@ export const Folders = () => {
                 icon={selectionType ? <CloseOutlined /> : <EditOutlined />} 
                 onClick={() => setSelectionType(!selectionType)} 
               />
-              <Button 
-                className='border-[0px] shadow-md' 
-                size='large' 
-                shape="circle" 
-                icon={<PlusOutlined />} 
-                onClick={() => setProxyModal(true)}
-              />
-              <ModalAddNewProxy 
+              <Tooltip title='Добавить новую папку'>
+                <Button 
+                  className='border-[0px] shadow-md' 
+                  size='large' 
+                  shape="circle" 
+                  icon={<PlusOutlined />} 
+                  onClick={() => setProxyModal(true)}
+                />
+              </Tooltip>
+              <ModalAddNewProxyFolder 
                 open={proxyModal} 
                 onOk={() => setProxyModal(false)}
                 onCancel={() => setProxyModal(false)}
@@ -107,7 +113,7 @@ export const Folders = () => {
               rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
               columns={TableHeaders()}
               dataSource={tableData || []}
-              pagination={{ pageSize: 4 }}
+              pagination={{ pageSize: 999 }}
             />
           </div>
         </div>

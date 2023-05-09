@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import tableCard from '../../../images/tableCard.svg'
 import { Input, Typography } from 'antd'
-import { colors } from '../../../global-style/style-colors.module'
-import styles from './folder-selection-style.module.css'
 import TextArea from 'antd/es/input/TextArea'
 
 const { Title } = Typography
@@ -70,34 +68,11 @@ export const FolserSelection = ({className}: IProps): JSX.Element => {
         <img className='h-full' src={tableCard} alt='table card'/>
       </div>
       <div className="flex flex-col gap-3 w-full">
-        {/* <Title 
-          editable={{
-            maxLength: 20,
-            onChange: handleFolderTitle,
-            text: folderTitle
-          }}
-          level={3} 
-          style={{ margin: '0px 0px', width: '100%' }}
-          className={styles.folder_styles}
-        >
-            {folderTitle}
-        </Title> */}
         <Input 
           size="large" 
           placeholder="Название папки" 
           onChange={(e) => handleFolderTitle(e.currentTarget.value)}
         />
-        {/* <Title 
-          editable={{
-            maxLength: 50,
-            onChange: handleFolderDescription,
-            text: folderDescription
-          }}
-          level={5} 
-          style={{margin: '5px 5px', fontWeight: 'normal', width: '100%', color: colors.dopFont}}
-          >
-            {folderDescription}
-        </Title> */}
         <TextArea
           value={folderDescription}
           onChange={(e) => setFolderDescription(e.target.value)}
