@@ -28,6 +28,7 @@ interface DeviceInfo {
 
 interface phoneVerify {
   service?: Service;
+  country?: Country;
   phone?: string;
 }
 
@@ -99,6 +100,7 @@ export class telegramUser {
       this.statistic.utils.servicePhone = null;
     } else {
       this.statistic.utils.servicePhone = params.phone.service;
+      this.statistic.utils.country = params.phone.country
     }
 
     this.statistic.tgUserStats.fisrtName = params.telegramUser.firstName;

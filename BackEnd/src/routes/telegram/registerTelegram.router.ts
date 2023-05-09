@@ -4,13 +4,12 @@ import {
   telegramUser,
   UserSettings,
 } from "../../utils/telegram/telegramRegister";
+import { testProxyConnectivity } from "../../utils/telegram/utils";
 import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { updateUser } from "../../servises/RegisterUserDB/updateUser.servise";
 
 const router: Router = express.Router();
-
-router.get("/info/device", async (req: Request, res: Response) => {});
 
 /*
 Need generate user profile
@@ -27,7 +26,8 @@ What need to containe inside body:
     }
     user: {
       email: "",
-      folderKey: "",
+      tgFolderKey: "",
+      proxyFolderKey: "",
       apiId: 0 | "me"
       apiHash: "" | "me"
     }
@@ -35,14 +35,15 @@ What need to containe inside body:
 */
 
 router.post("/manual/register-user", async (req: Request, res: Response) => {
-  const { mail, folderKey } = req.body.user;
+  const { mail, tgFolderKey } = req.body.user;
+  let proxyFolderData;
   let apiId = 0;
   let apiHash = "";
   const userData: IUserRes = await RegisterUserSchema.findOne({
     $or: [{ mail }],
   }); // All data about user
   const folderData = userData.accountsManagerFolder.find(
-    (folder) => folder.key === folderKey
+    (folder) => folder.key === tgFolderKey
   ); // Folder of user
 
   if (req.body.user.apiId === "me") {
@@ -81,13 +82,57 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
     throw new Error("Not correct username or it's containe non latin alphabet");
   }
 
+  // Check if the proxyFolderKey is provided
+  if (req.body.proxyFolderKey) {
+    // Find the folder with the specified proxyFolderKey in the proxyManagerFolder array
+    proxyFolderData = userData.proxyManagerFolder.find(
+      (folder) => folder.key === req.body.proxyFolderKey
+    );
+
+    if (proxyFolderData) {
+      // Check if a proxy exists within the folder
+      const proxy = proxyFolderData.proxies.find(
+        (proxy) => proxy.key === req.body.proxyKey
+      );
+
+      if (proxy) {
+        // Prepare the proxy settings
+        const proxySettings = {
+          ip: proxy.ip,
+          port: parseInt(proxy.port),
+          username: proxy.login,
+          password: proxy.pass,
+        };
+
+        // Test the proxy connectivity
+        const isProxyWorking = await testProxyConnectivity(proxySettings);
+
+        if (isProxyWorking) {
+          // Assign the proxy to the userSettings object with the ProxyInterface format
+          userSettings.proxy = proxySettings;
+
+          // Update the proxy status to "success"
+          proxy.status = "success";
+        } else {
+          // Update the proxy status to "error"
+          proxy.status = "error";
+          throw new Error(
+            "The proxy is not working with either SOCKS4 or SOCKS5"
+          );
+        }
+      } else {
+        throw new Error("Proxy not found");
+      }
+    } else {
+      throw new Error("Proxy folder not found");
+    }
+  }
+
   const newUser = new telegramUser(apiId, apiHash, userSettings);
 
   await newUser.createTelegramUser();
 
   const savedUser = await newUser.saveUser();
-
-  folderData.accounts.push(savedUser);
 
   if (!(req.body.user.apiId === "me")) {
     savedUser.apiId = req.body.user.apiId;
@@ -96,7 +141,21 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
     savedUser.apiHash = req.body.user.apiHash;
   }
 
-  updateUser(mail, { accountsManagerFolder: [folderData] });
+  if (req.body.user.proxyFolderKey) {
+    savedUser.proxy = req.body.user.proxyFolderKey;
+  }
+
+  folderData.accounts.push(savedUser);
+
+  // Update the proxyManagerFolder with the modified proxyFolderData
+  const updatedProxyFolders = userData.proxyManagerFolder.map((folder) =>
+    folder.key === req.body.proxyFolderKey ? proxyFolderData : folder
+  );
+
+  updateUser(mail, {
+    accountsManagerFolder: [folderData],
+    proxyManagerFolder: updatedProxyFolders,
+  });
 });
 
 router.post("/manual/add-code", async (req: Request, res: Response) => {
@@ -112,6 +171,150 @@ router.post("/manual/add-code", async (req: Request, res: Response) => {
   await addCodeToWaitingForVerify(phone as string, code as string);
 
   return res.status(200).json({ message: "Success" });
+});
+
+/*
+Need generate user profile
+
+What need to containe inside body:
+{
+  telegramUser: {
+        service: "",   REQUIRED
+        contryId: ""   REQUIRED
+    }
+    user: {
+      email: "",
+      tgFolderKey: "",
+      proxyFolderKey: "",
+      apiId: 0 | "me"
+      apiHash: "" | "me"
+    }
+}
+*/
+
+router.post("/auto/register-user", async (req: Request, res: Response) => {
+  const { mail, tgFolderKey } = req.body.user;
+  let proxyFolderData;
+  let apiId = 0;
+  let apiHash = "";
+  const userData: IUserRes = await RegisterUserSchema.findOne({
+    $or: [{ mail }],
+  }); // All data about user
+  const folderData = userData.accountsManagerFolder.find(
+    (folder) => folder.key === tgFolderKey
+  ); // Folder of user
+
+  if (req.body.user.apiId === "me") {
+    apiId = folderData.apiId;
+  } else {
+    apiId = req.body.user.apiId;
+  }
+  if (req.body.user.apiHash === "me") {
+    apiHash = folderData.apiHash;
+  } else {
+    apiHash = req.body.user.apiHash;
+  }
+
+  const userSettings: UserSettings = {
+    telegramUser: {
+      firstName: req.body.telegramUser.firstName,
+      lastName: req.body.telegramUser.lastName,
+      userName:
+        req.body.telegramUser.userName ??
+        `${req.body.telegramUser.firstName}_${req.body.telegramUser.lastName}`,
+      photoUrl: req.body.telegramUser.photoUrl ?? null,
+    },
+    phone: {
+      service: req.body.telegramUser.service,
+      country: { id: req.body.telegramUser.contryId },
+    },
+    manual: false,
+  };
+
+  const autoGenerate = req.body.telegramUser.auto ?? true;
+
+  if (autoGenerate === true) {
+    // Implement for auto generating telegramUser
+  }
+
+  if (!/^[a-zA-Z0-9_]+$/.test(userSettings.telegramUser.userName)) {
+    throw new Error("Not correct username or it's containe non latin alphabet");
+  }
+
+  // Check if the proxyFolderKey is provided
+  if (req.body.proxyFolderKey) {
+    // Find the folder with the specified proxyFolderKey in the proxyManagerFolder array
+    proxyFolderData = userData.proxyManagerFolder.find(
+      (folder) => folder.key === req.body.proxyFolderKey
+    );
+
+    if (proxyFolderData) {
+      // Check if a proxy exists within the folder
+      const proxy = proxyFolderData.proxies.find(
+        (proxy) => proxy.key === req.body.proxyKey
+      );
+
+      if (proxy) {
+        // Prepare the proxy settings
+        const proxySettings = {
+          ip: proxy.ip,
+          port: parseInt(proxy.port),
+          username: proxy.login,
+          password: proxy.pass,
+        };
+
+        // Test the proxy connectivity
+        const isProxyWorking = await testProxyConnectivity(proxySettings);
+
+        if (isProxyWorking) {
+          // Assign the proxy to the userSettings object with the ProxyInterface format
+          userSettings.proxy = proxySettings;
+
+          // Update the proxy status to "success"
+          proxy.status = "success";
+        } else {
+          // Update the proxy status to "error"
+          proxy.status = "error";
+          throw new Error(
+            "The proxy is not working with either SOCKS4 or SOCKS5"
+          );
+        }
+      } else {
+        throw new Error("Proxy not found");
+      }
+    } else {
+      throw new Error("Proxy folder not found");
+    }
+  }
+
+  const newUser = new telegramUser(apiId, apiHash, userSettings);
+
+  await newUser.createTelegramUser();
+
+  const savedUser = await newUser.saveUser();
+
+  if (!(req.body.user.apiId === "me")) {
+    savedUser.apiId = req.body.user.apiId;
+  }
+  if (!(req.body.user.apiHash === "me")) {
+    savedUser.apiHash = req.body.user.apiHash;
+  }
+
+  if (req.body.user.proxyFolderKey) {
+    savedUser.proxy = req.body.user.proxyFolderKey;
+  }
+
+  folderData.accounts.push(savedUser);
+
+  // Update the proxyManagerFolder with the modified proxyFolderData
+  const updatedProxyFolders = userData.proxyManagerFolder.map((folder) =>
+    folder.key === req.body.proxyFolderKey ? proxyFolderData : folder
+  );
+
+  updateUser(mail, {
+    accountsManagerFolder: [folderData],
+    proxyManagerFolder: updatedProxyFolders,
+  });
 });
 
 export default router;
