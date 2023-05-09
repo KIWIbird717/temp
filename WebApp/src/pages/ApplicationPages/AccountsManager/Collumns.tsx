@@ -32,7 +32,7 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
       icon: <EditOutlined />
     },
     {
-      key: '2',
+      key: '1',
       label: 'Экспорт"',
       icon: <UploadOutlined />,
     },
@@ -40,7 +40,7 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
       type: 'divider',
     },
     {
-      key: '4',
+      key: '2',
       label: 'Удалить',
       icon: <DeleteOutlined />,
       danger: true,
@@ -107,7 +107,7 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
     {
       title: 'Заблокировано',
       dataIndex: 'banned',
-      render: (banned: number) => (
+      render: (banned: number, record) => (
         <div className="w-full flex justify-between">
           {banned}
           <Dropdown menu={{ items: dropDownItems, onClick }} trigger={['click']}>

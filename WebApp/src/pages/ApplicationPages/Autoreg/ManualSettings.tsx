@@ -20,6 +20,7 @@ import { SliderDriwer } from '../../../components/SliderDrawer/SliderDriwer'
 import styles from './folder-selection-style.module.css'
 import { IHeaderType } from '../AccountsManager/Collumns'
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/es/upload'
+import { ModalAddNewFolder } from './ModalAddNewFolder'
 
 
 const { Title } = Typography
@@ -48,13 +49,20 @@ const beforeUpload = (file: RcFile) => {
   return isJpgOrPng && isLt2M
 }
 
-export const ManualSettings = ({key, current, value}: propsType) => {
+export const ManualSettings = ({current, value}: propsType) => {
   const accaountsFolders: IHeaderType[] | null = useSelector((state: StoreState) => state.user.userManagerFolders)
+
   const [modal, setModal] = useState<boolean>(false)
+  const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
+
   const [selectedFolder, setSelectedFolder] = useState<null | IHeaderType>(null)
 
   const [loading, setLoading] = useState(false)
   const [imageUrl, setImageUrl] = useState<string>()
+
+  const resetAllData = (): void => {
+    setSelectedFolder(null)
+  }
 
   const uploadButton = (
     <div>
@@ -65,7 +73,7 @@ export const ManualSettings = ({key, current, value}: propsType) => {
 
   const handleAvatarChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
     if (info.file.status === 'uploading') {
-      setLoading(true);
+      setLoading(true)
       return
     }
     if (info.file.status === 'done') {
@@ -84,7 +92,28 @@ export const ManualSettings = ({key, current, value}: propsType) => {
       animate={value === current ? { opacity: 1, scale: 1 } : 'null'}
       transition={{ duration: 0.2 }}
     >
-      <Modal style={{ borderRadius: 20 }} title="Выбор папку с аккаунтами" open={modal} onOk={() => setModal(false)} onCancel={() => setModal(false)}>
+      <ModalAddNewFolder 
+        open={newFolderModal}
+        onCancel={() => setNewFolderModal(false)}
+        onOk={() => setNewFolderModal(false)}
+        setSelectedFolder={(e) => setSelectedFolder(e)}
+      />
+      <Modal 
+        style={{ borderRadius: 20 }}
+        title="Выбор папки с аккаунтами" 
+        open={modal} 
+        onOk={() => setModal(false)} 
+        onCancel={() => setModal(false)}
+        footer={[
+          <Button
+            icon={<PlusOutlined />}
+            type='primary'
+            onClick={() => {setModal(false); setNewFolderModal(true)}}
+          >
+            Создать новую папку
+          </Button>
+        ]}
+      >
         <div className="flex flex-col gap-3 my-5">
           <SliderDriwer 
             dataSource={accaountsFolders || []}
@@ -223,7 +252,17 @@ export const ManualSettings = ({key, current, value}: propsType) => {
         </div>
 
         <div className="w-full flex justify-between items-center">
-          <Button danger type='link'>Отменить</Button>
+          {selectedFolder ? (
+            <Button 
+              danger 
+              type='link'
+              onClick={() => resetAllData()}
+            >
+              Отменить
+            </Button>
+          ) : (
+            <div className="div"></div>
+          )}
           <Button icon={<CheckOutlined />} size='large' type='primary'>Добавить аккаунт</Button>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react'
 import { MCard } from '../../../components/Card/MCard'
-import { Table, Tooltip, Button, message } from 'antd'
+import { Table, Tooltip, Button, message, Modal } from 'antd'
 import { motion } from 'framer-motion'
 import { IHeaderType, TableHeaders } from './Collumns'
 import { 
@@ -34,12 +34,12 @@ interface IEditButton {
 
 export const Folders = () => {
   const dispatch = useDispatch()
-  const tableData = useSelector((state: StoreState) => state.user.userManagerFolders)
+  const folders = useSelector((state: StoreState) => state.user.userManagerFolders)
   const changedFoldersRef = useRef<IHeaderType[] | null>(null)
 
   const [selectionType, setSelectionType] = useState<boolean>(false)
   const [selectedFolders, setSelectedFolders] = useState<IHeaderType[]>([])
-  const [dataSource, setDataSource] = useState<IHeaderType[] | null>(tableData)
+  const [dataSource, setDataSource] = useState<IHeaderType[] | null>(folders)
   const [headers, setHeaders] = useState<ColumnsType<IHeaderType>>(TableHeaders())
   const [dragHandler, setDragHandler] = useState<boolean>(false)
 
@@ -115,7 +115,7 @@ export const Folders = () => {
       })
     }
     if (changedFoldersRef.current !== null) {
-      setTimeout(() => {dispatch(setUserManagerFolders(changedFoldersRef.current))}, 2000)
+      setTimeout(() => {dispatch(setUserManagerFolders(changedFoldersRef.current))}, 1000)
     }
   };
 
