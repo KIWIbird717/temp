@@ -54,20 +54,20 @@ export const Folders = () => {
         <div className="flex flex-col gap-7">
           <div className="flex items-center justify-between">
             <div className="flex gap-3 mr-2">
-              <MSelect 
+              {/* <MSelect 
                 size='large'
                 defaultValue="Страна"
                 style={{ width: 200 }}
-                // onChange={handleChange}
-                // options={options}
+                onChange={handleChange}
+                options={options}
               />
               <MSearch 
                 placeholder="Поиск по папкам"
                 allowClear
                 enterButton="Поиск"
                 size="large"
-                // onSearch={() => console.log('search)}
-              />
+                onSearch={() => console.log('search)}
+              /> */}
             </div>
             <div className="flex gap-3">
               {selectionType ? (
