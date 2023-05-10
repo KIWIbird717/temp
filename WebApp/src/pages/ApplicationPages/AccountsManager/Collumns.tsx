@@ -1,12 +1,13 @@
 import type { ColumnsType } from 'antd/es/table';
 import tableCard from '../../../images/tableCard.svg'
-import { Typography, Button, Dropdown, MenuProps, message, Avatar, Divider } from 'antd'
+import { Typography, Button, Dropdown, message, Avatar, Divider } from 'antd'
 import { useDispatch } from 'react-redux';
 import { setAccountsManagerFolder } from '../../../store/appSlice';
 import { AntDesignOutlined, DeleteOutlined, EditOutlined, FolderOpenOutlined, MoreOutlined, UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { colors } from '../../../global-style/style-colors.module';
 import styles from './style.module.css'
 import { IAccountsData } from './ParseAccountsTable';
+import { Dispatch, SetStateAction } from 'react';
 
 export interface IHeaderType {
   key: React.Key,
@@ -21,34 +22,12 @@ export interface IHeaderType {
 
 const { Title } = Typography
 
-export const TableHeaders = (): ColumnsType<IHeaderType> => {
-  const dispatch = useDispatch()
+interface ITableHeaders {
+  setDeleteModal: Dispatch<SetStateAction<{open: boolean, record: IHeaderType | null}>>
+}
 
-  // Dropdown menu items & onClick function
-  const dropDownItems: MenuProps['items'] = [
-    {
-      key: '0',
-      label: 'Переименовать',
-      icon: <EditOutlined />
-    },
-    {
-      key: '1',
-      label: 'Экспорт"',
-      icon: <UploadOutlined />,
-    },
-    {
-      type: 'divider',
-    },
-    {
-      key: '2',
-      label: 'Удалить',
-      icon: <DeleteOutlined />,
-      danger: true,
-    },
-  ]
-  const onClick: MenuProps['onClick'] = ({ key }) => {
-    message.info(`Click on item ${key}`)
-  }
+export const TableHeaders = ({setDeleteModal}: ITableHeaders): ColumnsType<IHeaderType> => {
+  const dispatch = useDispatch()
 
   /**
    * Setting table body for `folders`table
@@ -89,9 +68,13 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
             <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
             <Avatar style={{ backgroundColor: colors.accent }}>K</Avatar>
             <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-            {new Array(accountsAmount).fill(0).map(() => (
-              <Avatar style={{ backgroundColor: '#1890ff' }} icon={<AntDesignOutlined />} />
-            ))}
+            {accountsAmount > 0 ? (
+              new Array(accountsAmount).fill(0).map(() => (
+                <Avatar style={{ backgroundColor: '#1890ff' }} icon={<AntDesignOutlined />} />
+              ))
+            ) : (
+              <div className="div"></div>
+            )}
           </Avatar.Group>
         </div>
       ),
@@ -110,7 +93,42 @@ export const TableHeaders = (): ColumnsType<IHeaderType> => {
       render: (banned: number, record) => (
         <div className="w-full flex justify-between">
           {banned}
-          <Dropdown menu={{ items: dropDownItems, onClick }} trigger={['click']}>
+          <Dropdown 
+            menu={
+              { 
+                items: [
+                  {
+                    key: '0',
+                    label: 'Переименовать',
+                    icon: <EditOutlined />,
+                    // onClick: () => warnMessage()
+                  },
+                  {
+                    key: '1',
+                    label: 'Экспорт"',
+                    icon: <UploadOutlined />,
+                    // onClick: () => warnMessage()
+                  },
+                  {
+                    type: 'divider',
+                  },
+                  {
+                    key: '2',
+                    label: 'Удалить',
+                    icon: <DeleteOutlined />,
+                    danger: true,
+                    onClick: () => setDeleteModal({open: true, record: record})
+                  },
+                ],
+                onClick: ({ key }) => {
+                  if (key === '1' || key === '0' ) {
+                    message.warning(`Временно не доступно`)
+                  }
+                }
+              }
+            } 
+            trigger={['click']}
+          >
             <Button style={{ borderWidth: '0px', boxShadow: 'inherit' }} shape="circle" icon={<MoreOutlined />} />
           </Dropdown>
         </div>

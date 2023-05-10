@@ -1,5 +1,5 @@
 import { Button, Cascader, InputNumber, Statistic, Popover, Typography } from 'antd'
-import { CheckOutlined, FolderOpenFilled, FolderOpenOutlined, InfoCircleOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
+import { CheckOutlined, FolderOpenFilled, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { Modal } from 'antd'
 import tableCard from '../../../images/tableCard.svg'
 import { SliderDriwer } from '../../../components/SliderDrawer/SliderDriwer'
@@ -18,6 +18,7 @@ import type { SelectProps } from 'antd';
 import { NoDataCountries, ServiceIsNotSelected } from '../../../components/CustomNoData/NoDataCountries'
 import axios from 'axios'
 import { IProxyHeaderType } from '../ProxyManager/Collumns'
+import { ModalAddNewFolder } from './ModalAddNewFolder'
 
 const { Title } = Typography
 
@@ -47,7 +48,10 @@ const getAvaliablePhones = async (service: string | null, countryId: string | nu
 
 export const AddToFolderSettings = ({current, value}: propsType) => {
   const accaountsFolders: IHeaderType[] | null = useSelector((state: StoreState) => state.user.userManagerFolders)
+
   const [modal, setModal] = useState<boolean>(false)
+  const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
+  
   const [selectedFolder, setSelectedFolder] = useState<IHeaderType | null>(null)
 
   // Proxies
@@ -146,7 +150,29 @@ export const AddToFolderSettings = ({current, value}: propsType) => {
       animate={value === current ? { opacity: 1, scale: 1 } : 'null'}
       transition={{ duration: 0.2 }}
     >
-      <Modal style={{ borderRadius: 20 }} title="Выбор папку с аккаунтами" open={modal} onOk={() => setModal(false)} onCancel={() => setModal(false)}>
+      <ModalAddNewFolder 
+        open={newFolderModal}
+        onCancel={() => setNewFolderModal(false)}
+        onOk={() => setNewFolderModal(false)}
+        setSelectedFolder={(e) => setSelectedFolder(e)}
+      />
+
+      <Modal 
+        style={{ borderRadius: 20 }}
+        title="Выбор папки с аккаунтами" 
+        open={modal} 
+        onOk={() => setModal(false)} 
+        onCancel={() => setModal(false)}
+        footer={[
+          <Button
+            icon={<PlusOutlined />}
+            type='primary'
+            onClick={() => {setModal(false); setNewFolderModal(true)}}
+          >
+            Создать новую папку
+          </Button>
+        ]}
+      >
         <div className="flex flex-col gap-3 my-5">
           <SliderDriwer 
             dataSource={accaountsFolders || []}

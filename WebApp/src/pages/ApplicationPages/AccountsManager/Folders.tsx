@@ -37,11 +37,24 @@ export const Folders = () => {
   const folders = useSelector((state: StoreState) => state.user.userManagerFolders)
   const changedFoldersRef = useRef<IHeaderType[] | null>(null)
 
+  const [deleteModal, setDeleteModal] = useState<{open: boolean, record: IHeaderType | null}>({open: false, record: null})
+
   const [selectionType, setSelectionType] = useState<boolean>(false)
   const [selectedFolders, setSelectedFolders] = useState<IHeaderType[]>([])
   const [dataSource, setDataSource] = useState<IHeaderType[] | null>(folders)
-  const [headers, setHeaders] = useState<ColumnsType<IHeaderType>>(TableHeaders())
+  const [headers, setHeaders] = useState<ColumnsType<IHeaderType>>(TableHeaders({setDeleteModal}))
   const [dragHandler, setDragHandler] = useState<boolean>(false)
+
+
+  const deleteFolder = (record: IHeaderType | null) => {
+    if (record) {
+      const newAccountsFolders = folders?.filter((folder) => folder.key !== record.key)
+
+      dispatch(setUserManagerFolders(newAccountsFolders || null))
+      setDataSource(newAccountsFolders || null)
+      setDeleteModal({open: false, record: null})
+    }
+  }
 
   const exportSelectedFolders = () => {
     if (selectedFolders.length) {
@@ -55,7 +68,7 @@ export const Folders = () => {
     }
   }
 
-  const headersRef = TableHeaders()
+  const headersRef = TableHeaders({setDeleteModal})
   const handleDragFolders = (): void => {
     if (!dragHandler) {
       setHeaders([{ key: 'sort' }, ...headersRef])
@@ -121,23 +134,35 @@ export const Folders = () => {
 
   return (
     <MCard className='w-full px-2 py-2'>
+      <Modal
+        title="Удаление папки с аккаунтами"
+        open={deleteModal.open}
+        onOk={() => deleteFolder(deleteModal.record)}
+        onCancel={() => setDeleteModal({open: false, record: null})}
+        okButtonProps={{ danger: true }}
+        okText='Удалить'
+        cancelText='Отмена'
+      >
+        <p>Вы уверены, что хотите удалить папку <span style={{ fontWeight: 700 }}>{deleteModal.record?.folder}</span>? Все аккаунты из этой папки будут удалены. Это действие не возможно обратить.</p>
+      </Modal>
+
       <div className="flex flex-col gap-7">
         <div className="flex items-center justify-between">
           <div className="flex gap-3 mr-2">
-            <MSelect 
+            {/* <MSelect 
               size='large'
               defaultValue="Страна"
               style={{ width: 200 }}
-              // onChange={handleChange}
-              // options={options}
-            />
-            <MSearch 
+              onChange={handleChange}
+              options={options}
+            /> */}
+            {/* <MSearch 
               placeholder="Поиск по папкам"
               allowClear
               enterButton="Поиск"
               size="large"
-              // onSearch={() => console.log('search)}
-            />
+              onSearch={() => console.log('search)}
+            /> */}
           </div>
           <div className="flex gap-3">
             {selectionType ? (
