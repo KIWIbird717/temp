@@ -3,7 +3,11 @@ import { StringSession } from "telegram/sessions";
 import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
 import { getTelegramVersionSync } from "./utils";
 import { signInUser } from "telegram/client/auth";
-import { IAccountsManagerFolder, RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
+import { CustomFile } from "telegram/client/uploads";
+import {
+  IAccountsManagerFolder,
+  RegisterUserSchema,
+} from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import os from "os";
 
 import {
@@ -36,7 +40,6 @@ interface userStatistic {
   firstName: string;
   lastName: string;
   userName: string;
-  photoUrl?: string;
   userString?: string;
 }
 
@@ -68,7 +71,6 @@ export class telegramUser {
       fisrtName: string;
       lastName: string;
       description: string;
-      photoUrl?: string;
     };
   };
   public client: TelegramClient;
@@ -88,7 +90,6 @@ export class telegramUser {
         fisrtName: "",
         lastName: "",
         description: "",
-        photoUrl: params.telegramUser.photoUrl ?? null
       },
     };
 
@@ -100,7 +101,7 @@ export class telegramUser {
       this.statistic.utils.servicePhone = null;
     } else {
       this.statistic.utils.servicePhone = params.phone.service;
-      this.statistic.utils.country = params.phone.country
+      this.statistic.utils.country = params.phone.country;
     }
 
     this.statistic.tgUserStats.fisrtName = params.telegramUser.firstName;
@@ -233,26 +234,47 @@ export class telegramUser {
         `Valid sms code from service: ${this.statistic.utils.servicePhone} and phone number is: ${this.statistic.phone}`
       );
     }
+  }
 
+  public async changeAvatar(url: string): Promise<void> {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    const imageBuffer = Buffer.from(arrayBuffer);
+
+    const result = await this.client.invoke(
+      new Api.photos.UploadProfilePhoto({
+        file: await this.client.uploadFile({
+          file: new CustomFile(
+            "image.jpg",
+            imageBuffer.length,
+            "image.jpg",
+            imageBuffer
+          ),
+          workers: 1,
+        }),
+      })
+    );
   }
 
   public async saveUser(): Promise<IAccountsManagerFolder["accounts"][0]> {
-    let userId = Number(RegisterUserSchema.findOne()
-    .sort({ "accounts.key": -1 })
-    .limit(1)
-    .exec()) + 1
+    let userId =
+      Number(
+        RegisterUserSchema.findOne()
+          .sort({ "accounts.key": -1 })
+          .limit(1)
+          .exec()
+      ) + 1;
 
     await this.client.connect();
     const sessionString = this.statistic.utils.sessionString.save();
     await this.client.disconnect();
-    
+
     return {
       key: userId.toString(),
-      avatar: this.statistic.tgUserStats.photoUrl ?? null,
       phoneNumber: this.statistic.phone,
       resting: 0,
       userName: this.statistic.tgUserStats.username,
-      firstName: this.statistic.tgUserStats.fisrtName ?? null, 
+      firstName: this.statistic.tgUserStats.fisrtName ?? null,
       lastName: this.statistic.tgUserStats.lastName ?? null,
       secondFacAith: "",
       proxy: "",
