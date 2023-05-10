@@ -65,13 +65,15 @@ export const TableHeaders = ({setDeleteModal}: ITableHeaders): ColumnsType<IHead
           <Title style={{ margin: '0px 0px' }} level={5}>{accountsAmount}</Title>
           <Divider type="vertical"/>
           <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }} maxPopoverTrigger="focus">
-            <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
-            <Avatar style={{ backgroundColor: colors.accent }}>K</Avatar>
-            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
             {accountsAmount > 0 ? (
-              new Array(accountsAmount).fill(0).map(() => (
+              <>
+              <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
+              <Avatar style={{ backgroundColor: colors.accent }}>K</Avatar>
+              <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
+              {new Array(accountsAmount).fill(0).map(() => (
                 <Avatar style={{ backgroundColor: '#1890ff' }} icon={<AntDesignOutlined />} />
-              ))
+              ))}
+              </>
             ) : (
               <div className="div"></div>
             )}
