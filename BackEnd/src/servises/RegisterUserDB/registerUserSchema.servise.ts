@@ -52,7 +52,7 @@ interface IProxyManagerFolder extends Document {
       pass: string;
       type: string;
       delay: string;
-      status: string;
+      status: "success" | "error" | string;
     }
   ];
 }

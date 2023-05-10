@@ -62,3 +62,43 @@ export function generateRandomPassword(length: number): string {
 
   return result;
 }
+
+import axios from "axios";
+
+export async function testProxyConnectivity(proxySettings) {
+  async function tryProtocol(protocol) {
+    try {
+      const response = await axios.get("https://api.ipify.org?format=json", {
+        proxy: {
+          protocol: protocol,
+          host: proxySettings.ip,
+          port: proxySettings.port,
+          auth: {
+            username: proxySettings.username,
+            password: proxySettings.password,
+          },
+        },
+        timeout: 5000, // Set a short timeout, e.g., 5 seconds
+      });
+
+      // If the request is successful, the proxy is working
+      return true;
+    } catch (error) {
+      // If there's an error or timeout, the proxy is not working
+      return false;
+    }
+  }
+
+  // Try SOCKS4 and SOCKS5 protocols
+  const protocols = ["socks4", "socks5"];
+  for (const protocol of protocols) {
+    const isConnected = await tryProtocol(protocol);
+    if (isConnected) {
+      // If the proxy is working with the current protocol, return true
+      return true;
+    }
+  }
+
+  // If none of the protocols worked, return false
+  return false;
+}
