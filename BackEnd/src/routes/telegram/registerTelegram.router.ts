@@ -21,7 +21,7 @@ What need to containe inside body:
     language: "ru" | "en" NON REQUIRED
   }
   user: {
-    mail: "",
+    email: "",
     tgFolderKey: "",
     proxyFolderKey: "",
     apiId: 0 | "me"

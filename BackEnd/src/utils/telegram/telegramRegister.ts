@@ -116,9 +116,7 @@ export class telegramUser {
     const deviceModel = deviceInfo.device;
     const systemVersion = deviceInfo.os;
 
-    const last_version = getTelegramVersionSync(
-      params.device.device ?? os.platform().toString()
-    );
+    const last_version = getTelegramVersionSync(deviceInfo.device);
 
     const appVersion =
       deviceInfo.appVersion === "last" || deviceInfo.appVersion === ""

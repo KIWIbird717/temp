@@ -176,17 +176,17 @@ export const NewFolderSettings = ({current, value}: propsType) => {
     //     language: "ru"
     //   },
     //   user: {
-    //     mail: "test1@mail.ru",
+    //     email: "test1@mail.ru",
     //     tgFolderKey: '1',
     //     proxyFolderKey: '1',
-    //     apiId: 0,
-    //     apiHash: ""
+    //     apiId: "me",
+    //     apiHash: "me"
     //   }
     // }
 
     // console.log(request)
 
-    // const res = await axios.post(url, {...request})
+    // const res = await axios.post(url, request)
     // console.log(res)
 
     // addNewAccounts()
