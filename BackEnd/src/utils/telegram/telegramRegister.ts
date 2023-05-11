@@ -144,6 +144,8 @@ export class telegramUser {
   }
 
   public async createTelegramUser() {
+    await this.client.connect()
+
     if (this.statistic.manual === true) {
       const phone = await rentPhoneRegistration(
         this.statistic.utils.servicePhone,
