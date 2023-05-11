@@ -8,9 +8,12 @@ import { colors } from '../../../global-style/style-colors.module';
 import styles from './style.module.css'
 import { IAccountsData } from './ParseAccountsTable';
 import { Dispatch, SetStateAction } from 'react';
+import { dateToFormat } from '../../../utils/dateToFormat';
 
 export interface IHeaderType {
   key: React.Key,
+  apiHash?: string,
+  apiId?: number,
   folder: string,
   dopTitle: string,
   accountsAmount: number,
@@ -88,6 +91,12 @@ export const TableHeaders = ({setDeleteModal}: ITableHeaders): ColumnsType<IHead
     {
       title: 'Последняя активность',
       dataIndex: 'latestActivity',
+      render: (latestActivity: Date) => {
+        const date = dateToFormat(latestActivity)
+        return (
+          <p>{date}</p>
+        )
+      }
     },
     {
       title: 'Заблокировано',
@@ -140,5 +149,3 @@ export const TableHeaders = ({setDeleteModal}: ITableHeaders): ColumnsType<IHead
 
   return tableHeaders
 }
-
-

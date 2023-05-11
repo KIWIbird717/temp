@@ -16,17 +16,17 @@ const router: Router = express.Router();
 What need to containe inside body:
 {
   telegramUser: {
-        service: "",   REQUIRED
-        contryId: "",  REQUIRED
-        language: "ru" | "en" NON REQUIRED
-    }
-    user: {
-      email: "",
-      tgFolderKey: "",
-      proxyFolderKey: "",
-      apiId: 0 | "me"
-      apiHash: "" | "me"
-    }
+    service: "",   REQUIRED
+    contryId: "",  REQUIRED
+    language: "ru" | "en" NON REQUIRED
+  }
+  user: {
+    mail: "",
+    tgFolderKey: "",
+    proxyFolderKey: "",
+    apiId: 0 | "me"
+    apiHash: "" | "me"
+  }
 }
 */
 router.post("/auto/register-user", async (req: Request, res: Response) => {
@@ -173,20 +173,20 @@ Need generate user profile
 What need to containe inside body:
 {
   telegramUser: {
-        phone: "",     REQUIRED
-        auto: true,    IF TRUE ANYTHING ELSE NOT REQUIRED, ONLY PHONE
-        firstName: "", REQUIRED
-        lastName: "",  REQUIRED
-        userName: "",  NON REQUIRED  
-        photo: "",     NON REQUIRED  
-    }
-    user: {
-      email: "",
-      tgFolderKey: "",
-      proxyFolderKey: "",
-      apiId: 0 | "me"
-      apiHash: "" | "me"
-    }
+    phone: "",     REQUIRED
+    auto: true,    IF TRUE ANYTHING ELSE NOT REQUIRED, ONLY PHONE
+    firstName: "", REQUIRED
+    lastName: "",  REQUIRED
+    userName: "",  NON REQUIRED  
+    photo: "",     NON REQUIRED  
+  }
+  user: {
+    email: "",
+    tgFolderKey: "",
+    proxyFolderKey: "",
+    apiId: 0 | "me"
+    apiHash: "" | "me"
+  }
 }
 */
 

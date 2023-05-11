@@ -42,6 +42,7 @@ interface ILocalStorageParced {
 const App: React.FC = () => {
   const dispatch = useDispatch()
   const isUserLogined = useSelector((state: IRootStoreState) => state.user.isUserLogined)
+
   const navigate = useNavigate()
 
   const setSmsServiciesFromDB = async (): Promise<void> => {
@@ -75,12 +76,29 @@ const App: React.FC = () => {
     }
   }
 
+  const accountsFoldersFromBD = async (mail: string): Promise<void> => {
+    try {
+      if (mail) {
+        const accounts: any = await axios.get(`${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/get-accounts-folders/${mail}`)
+        if (accounts.status === 200) {
+          dispatch(setUserManagerFolders(accounts.data))
+        } else {
+          console.error('Error occured while trying handle accounts folders')
+        }
+      }
+    } catch(err: any) {
+      console.error(err)
+    }
+  }
+
   // Dummy accounts data (temp)
   const ParseAccountsTable = () => {
     const accountsData = useRef<IAccountsData[]>()
   
     const dummyAll = new Array(35).fill(0).map((_, index) => { return {
       key: index,
+      apiHash: generateRandomString(12),
+      apiId: 1232432,
       avatar: "https://xsgames.co/randomusers/avatar.php?g=pixel&key=2",
       phoneNumber: generateRandomPhoneNumber(),
       resting: generateRandomResting(),
@@ -89,6 +107,10 @@ const App: React.FC = () => {
       proxy: generateRandomCountry(),
       latestActivity: generateRandomDate(2023, 2023),
       status: generateRandomStatus(),
+      userName: 'test user1',
+      firstName: 'test',
+      lastName: 'user1',
+      telegramSession: generateRandomString(12),
     }})
     accountsData.current = [...dummyAll]
   
@@ -214,12 +236,14 @@ const App: React.FC = () => {
     if (token) {
       // Parce data from localStorage
       const tokenData: ILocalStorageParced = JSON.parse(token)
+      
       dispatch(setUserMail(tokenData.mail))
       dispatch(setUserId(Number(tokenData.id)))
       dispatch(setUserNick(tokenData.nick))
       dispatch(setUserIsLogined(true))
-
-      dispatch(setUserManagerFolders(AccountsManagerTableData))
+      
+      accountsFoldersFromBD(tokenData.mail)
+      // dispatch(setUserManagerFolders(AccountsManagerTableData))
       dispatch(setUserProxyFolders(ProxiesManagerTableData))
       
       setSmsServiciesFromDB() // get and set sms service from DB

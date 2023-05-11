@@ -4,7 +4,7 @@ import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import { notification } from 'antd';
 import { useDispatch } from 'react-redux';
-import { setUserIsLogined, setUserMail, setUserNick, setUserId } from '../store/userSlice';
+import { setUserIsLogined, setUserMail, setUserNick, setUserId, setUserDefaulAppHash, setUserDefaulAppId } from '../store/userSlice';
 import { isValidEmail } from '../utils/isValidEmail';
 import { Link } from 'react-router-dom';
 import Logo from "../images/fullLogo.svg"
@@ -62,6 +62,8 @@ export const Logining = () => {
             dispatch(setUserMail(mail))
             dispatch(setUserNick(res.data.data.nick))
             dispatch(setUserId(res.data.data.id))
+            dispatch(setUserDefaulAppHash(res.data.data.defaultAppHash))
+            dispatch(setUserDefaulAppId(res.data.data.defaultAppId))
             dispatch(setUserIsLogined(true))
             const localStorageData = {
               mail: mail,
@@ -81,7 +83,7 @@ export const Logining = () => {
           break
 
         case "User not found":
-          setFormError({validate: "error", msg: 'Такого пользователя не существует'})
+          setFormError({validate: "error", msg: 'Пользователь не существует'})
           break
 
         default:

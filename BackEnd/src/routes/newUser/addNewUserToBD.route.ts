@@ -7,7 +7,7 @@ const router: Router = express.Router()
 
 router.post('/registration', async (req: Request, res: Response) => {
   // Get the data from the request body
-  const { nick, mail, password, accountsManagerFolder, proxyManagerFolder, recentAutoregActivity }: IRegisterUserSchema = req.body
+  const { nick, mail, password, defaultAppHash, defaultAppId, accountsManagerFolder, proxyManagerFolder, recentAutoregActivity }: IRegisterUserSchema = req.body
 
   // Check if user already exists
   const existingUser: IUserRes | null = await RegisterUserSchema.findOne({$or: [{ mail }]})
@@ -25,6 +25,8 @@ router.post('/registration', async (req: Request, res: Response) => {
     nick, 
     mail, 
     password, 
+    defaultAppHash,
+    defaultAppId,
     accountsManagerFolder, 
     proxyManagerFolder, 
     recentAutoregActivity
@@ -37,6 +39,8 @@ router.post('/registration', async (req: Request, res: Response) => {
         id: existingUserAfterReg._id,
         nick: existingUserAfterReg.nick,
         mail: existingUserAfterReg.mail,
+        defaultAppHash: existingUserAfterReg.defaultAppHash,
+        defaultAppId: existingUserAfterReg.defaultAppId,
         accountsManagerFolder: existingUserAfterReg.accountsManagerFolder,
         proxyManagerFolder: existingUserAfterReg.proxyManagerFolder,
         recentAutoregActivity: existingUserAfterReg.recentAutoregActivity,

@@ -29,9 +29,10 @@ export interface IAccountsManagerFolder extends Document {
       telegramSession: string;
       apiId?: number;
       apiHash?: string;
-    }
-  ];
+    },
+  ]
 }
+
 
 /**
  * interface for `Менеджер proxy` page
@@ -76,6 +77,8 @@ export interface IRegisterUserSchema extends Document {
   nick: string;
   mail: string;
   password: string;
+  defaultAppHash: string;
+  defaultAppId: number;
   accountsManagerFolder: IAccountsManagerFolder[];
   proxyManagerFolder: IProxyManagerFolder[];
   recentAutoregActivity: IRecentAutoregActivity[];
@@ -90,6 +93,8 @@ export interface IUserRes {
   nick: string;
   mail: string;
   password: string;
+  defaultAppHash: string;
+  defaultAppId: number;
   accountsManagerFolder: IAccountsManagerFolder[];
   proxyManagerFolder: IProxyManagerFolder[];
   recentAutoregActivity: IRecentAutoregActivity[];
@@ -99,6 +104,23 @@ export interface IUserRes {
 }
 
 interface IRegisterUserModel extends Model<IRegisterUserSchema> {}
+
+const AccountsDataSchema = new Schema<IAccountsManagerFolder["accounts"][0]>({
+  key: String,
+  avatar: {type: String, require: false},
+  phoneNumber: String,
+  resting: Number,
+  userName: String,
+  firstName: {type: String, require: false},
+  lastName: {type: String, require: false},
+  secondFacAith: String,
+  proxy: String,
+  latestActivity: Date,
+  status: String,
+  telegramSession: String,
+  apiId: {type: Number, require: false},
+  apiHash: {type: String, require: false},
+})
 
 const AccountsManagerFolderSchema = new Schema<IAccountsManagerFolder>({
   key: String,
@@ -110,23 +132,7 @@ const AccountsManagerFolderSchema = new Schema<IAccountsManagerFolder>({
   country: String,
   latestActivity: Date,
   banned: Number,
-  accounts: [
-    {
-      key: String,
-      avatar: { type: String, require: false },
-      phoneNumber: String,
-      resting: Schema.Types.Mixed,
-      userName: String,
-      firstName: { type: String, require: false },
-      lastName: { type: String, require: false },
-      secondFacAith: String,
-      proxy: String,
-      latestActivity: Date,
-      status: String,
-      telegramSession: String,
-      apiId: { type: Number, require: false },
-    },
-  ],
+  accounts: [AccountsDataSchema],
 });
 
 const ProxyManagerFolderSchema = new Schema<IProxyManagerFolder>({
@@ -162,6 +168,8 @@ const registerUserSchema: Schema = new Schema(
   {
     nick: { type: String, require: true },
     mail: { type: String, require: true },
+    defaultAppHash: { type: String, require: true }, // по дефолту "null"
+    defaultAppId: { type: Number, require: true }, // по дефолту 0
     password: { type: String, require: true },
     accountsManagerFolder: {
       type: [AccountsManagerFolderSchema],
@@ -182,5 +190,4 @@ const registerUserSchema: Schema = new Schema(
  * @description
  * Registrate new user in application
  */
-export const RegisterUserSchema: IRegisterUserModel =
-  model<IRegisterUserSchema>("RegisterUserSchema", registerUserSchema);
+export const RegisterUserSchema: IRegisterUserModel = model<IRegisterUserSchema>("RegisterUserSchema", registerUserSchema)
