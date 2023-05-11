@@ -30,7 +30,7 @@ function asyncWrapper(fn) {
   };
 }
 
-async function logErrorToFile(err: ErrorWithStatus): Promise<void> {
+export async function logErrorToFile(err: ErrorWithStatus): Promise<void> {
   try {
     const logsDir = path.join(__dirname, "../../../logs");
     const errorLogPath = path.join(logsDir, "errorExpress.txt");

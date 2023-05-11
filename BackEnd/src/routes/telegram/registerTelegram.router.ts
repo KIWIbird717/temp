@@ -8,6 +8,7 @@ import { testProxyConnectivity } from "../../utils/telegram/utils";
 import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { updateUser } from "../../servises/RegisterUserDB/updateUser.servise";
+import { logErrorToFile } from "../../utils/express/errorHandler";
 import fetch from "node-fetch";
 
 const router: Router = express.Router();
@@ -131,7 +132,6 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
   }
 
   const newUser = new telegramUser(apiId, apiHash, userSettings);
-
   await newUser.createTelegramUser();
 
   const savedUser = await newUser.saveUser();
@@ -162,6 +162,13 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
   const updatedProxyFolders = userData.proxyManagerFolder.map((folder) =>
     folder.key === req.body.proxyFolderKey ? proxyFolderData : folder
   );
+
+  const respErr: string[] = await newUser.getError();
+
+  if (respErr && respErr.length > 0) {
+    const errorMessage: string = respErr.join("\n");
+    throw new Error(errorMessage);
+  }
 
   updateUser(email, {
     accountsManagerFolder: [folderData],
