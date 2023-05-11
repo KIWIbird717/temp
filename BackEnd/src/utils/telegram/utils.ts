@@ -49,3 +49,15 @@ export async function testProxyConnectivity(proxySettings) {
   // If none of the protocols worked, return false
   return false;
 }
+
+export function formatPhoneNumber(phoneNumber: string): string {
+  // Remove all non-digit characters
+  let formattedNumber = phoneNumber.replace(/\D/g, "");
+
+  // Optionally add a leading '1' if your application is US-centric
+  if (formattedNumber.length === 10) {
+    formattedNumber = "1" + formattedNumber;
+  }
+
+  return formattedNumber;
+}

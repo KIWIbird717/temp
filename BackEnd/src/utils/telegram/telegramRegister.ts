@@ -3,6 +3,7 @@ import { StringSession } from "telegram/sessions";
 import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
 import { signInUser } from "telegram/client/auth";
 import { CustomFile } from "telegram/client/uploads";
+import { formatPhoneNumber } from "./utils"
 import {
   IAccountsManagerFolder,
   RegisterUserSchema,
@@ -295,7 +296,7 @@ export class telegramUser {
                 this.statistic.tgUserStats.lastName,
               ];
             },
-            phoneNumber: async () => this.statistic.phone,
+            phoneNumber: async () => {return formatPhoneNumber(this.statistic.phone)},
             phoneCode: async (isCodeViaApp = false) => {
               if (isCodeViaApp) {
                 throw new Error("CODE_VIA_APP");
@@ -332,7 +333,7 @@ export class telegramUser {
           res("reg-noacc");
           await this.client.disconnect();
         } else {
-          throw new Error(`When checking user happend error: ${err}`);
+          throw new Error(err);
         }
       }
     });
