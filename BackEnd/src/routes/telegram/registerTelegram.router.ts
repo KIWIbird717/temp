@@ -30,12 +30,12 @@ What need to containe inside body:
 }
 */
 router.post("/auto/register-user", async (req: Request, res: Response) => {
-  const { mail, tgFolderKey } = req.body.user;
+  const { email, tgFolderKey } = req.body.user;
   let proxyFolderData;
   let apiId = 0;
   let apiHash = "";
-  const userData: IUserRes = await RegisterUserSchema.findOne({
-    $or: [{ mail }],
+  const userData: IUserRes | null = await RegisterUserSchema.findOne({
+    mail: email,
   }); // All data about user
   if (!userData) {
     throw new Error("User not found in the database");
@@ -159,7 +159,7 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     folder.key === req.body.proxyFolderKey ? proxyFolderData : folder
   );
 
-  updateUser(mail, {
+  updateUser(email, {
     accountsManagerFolder: [folderData],
     proxyManagerFolder: updatedProxyFolders,
   });
@@ -191,13 +191,14 @@ What need to containe inside body:
 */
 
 router.post("/manual/register-user", async (req: Request, res: Response) => {
-  const { mail, tgFolderKey } = req.body.user;
+  const { email, tgFolderKey } = req.body.user;
   let proxyFolderData;
   let apiId = 0;
   let apiHash = "";
-  const userData: IUserRes = await RegisterUserSchema.findOne({
-    $or: [{ mail }],
+  const userData: IUserRes | null = await RegisterUserSchema.findOne({
+    mail: email,
   }); // All data about user
+
   if (!userData) {
     throw new Error("User not found in the database");
   }
@@ -338,7 +339,7 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
     folder.key === req.body.proxyFolderKey ? proxyFolderData : folder
   );
 
-  updateUser(mail, {
+  updateUser(email, {
     accountsManagerFolder: [folderData],
     proxyManagerFolder: updatedProxyFolders,
   });
