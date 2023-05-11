@@ -8,7 +8,6 @@ import { testProxyConnectivity } from "../../utils/telegram/utils";
 import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { updateUser } from "../../servises/RegisterUserDB/updateUser.servise";
-import { logErrorToFile } from "../../utils/express/errorHandler";
 import fetch from "node-fetch";
 
 const router: Router = express.Router();
@@ -39,7 +38,7 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     mail: email,
   }); // All data about user
   if (!userData) {
-    res.status(500).json({error: "User not found in the database"});
+    res.status(500).json({ error: "User not found in the database" });
   }
   const folderData = userData.accountsManagerFolder.find(
     (folder) => folder.key === tgFolderKey
@@ -119,11 +118,9 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
         } else {
           // Update the proxy status to "error"
           proxy.status = "error";
-          res
-            .status(500)
-            .json({
-              error: "The proxy is not working with either SOCKS4 or SOCKS5",
-            });
+          res.status(500).json({
+            error: "The proxy is not working with either SOCKS4 or SOCKS5",
+          });
         }
       } else {
         res.status(500).json({ error: "Proxy not found" });
@@ -169,6 +166,9 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
 
   if (respErr && respErr.length > 0) {
     const errorMessage: string = respErr.join("\n");
+    if (process.env.DEBUG === "true") {
+      console.log("\x1B[31m", `[ERROR]: ${errorMessage.toString()}`);
+    }
     res.status(500).json({ error: errorMessage });
   }
 
