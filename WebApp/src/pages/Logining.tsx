@@ -64,7 +64,6 @@ export const Logining = () => {
             dispatch(setUserId(res.data.data.id))
             dispatch(setUserDefaulAppHash(res.data.data.defaultAppHash))
             dispatch(setUserDefaulAppId(res.data.data.defaultAppId))
-            dispatch(setUserIsLogined(true))
             const localStorageData = {
               mail: mail,
               nick: res.data.data.nick,
@@ -73,6 +72,8 @@ export const Logining = () => {
               defaultAppId: res.data.data.defaultAppId,
             }
             localStorage.setItem('sessionToken', JSON.stringify(localStorageData))  // should contain only user email
+            // should be in the end
+            dispatch(setUserIsLogined(true))
           }
           setLoading(false)
         })

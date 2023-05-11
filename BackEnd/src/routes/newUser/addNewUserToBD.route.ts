@@ -14,7 +14,24 @@ router.post('/registration', async (req: Request, res: Response) => {
 
   if (existingUser) {
     if (await customCompareDecription(password, existingUser.password)) {
-      return res.status(201).json({ message: 'User logined successfully' })
+      const existingUserAfterReg: IUserRes = await RegisterUserSchema.findOne({$or: [{ mail }]})
+      return res.status(201).json(
+        { 
+          message: 'User registered successfully',
+          data: {
+            id: existingUserAfterReg._id,
+            nick: existingUserAfterReg.nick,
+            mail: existingUserAfterReg.mail,
+            defaultAppHash: existingUserAfterReg.defaultAppHash,
+            defaultAppId: existingUserAfterReg.defaultAppId,
+            accountsManagerFolder: existingUserAfterReg.accountsManagerFolder,
+            proxyManagerFolder: existingUserAfterReg.proxyManagerFolder,
+            recentAutoregActivity: existingUserAfterReg.recentAutoregActivity,
+            createdAt: existingUserAfterReg.createdAt,
+            updatedAt: existingUserAfterReg.updatedAt,
+            __v: existingUserAfterReg.__v
+          }
+        })
     } else {
       return res.status(400).json({ message: 'User with this email already exists' })
     }

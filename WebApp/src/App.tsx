@@ -254,6 +254,7 @@ const App: React.FC = () => {
       dispatch(setUserDefaulAppId(Number(tokenData.defaultAppId)))
       
       setSmsServiciesFromDB() // get and set sms service from DB
+      
       navigate("/app")
       // From here could be added more user info 
     } else {

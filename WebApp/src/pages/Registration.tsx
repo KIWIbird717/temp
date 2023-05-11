@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { notification } from 'antd';
 import { useDispatch } from 'react-redux';
-import { setUserId, setUserIsLogined, setUserMail, setUserNick } from '../store/userSlice';
+import { setUserDefaulAppHash, setUserDefaulAppId, setUserId, setUserIsLogined, setUserMail, setUserNick } from '../store/userSlice';
 import { isValidEmail } from '../utils/isValidEmail';
 import { isValidNick } from '../utils/isValidNick';
 import Logo from "../images/fullLogo.svg"
@@ -68,15 +68,13 @@ export const Registration = () => {
   
       await axios.post(url, { nick, mail, password, defaultAppHash: "null" , defaultAppId: 0 })
         .then((res: any) => {
-          console.log(res)
           if (res.status === 201) {
             dispatch(setUserMail(mail))
             dispatch(setUserNick(res.data.nick))
             dispatch(setUserId(res.data.id))
             dispatch(setUserMail(mail))
             dispatch(setUserDefaulAppHash(res.data.defaultAppHash))
-            dispatch(setUserDefaulAppHash(res.data.defaultAppId))
-            dispatch(setUserIsLogined(true))
+            dispatch(setUserDefaulAppId(res.data.defaultAppId))
             const localStorageData = {
               mail: mail,
               nick: res.data.data.nick,
@@ -85,6 +83,8 @@ export const Registration = () => {
               defaultAppId: res.data.data.defaultAppId,
             }
             localStorage.setItem('sessionToken', JSON.stringify(localStorageData))  // should contain only user email
+            // Should be in the end
+            dispatch(setUserIsLogined(true))
           }
           setLoading(false)
         })
@@ -172,7 +172,3 @@ export const Registration = () => {
     </div>
   )
 }
-function setUserDefaulAppHash(arg0: string): any {
-  throw new Error('Function not implemented.');
-}
-

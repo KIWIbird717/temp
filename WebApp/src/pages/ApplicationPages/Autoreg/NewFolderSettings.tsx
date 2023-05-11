@@ -80,6 +80,9 @@ export const NewFolderSettings = ({current, value}: propsType) => {
   const [apiHashInput, setApiHashInput] = useState<{label: string, value: errType} | null>(null)
   const [apiIdInput, setApiIdInput] = useState<{label: number, value: errType} | null>(null)
 
+  // Main Button
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false)
+
   const upDateFields = (): void => {
     setSelectedCountry(null)
     setAvaliableCountries([])
@@ -135,6 +138,8 @@ export const NewFolderSettings = ({current, value}: propsType) => {
       setCountErr("error")
       return
     }
+
+    // set button 
     
     // Adding new folder to DB
     const addNewFolder = async () =>  {
@@ -428,6 +433,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
           <div></div>
         )}
         <Button 
+          loading={buttonLoading}
           icon={<CheckOutlined />} 
           size='large' 
           type='primary'
