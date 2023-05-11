@@ -50,7 +50,6 @@ export const checkForErrorFromAxiosResponse = async (
   response: AxiosResponse,
   service: Service
 ): Promise<void> => {
-  console.log(response.data)
   if (response.status !== 200) {
     const error = await mapErrorToUniversalError(
       service,
