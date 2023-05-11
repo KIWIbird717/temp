@@ -147,10 +147,11 @@ export class telegramUser {
   public async createTelegramUser() {
     await this.client.connect()
 
-    if (this.statistic.manual === true) {
+    if (this.statistic.manual === false) {
+      const telegram_code = await getTelegramCode(this.statistic.utils.servicePhone)
       const phone = await rentPhoneRegistration(
         this.statistic.utils.servicePhone,
-        await getTelegramCode(this.statistic.utils.servicePhone),
+        telegram_code,
         this.statistic.utils.country.id
       );
       this.statistic.utils.phoneId = phone.id;
@@ -296,7 +297,10 @@ export class telegramUser {
                 this.statistic.tgUserStats.lastName,
               ];
             },
-            phoneNumber: async () => {return formatPhoneNumber(this.statistic.phone)},
+            phoneNumber: async () => {
+              const phone = formatPhoneNumber(this.statistic.phone)
+              return phone
+            },
             phoneCode: async (isCodeViaApp = false) => {
               if (isCodeViaApp) {
                 throw new Error("CODE_VIA_APP");

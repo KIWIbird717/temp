@@ -393,7 +393,7 @@ export async function rentPhoneRegistration(
       await checkForErrorFromAxiosResponse(response, service);
 
       const [_, id, number] = response.data.split(":");
-      return { id, phoneNumber: number };
+      return { id: id, phoneNumber: number };
     }
     case "5sim": {
       const response = await axios.get(
