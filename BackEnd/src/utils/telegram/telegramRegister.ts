@@ -1,7 +1,6 @@
 import { TelegramClient, Api } from "telegram";
 import { StringSession } from "telegram/sessions";
 import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
-import { getTelegramVersionSync } from "./utils";
 import { signInUser } from "telegram/client/auth";
 import { CustomFile } from "telegram/client/uploads";
 import {
@@ -116,11 +115,9 @@ export class telegramUser {
     const deviceModel = deviceInfo.device;
     const systemVersion = deviceInfo.os;
 
-    const last_version = getTelegramVersionSync(deviceInfo.device);
-
     const appVersion =
       deviceInfo.appVersion === "last" || deviceInfo.appVersion === ""
-        ? last_version
+        ? "8.0.0"
         : deviceInfo.appVersion;
 
     const systemLanguage = params.language ?? "en";
