@@ -320,7 +320,7 @@ export class telegramUser {
             },
             phoneCode: async (isCodeViaApp = false) => {
               if (isCodeViaApp) {
-                throw new Error("CODE_VIA_APP");
+                this.statistic.userError.push("CODE_VIA_APP");
               }
               if (this.statistic.manual) {
                 const codeGenerator = waitForCode(this.statistic.phone);
@@ -338,7 +338,7 @@ export class telegramUser {
               }
             },
             onError: (err: Error) => {
-              throw new Error(`Telegram register error: ${err}`);
+              this.statistic.userError.push(`Telegram register error: ${err}`);
             },
           }
         );
@@ -354,7 +354,7 @@ export class telegramUser {
           res("reg-noacc");
           await this.client.disconnect();
         } else {
-          throw new Error(err);
+          this.statistic.userError.push(err);
         }
       }
     });

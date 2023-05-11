@@ -39,7 +39,7 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     mail: email,
   }); // All data about user
   if (!userData) {
-    throw new Error("User not found in the database");
+    res.status(500).json({error: "User not found in the database"});
   }
   const folderData = userData.accountsManagerFolder.find(
     (folder) => folder.key === tgFolderKey
@@ -119,15 +119,17 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
         } else {
           // Update the proxy status to "error"
           proxy.status = "error";
-          throw new Error(
-            "The proxy is not working with either SOCKS4 or SOCKS5"
-          );
+          res
+            .status(500)
+            .json({
+              error: "The proxy is not working with either SOCKS4 or SOCKS5",
+            });
         }
       } else {
-        throw new Error("Proxy not found");
+        res.status(500).json({ error: "Proxy not found" });
       }
     } else {
-      throw new Error("Proxy folder not found");
+      res.status(500).json({ error: "Proxy folder not found" });
     }
   }
 
@@ -167,7 +169,7 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
 
   if (respErr && respErr.length > 0) {
     const errorMessage: string = respErr.join("\n");
-    throw new Error(errorMessage);
+    res.status(500).json({ error: errorMessage });
   }
 
   updateUser(email, {
