@@ -17,7 +17,7 @@ const { Title } = Typography
 interface IOnFinish {
   nick: string,
   mail: string,
-  password: 'string',
+  password: string,
 }
 
 interface IFormError {
@@ -53,6 +53,7 @@ export const Registration = () => {
       }
       if (!isValidNick(nick)) {
         setNickErr({validate: "error", msg: 'Никнейм должен содержать только буквы' })
+        return
       }
       if (!mail) {
         setFormError({validate: "error", msg: 'Пожалуйста, введите Почту!' })
@@ -65,13 +66,15 @@ export const Registration = () => {
       setLoading(true)
       const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/newUser/registration`
   
-      await axios.post(url, { nick, mail, password })
+      await axios.post(url, { nick, mail, password, defaultAppHash: "null" , defaultAppId: 0 })
         .then((res: any) => {
           if (res.status === 201) {
             dispatch(setUserMail(mail))
             dispatch(setUserNick(res.data.nick))
             dispatch(setUserId(res.data.id))
             dispatch(setUserMail(mail))
+            dispatch(setUserDefaulAppHash(res.data.defaultAppHash))
+            dispatch(setUserDefaulAppHash(res.data.defaultAppId))
             dispatch(setUserIsLogined(true))
             const localStorageData = {
               mail: mail,
@@ -166,3 +169,7 @@ export const Registration = () => {
     </div>
   )
 }
+function setUserDefaulAppHash(arg0: string): any {
+  throw new Error('Function not implemented.');
+}
+

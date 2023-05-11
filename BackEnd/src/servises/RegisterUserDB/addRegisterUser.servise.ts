@@ -12,6 +12,8 @@ const CreateNewUser = async (props: IRegisterUserSchema): Promise<IRegisterUserS
     nick: props.nick,
     mail: props.mail, 
     password: customEncryption(props.password),
+    defaultAppHash: props.defaultAppHash,
+    defaultAppId: props.defaultAppId,
     accountsManagerFolder: props.accountsManagerFolder,
     proxyManagerFolder: props.proxyManagerFolder,
     recentAutoregActivity: props.recentAutoregActivity

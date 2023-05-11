@@ -20,7 +20,10 @@ import { IRegisterUserSchema, IUserRes, RegisterUserSchema } from "./registerUse
  */
 export const updateUser = async (mail: string, updateData: Partial<IRegisterUserSchema> | null) => {
   try {
-    const updatedUser: IUserRes = await RegisterUserSchema.findOne({ $or: [{ mail }] }, updateData, { new: true })
+    const updatedUser = await RegisterUserSchema.updateOne(
+      { mail: mail },
+      { $set: updateData }
+    );
     return updatedUser
   } catch (error) {
     console.error(error)

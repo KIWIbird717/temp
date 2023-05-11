@@ -1,7 +1,8 @@
 import express, { Router, Request, Response } from "express";
 import {
   RegisterUserSchema,
-  IUserRes
+  IUserRes,
+  IAccountsManagerFolder
 } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { customCompareDecription } from "../../utils/hooks/customCompareDecryption.util";
 
@@ -33,6 +34,8 @@ router.post("/login", async (req: Request, res: Response) => {
           id: existingUser._id,
           nick: existingUser.nick,
           mail: existingUser.mail,
+          defaultAppHash: existingUser.defaultAppHash,
+          defaultAppId: existingUser.defaultAppId,
           createdAt: existingUser.createdAt,
           updatedAt: existingUser.updatedAt,
           __v: existingUser.__v

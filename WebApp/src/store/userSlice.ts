@@ -6,6 +6,8 @@ import { IProxyHeaderType } from "../pages/ApplicationPages/ProxyManager/Collumn
 const initialState: IUserState = {
   nick: null,
   mail: null,
+  defaultAppHash: null,
+  defaultAppId: null,
   id: null,
   isUserLogined: false,
   userManagerFolders: [],
@@ -21,6 +23,12 @@ export const userSlice = createSlice({
     },
     setUserMail: (state, action: PayloadAction<string>) => {
       state.mail = action.payload
+    },
+    setUserDefaulAppHash: (state, action: PayloadAction<string>) => {
+      state.defaultAppHash = action.payload
+    },
+    setUserDefaulAppId: (state, action: PayloadAction<number>) => {
+      state.defaultAppId = action.payload
     },
     setUserId: (state, action: PayloadAction<number>) => {
       state.id = action.payload
@@ -41,6 +49,8 @@ export const userSlice = createSlice({
 export const {
   setUserNick,
   setUserMail,
+  setUserDefaulAppHash,
+  setUserDefaulAppId,
   setUserId,
   setUserIsLogined,
   setUserManagerFolders,

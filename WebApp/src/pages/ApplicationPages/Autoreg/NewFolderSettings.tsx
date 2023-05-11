@@ -12,6 +12,8 @@ import type { SelectProps } from 'antd';
 import { NoDataCountries, ServiceIsNotSelected } from '../../../components/CustomNoData/NoDataCountries'
 import axios from 'axios'
 import { IProxyHeaderType } from '../ProxyManager/Collumns'
+import { notification } from 'antd'
+import { addNewAccounts } from './addNewAccounts'
 
 const { Title } = Typography
 
@@ -26,6 +28,8 @@ interface IProxyClearData {
   children: {value: string | number, label: string}[]
 }
 
+type errType = "" | "warning" | "error" | undefined
+
 const getAvaliablePhones = async (service: string | null, countryId: string | null): Promise<any> => {
   if (!service && !countryId) return null
 
@@ -38,7 +42,13 @@ const getAvaliablePhones = async (service: string | null, countryId: string | nu
   }
 }
 
+
 export const NewFolderSettings = ({current, value}: propsType) => {
+  // UserData
+  const userMail = useSelector((state: StoreState) => state.user.mail)
+  // Accounts folders
+  const accountsFolders = useSelector((state: StoreState) => state.user.userManagerFolders)
+
   // SMS servicies
   const smsServicies = useSelector((state: StoreState) => state.app.smsServiciesData)
   const smsServiciesData = smsServicies?.filter((service: smsServiciesDataType) => service.countries?.length)
@@ -53,9 +63,22 @@ export const NewFolderSettings = ({current, value}: propsType) => {
   const [avaliableCountries, setAvaliableCountries] = useState<SelectProps[]>([])
   const [avaliablePhones, setAvaliablePhones] = useState<{cost: number, count: number} | null>(null) // Avaliable phones data
 
+  // Input selection
   const [selectedSmsService, setSelectedSmsService] = useState<string | null>(null)
   const [selectedCountry, setSelectedCountry] = useState<{label: string, value: string} | null>(null)
   const [selectedProxy, setSelectedProxy] = useState<(string | number)[] | null>(null)
+  const [accountsCount, setAccountsCount] = useState<number | null>(null)
+
+  const [smsServiseErr, setSmsServiseErr] = useState<errType>("")
+  const [countryErr, setCountryErr] = useState<errType>("")
+  const [proxyErr, setProxyErr] = useState<errType>("")
+  const [countErr, setCountErr] = useState<errType>("")
+
+  // Folder 
+  const [folderTitle, setFolderTitle] = useState<{label: string, value: errType} | null>(null)
+  const [folderDescription, setFolderDescription] = useState<{label: string, value: errType} | null>(null)
+  const [apiHashInput, setApiHashInput] = useState<{label: string, value: errType} | null>(null)
+  const [apiIdInput, setApiIdInput] = useState<{label: number, value: errType} | null>(null)
 
   const upDateFields = (): void => {
     setSelectedCountry(null)
@@ -69,6 +92,104 @@ export const NewFolderSettings = ({current, value}: propsType) => {
     setAvaliableCountries([])
     setAvaliablePhones(null)
     setSelectedProxy(null)
+    setFolderTitle(null)
+    setFolderDescription(null)
+    setApiHashInput(null)
+    setApiIdInput(null)
+  }
+
+  const pushAccountsToDb = async () => {
+    // Chek if folder fields not filled
+    if (!folderTitle) {
+      setFolderTitle({label: "", value: "error"})
+      return
+    }
+    if (!folderDescription) {
+      setFolderDescription({label: "", value: "error"})
+      return
+    }
+    if (!apiHashInput) {
+      setApiHashInput({label: "", value: "error"})
+      return
+    }
+    if (!apiIdInput) {
+      setApiIdInput({label: 0, value: "error"})
+      return
+    }
+
+    // Chek if input fields not filled
+    const inputProps = [selectedSmsService, selectedCountry, selectedProxy, accountsCount]
+    const inputErrStatus = [setSmsServiseErr, setCountryErr, setProxyErr, setCountErr]
+    inputProps.forEach((input, index) => {
+      if (!input) {
+        inputErrStatus[index]("error")
+        return
+      }
+    })
+
+    // Adding new folder to DB
+    const addNewFolder = async () =>  {
+      try {
+        const url = `${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/add-new-folder`
+        // Lates folder key
+        let maxFolderKey: string
+        if (accountsFolders) {
+          const maxKey = Math.max(...accountsFolders?.map((folder) => Number(folder.key))) + 1
+          maxFolderKey = maxKey.toString()
+        } else {
+          maxFolderKey = '0'
+        }
+  
+        const newFolder = {
+          key: maxFolderKey,
+          apiHash: apiHashInput.label,
+          apiId: apiIdInput.label,
+          folder: folderTitle.label,
+          dopTitle: folderDescription.label,
+          accountsAmount: 0,
+          country: selectedCountry?.label,
+          latestActivity: new Date(),
+          banned: 0,
+          accounts: []
+        }
+  
+        const res = await axios.post(url, {mail: userMail, folder: newFolder})
+  
+        console.log({res})
+      } catch (err: any) {
+        if (err.response.data === 'Ошибка при создании новой папки') {
+          notification['error']({
+            message: 'Ошибка при создании новой папки',
+            description: 'Измените параметры папки или попробуйте позже. Возможно ошибка сервера',
+            placement: 'bottomRight'
+          })
+          return
+        }
+      }
+    }
+    await addNewFolder()
+
+    // const request = {
+    //   telegramUser: {
+    //     service: selectedSmsService,
+    //     contryId: selectedCountry?.value,
+    //     language: "ru"
+    //   },
+    //   user: {
+    //     mail: "test1@mail.ru",
+    //     tgFolderKey: '1',
+    //     proxyFolderKey: '1',
+    //     apiId: 0,
+    //     apiHash: ""
+    //   }
+    // }
+
+    // console.log(request)
+
+    // const res = await axios.post(url, {...request})
+    // console.log(res)
+
+    // addNewAccounts()
   }
 
   // Set proxy clear data
@@ -134,7 +255,17 @@ export const NewFolderSettings = ({current, value}: propsType) => {
       transition={{ duration: 0.2 }}
     >
       <div>
-      <FolserSelection className='mb-5'/>
+      <FolserSelection 
+        className='mb-5' 
+        folderTitle={folderTitle}
+        folderDescription={folderDescription}
+        apiHashInput={apiHashInput}
+        apiIdInput={apiIdInput}
+        setFolderTitle={setFolderTitle}
+        setFolderDescription={setFolderDescription}
+        setApiHashInput={setApiHashInput}
+        setApiIdInput={setApiIdInput}
+      />
 
       <div className="w-full flex gap-3 mb-5">
         <div className="w-full flex flex-col gap-1">
@@ -152,6 +283,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
             dropdownMatchSelectWidth={false}
             allowClear
             value={selectedSmsService}
+            status={smsServiseErr}
             onClear={() => {
               upDateFields()
               setAvaliableCountries([])
@@ -160,6 +292,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
             onSelect={(service) => {
               upDateFields()
               setSelectedSmsService(service)
+              setSmsServiseErr("")
             }}
           />
         </div>
@@ -176,6 +309,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
               showSearch
               placeholder='Страна'
               optionFilterProp="children"
+              status={countryErr}
               filterOption={(input, option) => ((option as {label: string, value: string})?.label.toLowerCase() ?? '').includes(input)}
               filterSort={(optionA, optionB) =>
                 ((optionA as {label: string, value: string})?.label ?? '').toLowerCase().localeCompare(((optionB as {label: string, value: string})?.label ?? '').toLowerCase())
@@ -183,7 +317,10 @@ export const NewFolderSettings = ({current, value}: propsType) => {
               // mode="tags"
               value={selectedCountry?.label}
               style={{ width: '100%' }}
-              onChange={(_, countryData) => {setSelectedCountry(countryData as {label: string, value: string})}}
+              onChange={(_, countryData) => {
+                setSelectedCountry(countryData as {label: string, value: string});
+                setCountryErr("")
+              }}
               tokenSeparators={[',']}
               options={avaliableCountries || []}
             />
@@ -203,9 +340,13 @@ export const NewFolderSettings = ({current, value}: propsType) => {
             placeholder="Proxy" 
             size='large' 
             className='w-full'
+            status={proxyErr}
             options={proxyClearData || []}
             value={selectedProxy || undefined}
-            onChange={setSelectedProxy}
+            onChange={(e) => {
+              setSelectedProxy(e)
+              setProxyErr("")
+            }}
           />
         </div>
         <div className="w-full flex gap-3 mb-7">
@@ -220,9 +361,14 @@ export const NewFolderSettings = ({current, value}: propsType) => {
               size='large' 
               defaultValue={0} 
               min={0} 
+              status={countErr}
               max={avaliablePhones?.count !== undefined ? avaliablePhones?.count : 0} 
               addonBefore={<UserOutlined />} 
               className='w-full' 
+              onChange={(e) => {
+                setAccountsCount(e)
+                setCountErr("")
+              }}
             />
           </div>
           {avaliablePhonesLoading ? (
@@ -247,12 +393,19 @@ export const NewFolderSettings = ({current, value}: propsType) => {
       </div>
 
       <div className="w-full flex justify-between items-center">
-        {selectedSmsService || selectedCountry || selectedProxy ? (
+        {selectedSmsService || selectedCountry || selectedProxy || folderTitle || folderDescription ? (
           <Button danger type='link' onClick={() => resetFields()}>Отменить</Button>
         ) : (
           <div></div>
         )}
-        <Button icon={<CheckOutlined />} size='large' type='primary'>Зарегестрировать аккаунты</Button>
+        <Button 
+          icon={<CheckOutlined />} 
+          size='large' 
+          type='primary'
+          onClick={() => pushAccountsToDb()}
+        >
+          Зарегестрировать аккаунты
+        </Button>
       </div>
     </motion.div>
   )

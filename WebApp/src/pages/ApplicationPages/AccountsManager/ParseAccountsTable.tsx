@@ -32,11 +32,16 @@ export interface IAccountsData {
   avatar: string,
   phoneNumber: string,
   resting: string,
-  fullName: string,
+  userName: string,
+  firstName?: string,
+  lastName?: string,
   secondFacAith: string,
   proxy: string,
   latestActivity: string,
   status: string,
+  telegramSession: string,
+  apiId?: number,
+  apiHash?: string,
 }
 
 type DataIndex = keyof IAccountsData;
@@ -95,8 +100,8 @@ const GetColumnSearchProps = ({data, placeholder}: {data: DataIndex, placeholder
     filterIcon: (filtered: boolean) => (
       <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex]
+    onFilter: (value, record) => 
+      (record[dataIndex] as any)
         .toString()
         .toLowerCase()
         .includes((value as string).toLowerCase()),
@@ -190,9 +195,9 @@ export const TableHeaders = () => {
     },
     {
       title: 'ФИО',
-      dataIndex: 'fullName',
+      dataIndex: 'userName',
       editable: true,
-      ...GetColumnSearchProps({data: 'fullName', placeholder: 'Поиск по ФИО'}),
+      ...GetColumnSearchProps({data: 'userName', placeholder: 'Поиск по ФИО'}),
     },
     {
       title: '2ФА',

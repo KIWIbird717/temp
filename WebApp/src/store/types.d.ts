@@ -4,6 +4,8 @@ import type { smsServicesTypes } from '../globalTypes'
 export interface IUserState {
   nick: string | null,
   mail: string | null,
+  defaultAppHash: string | null,
+  defaultAppId: number | null,
   id: number | null,
   isUserLogined: boolean,
   userManagerFolders: IHeaderType[] | null,
