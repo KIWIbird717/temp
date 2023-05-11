@@ -50,7 +50,7 @@ export const FolserSelection = ({
           onChange={(e) => setFolderDescription({label: e.target.value, value: ""})}
           placeholder="Добавьте описание"
           autoSize={{ minRows: 2, maxRows: 5 }}
-          showCount
+          // showCount
           maxLength={50}
         />
       <div className="flex gap-3 w-full">

@@ -13,7 +13,8 @@ import { NoDataCountries, ServiceIsNotSelected } from '../../../components/Custo
 import axios from 'axios'
 import { IProxyHeaderType } from '../ProxyManager/Collumns'
 import { notification } from 'antd'
-import { addNewAccounts } from './addNewAccounts'
+import { useDispatch } from 'react-redux'
+import { setUserManagerFolders } from '../../../store/userSlice'
 
 const { Title } = Typography
 
@@ -44,6 +45,7 @@ const getAvaliablePhones = async (service: string | null, countryId: string | nu
 
 
 export const NewFolderSettings = ({current, value}: propsType) => {
+  const dispatch = useDispatch()
   // UserData
   const userMail = useSelector((state: StoreState) => state.user.mail)
   // Accounts folders
@@ -172,9 +174,26 @@ export const NewFolderSettings = ({current, value}: propsType) => {
         }
   
         const res = await axios.post(url, {mail: userMail, folder: newFolder})
-        console.log(res, newFolder)
-        return newFolder
+        // Setting up new folders
+        const accountsFoldersFromBD = async (mail: string): Promise<void> => {
+          try {
+            if (mail) {
+              const accounts: any = await axios.get(`${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/get-accounts-folders/${mail}`)
+              if (accounts.status === 200) {
+                dispatch(setUserManagerFolders(accounts.data))
+              } else {
+                console.error('Error occured while trying handle accounts folders')
+              }
+            }
+          } catch(err: any) {
+            console.error(err)
+          }
+        }
+        if (userMail) {
+          await accountsFoldersFromBD(userMail)
+        }
 
+        return newFolder
       } catch (err: any) {
         if (err.response.data === 'Ошибка при создании новой папки') {
           notification['error']({

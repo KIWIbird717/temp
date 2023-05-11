@@ -47,7 +47,10 @@ const getAvaliablePhones = async (service: string | null, countryId: string | nu
 
 
 export const AddToFolderSettings = ({current, value}: propsType) => {
-  const accaountsFolders: IHeaderType[] | null = useSelector((state: StoreState) => state.user.userManagerFolders)
+  const accaountsFoldersRaw: IHeaderType[] | null = useSelector((state: StoreState) => state.user.userManagerFolders)
+
+  // accounts folders]
+  const [accaountsFolders, setAccountsFolders] = useState<IHeaderType[] | null>(accaountsFoldersRaw)
 
   const [modal, setModal] = useState<boolean>(false)
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
@@ -87,6 +90,11 @@ export const AddToFolderSettings = ({current, value}: propsType) => {
     setSelectedProxy(null)
     setSelectedFolder(null)
   }
+
+  // Set Accounts folders
+  useEffect(() => {
+    setAccountsFolders(accaountsFoldersRaw)
+  }, [accaountsFoldersRaw])
 
   // Set proxy clear data
   useEffect(() => {
