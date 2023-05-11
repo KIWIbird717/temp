@@ -160,7 +160,15 @@ export class telegramUser {
       this.statistic.phone = phone.phoneNumber;
     }
 
-    const isAvalible = await this.autoRegister();
+    let isAvalible;
+
+    try {
+      isAvalible = await this.autoRegister();
+    } catch (err) {
+      this.statistic.userError.push(
+        `Error when fetch data from registered user, error: ${err}`
+      );
+    }
 
     if (this.statistic.userExists === true) {
       try {
@@ -283,6 +291,10 @@ export class telegramUser {
       status: "",
       telegramSession: sessionString,
     };
+  }
+
+  public async getError(): Promise<string[]> {
+    return this.statistic.userError;
   }
 
   private async autoRegister(): Promise<string> {
