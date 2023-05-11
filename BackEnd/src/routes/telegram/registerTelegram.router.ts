@@ -152,6 +152,10 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     savedUser.proxy = req.body.user.proxyFolderKey;
   }
 
+  // if ( === "nan")
+
+  console.log(savedUser.key)
+
   folderData.accounts.push(savedUser);
 
   // Update the proxyManagerFolder with the modified proxyFolderData
