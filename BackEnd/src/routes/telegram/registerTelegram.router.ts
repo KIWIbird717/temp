@@ -80,9 +80,9 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     manual: false,
   };
 
-  if (!/^[a-zA-Z0-9_]+$/.test(userSettings.telegramUser.userName)) {
-    throw new Error("Not correct username or it's containe non latin alphabet");
-  }
+  // if (!/^[a-zA-Z0-9_]+$/.test(userSettings.telegramUser.userName)) {
+  //   throw new Error("Not correct username or it's containe non latin alphabet");
+  // }
 
   // Check if the proxyFolderKey is provided
   if (req.body.proxyFolderKey) {
@@ -152,9 +152,9 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     savedUser.proxy = req.body.user.proxyFolderKey;
   }
 
-  // if ( === "nan")
-
-  console.log(savedUser.key)
+  if (!savedUser.key) {
+    savedUser.key = "0";
+  }
 
   folderData.accounts.push(savedUser);
 
@@ -264,9 +264,9 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
     userAvatar = req.body.telegramUser.photo;
   }
 
-  if (!/^[a-zA-Z0-9_]+$/.test(userSettings.telegramUser.userName)) {
-    throw new Error("Not correct username or it's containe non latin alphabet");
-  }
+  // if (!/^[a-zA-Z0-9_]+$/.test(userSettings.telegramUser.userName)) {
+  //   throw new Error("Not correct username or it's containe non latin alphabet");
+  // }
 
   // Check if the proxyFolderKey is provided
   if (req.body.proxyFolderKey) {
@@ -323,6 +323,10 @@ router.post("/manual/register-user", async (req: Request, res: Response) => {
   if (userAvatar) {
     await newUser.changeAvatar(userAvatar);
     savedUser.avatar = userAvatar;
+  }
+
+  if (!savedUser.key) {
+    savedUser.key = "0";
   }
 
   if (!(req.body.user.apiId === "me")) {

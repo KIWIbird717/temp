@@ -300,14 +300,11 @@ export class telegramUser {
               ];
             },
             phoneNumber: async () => {
-              let phone;
               try {
-                phone = formatPhoneNumber(this.statistic.phone);
+                return formatPhoneNumber(this.statistic.phone);
               } catch {
-                phone = this.statistic.phone;
+                return this.statistic.phone;
               }
-
-              return phone;
             },
             phoneCode: async (isCodeViaApp = false) => {
               if (isCodeViaApp) {
