@@ -22,7 +22,7 @@ export const updateUser = async (mail: string, updateData: Partial<IRegisterUser
   try {
     const updatedUser = await RegisterUserSchema.updateOne(
       { mail: mail },
-      { $push: updateData }
+      { $set: updateData }
     );
     return updatedUser
   } catch (error) {
