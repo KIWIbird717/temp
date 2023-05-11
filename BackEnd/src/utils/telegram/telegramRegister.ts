@@ -3,7 +3,7 @@ import { StringSession } from "telegram/sessions";
 import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
 import { signInUser } from "telegram/client/auth";
 import { CustomFile } from "telegram/client/uploads";
-import { formatPhoneNumber } from "./utils"
+import { formatPhoneNumber } from "./utils";
 import {
   IAccountsManagerFolder,
   RegisterUserSchema,
@@ -145,10 +145,12 @@ export class telegramUser {
   }
 
   public async createTelegramUser() {
-    await this.client.connect()
+    await this.client.connect();
 
     if (this.statistic.manual === false) {
-      const telegram_code = await getTelegramCode(this.statistic.utils.servicePhone)
+      const telegram_code = await getTelegramCode(
+        this.statistic.utils.servicePhone
+      );
       const phone = await rentPhoneRegistration(
         this.statistic.utils.servicePhone,
         telegram_code,
@@ -298,8 +300,14 @@ export class telegramUser {
               ];
             },
             phoneNumber: async () => {
-              const phone = formatPhoneNumber(this.statistic.phone)
-              return phone
+              let phone;
+              try {
+                phone = formatPhoneNumber(this.statistic.phone);
+              } catch {
+                phone = this.statistic.phone;
+              }
+
+              return phone;
             },
             phoneCode: async (isCodeViaApp = false) => {
               if (isCodeViaApp) {
