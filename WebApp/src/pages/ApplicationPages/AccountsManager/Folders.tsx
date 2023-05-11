@@ -22,6 +22,7 @@ import { MSearch } from '../../../components/Search/MSearch'
 import { useSelector, useDispatch } from 'react-redux'
 import { StoreState } from '../../../store/store'
 import { setUserManagerFolders } from '../../../store/userSlice'
+import { deleteAccountsFolderFromDb } from '../../../utils/dbUtils/deleteAccountsFolderFromDB'
 
 
 interface IEditButton {
@@ -33,8 +34,12 @@ interface IEditButton {
 }
 
 export const Folders = () => {
+  const [messageApi, contextHolder] = message.useMessage()
+
   const dispatch = useDispatch()
   const folders = useSelector((state: StoreState) => state.user.userManagerFolders)
+  const userMail = useSelector((state: StoreState) => state.user.mail)
+
   const changedFoldersRef = useRef<IHeaderType[] | null>(null)
 
   const [deleteModal, setDeleteModal] = useState<{open: boolean, record: IHeaderType | null}>({open: false, record: null})
@@ -46,11 +51,26 @@ export const Folders = () => {
   const [dragHandler, setDragHandler] = useState<boolean>(false)
 
 
-  const deleteFolder = (record: IHeaderType | null) => {
+  const deleteFolder = async (record: IHeaderType | null) => {
     if (record) {
       const newAccountsFolders = folders?.filter((folder) => folder.key !== record.key)
+      if (userMail) {
+        deleteAccountsFolderFromDb({dispatch, userMail, folderKey: record.key})
+          .then((res: number) => {
+            if (res === 200) {
+              messageApi.open({
+                type: 'success',
+                content: 'Папка успешно удалена',
+              })
+            } else {
+              messageApi.open({
+                type: 'error',
+                content: 'Ошибка',
+              })
+            }
+          })
+      }
 
-      dispatch(setUserManagerFolders(newAccountsFolders || null))
       setDataSource(newAccountsFolders || null)
       setDeleteModal({open: false, record: null})
     }

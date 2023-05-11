@@ -143,7 +143,7 @@ export const AccountsTable = () => {
               icon={selectionType ? <CloseOutlined /> : <EditOutlined />} 
               onClick={() => setSelectionType(!selectionType)} 
             />
-            <Button type='primary' size='large'>Проверить</Button>
+            <Button disabled type='primary' size='large'>Проверить</Button>
           </div>
         </div>
         <Table

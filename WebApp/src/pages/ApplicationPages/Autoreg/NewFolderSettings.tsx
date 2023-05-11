@@ -141,7 +141,25 @@ export const NewFolderSettings = ({current, value}: propsType) => {
       return
     }
 
-    // set button 
+    // set button loading
+    setButtonLoading(true)
+
+    // Get accounts folders from DB
+    const accountsFoldersFromBD = async (mail: string): Promise<void> => {
+      try {
+        if (mail) {
+          const accounts: any = await axios.get(`${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/get-accounts-folders/${mail}`)
+          if (accounts.status === 200) {
+            dispatch(setUserManagerFolders(accounts.data))
+          } else {
+            console.error('Error occured while trying handle accounts folders')
+          }
+        }
+      } catch(err: any) {
+        console.error(err)
+        setButtonLoading(false)
+      }
+    }
     
     // Adding new folder to DB
     const addNewFolder = async () =>  {
@@ -175,20 +193,6 @@ export const NewFolderSettings = ({current, value}: propsType) => {
   
         const res = await axios.post(url, {mail: userMail, folder: newFolder})
         // Setting up new folders
-        const accountsFoldersFromBD = async (mail: string): Promise<void> => {
-          try {
-            if (mail) {
-              const accounts: any = await axios.get(`${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/get-accounts-folders/${mail}`)
-              if (accounts.status === 200) {
-                dispatch(setUserManagerFolders(accounts.data))
-              } else {
-                console.error('Error occured while trying handle accounts folders')
-              }
-            }
-          } catch(err: any) {
-            console.error(err)
-          }
-        }
         if (userMail) {
           await accountsFoldersFromBD(userMail)
         }
@@ -202,6 +206,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
             placement: 'bottomRight'
           })
         }
+        setButtonLoading(false)
         return null
       }
     }
@@ -231,15 +236,20 @@ export const NewFolderSettings = ({current, value}: propsType) => {
         } catch(err: any) {
           console.error(err)
           notification['error']({
-            message: 'Ошибка при решистрации аккаунтов',
+            message: 'Ошибка при регистрации аккаунтов',
             description: 'Измените параметры создания аккаунтов или попробуйте позже. Возможно ошибка сервера',
             placement: 'bottomRight'
           })
+          setButtonLoading(false)
         }
       }
     }
-
-    registerAccounts()
+    await registerAccounts()
+    // Setting up new folders
+    if (userMail) {
+      await accountsFoldersFromBD(userMail)
+    }
+    setButtonLoading(false)
   }
 
   // Set proxy clear data
@@ -290,7 +300,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
           if (data) {
             setAvaliablePhones(data.data.telegram)
           } else {
-            setAvaliablePhones(data) // null
+            setAvaliablePhones({cost: 0, count: 0}) // null
           }
         })
     }

@@ -63,33 +63,38 @@ export const TableHeaders = ({setDeleteModal}: ITableHeaders): ColumnsType<IHead
     {
       title: 'Аккаунты',
       dataIndex: 'accountsAmount',
-      render: (accountsAmount: number) => (
-        <div className="flex gap-1 items-center">
-          <Title style={{ margin: '0px 0px' }} level={5}>{accountsAmount}</Title>
-          <Divider type="vertical"/>
-          <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }} maxPopoverTrigger="focus">
-            {accountsAmount > 0 ? (
-              <>
-              <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" />
-              <Avatar style={{ backgroundColor: colors.accent }}>K</Avatar>
-              <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-              {new Array(accountsAmount).fill(0).map(() => (
-                <Avatar style={{ backgroundColor: '#1890ff' }} icon={<AntDesignOutlined />} />
-              ))}
-              </>
-            ) : (
-              <div className="div"></div>
-            )}
-          </Avatar.Group>
-        </div>
-      ),
+      render: (accountsAmount: number, record) => {
+        console.log(record)
+        const accAmount = record.accounts.length || 0
+        return (
+          <div className="flex gap-1 items-center">
+            <Title style={{ margin: '0px 0px' }} level={5}>{accAmount}</Title>
+            <Divider type="vertical"/>
+            <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }} maxPopoverTrigger="focus">
+              {accAmount > 0 ? (
+                <>
+                  {/* <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" /> */}
+                  {/* <Avatar style={{ backgroundColor: colors.accent }}>K</Avatar> */}
+                  {/* <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} /> */}
+                  {new Array(accAmount).fill(0).map((_, index) => {
+                    const letter = record.accounts[index].userName.slice(0,1)
+                    return <Avatar style={{ backgroundColor: colors.accent }}>{letter}</Avatar>
+                  })}
+                </>
+              ) : (
+                <div className="div"></div>
+              )}
+            </Avatar.Group>
+          </div>
+        )
+      },
     },
     {
       title: 'Страна',
       dataIndex: 'country',
     },
     {
-      title: 'Последняя активность',
+      title: 'Последнее изменение',
       dataIndex: 'latestActivity',
       render: (latestActivity: Date) => {
         const date = dateToFormat(latestActivity)
@@ -108,18 +113,18 @@ export const TableHeaders = ({setDeleteModal}: ITableHeaders): ColumnsType<IHead
             menu={
               { 
                 items: [
-                  {
-                    key: '0',
-                    label: 'Переименовать',
-                    icon: <EditOutlined />,
-                    // onClick: () => warnMessage()
-                  },
-                  {
-                    key: '1',
-                    label: 'Экспорт"',
-                    icon: <UploadOutlined />,
-                    // onClick: () => warnMessage()
-                  },
+                  // {
+                  //   key: '0',
+                  //   label: 'Переименовать',
+                  //   icon: <EditOutlined />,
+                  //   onClick: () => warnMessage()
+                  // },
+                  // {
+                  //   key: '1',
+                  //   label: 'Экспорт"',
+                  //   icon: <UploadOutlined />,
+                  //   onClick: () => warnMessage()
+                  // },
                   {
                     type: 'divider',
                   },

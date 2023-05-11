@@ -19,12 +19,14 @@ import {
   EnterOutlined, 
   MoreOutlined, 
   SearchOutlined, 
-  UploadOutlined 
+  UploadOutlined, 
+  UserOutlined
 } from '@ant-design/icons';
 import type { FilterConfirmProps } from 'antd/es/table/interface';
 import Highlighter from 'react-highlight-words';
 import type { MenuProps } from 'antd';
 import { colors } from '../../../global-style/style-colors.module';
+import { dateToFormat } from '../../../utils/dateToFormat';
 
 
 export interface IAccountsData {
@@ -172,7 +174,11 @@ export const TableHeaders = () => {
       render: (avatar: string, record: any) => (
         <span className='w-full h-full'>
           <Badge dot={record.status === 'active' ? true : false} status='success' offset={[-7, 28]}>
-            <Avatar src={avatar} />
+            {avatar ? (
+              <Avatar src={avatar} />
+            ) : (
+              <Avatar style={{ background: colors.accent }} icon={<UserOutlined />} />
+            )}
           </Badge>
         </span>
       ),
@@ -209,8 +215,14 @@ export const TableHeaders = () => {
       dataIndex: 'proxy'
     },
     {
-      title: 'Поседняя активность',
-      dataIndex: 'latestActivity'
+      title: 'Поседнее изменение',
+      dataIndex: 'latestActivity',
+      render: (latestActivity: Date) => {
+        const date = dateToFormat(latestActivity)
+        return (
+          <p>{date}</p>
+        )
+      }
     },
     {
       title: 'Статус',
@@ -224,7 +236,7 @@ export const TableHeaders = () => {
               if (tag === 'banned') {color = 'red'}
               if (tag === 'resting') {color = 'yellow'}
     
-              return <Tag color={color} key={tag}>{tag}</Tag>
+              return <Tag color={color || 'green'} key={tag}>{tag || 'active'}</Tag>
             })}
           </div>
           <Dropdown menu={{ items: dropDownItems, onClick }} trigger={['click']}>

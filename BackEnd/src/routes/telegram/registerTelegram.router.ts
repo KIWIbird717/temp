@@ -168,6 +168,7 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     proxyManagerFolder: updatedProxyFolders,
   });
 
+
   return res.status(200).json({ message: "Success" });
 });
 
