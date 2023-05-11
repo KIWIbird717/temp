@@ -69,6 +69,8 @@ export const Logining = () => {
               mail: mail,
               nick: res.data.data.nick,
               id: res.data.data.id,
+              defaultAppHash: res.data.data.defaultAppHash,
+              defaultAppId: res.data.data.defaultAppId,
             }
             localStorage.setItem('sessionToken', JSON.stringify(localStorageData))  // should contain only user email
           }

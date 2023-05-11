@@ -18,6 +18,7 @@ import { values } from 'lodash'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { setUserDefaulAppHash, setUserDefaulAppId } from '../../../store/userSlice'
+import { ILocalStorageParced } from '../../../App'
 
 
 const { Title } = Typography
@@ -110,6 +111,12 @@ export const SettingsPage = () => {
           dispatch(setUserDefaulAppId(Number(appId)))
           setappHash(appHash)
           setAppId(appId)
+          // set apphash / appid to localstorage
+          const token = localStorage.getItem('sessionToken')
+          if (token) {
+            const tokenData: ILocalStorageParced = JSON.parse(token)
+            localStorage.setItem('sessionToken', JSON.stringify({...tokenData, defaultAppHash: appHash, defaultAppId: appId}))
+          }
         }
       }
     } catch (err) {

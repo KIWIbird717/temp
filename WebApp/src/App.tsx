@@ -13,6 +13,8 @@ import {
   setUserNick, 
   setUserManagerFolders,
   setUserProxyFolders,
+  setUserDefaulAppHash,
+  setUserDefaulAppId,
 } from './store/userSlice'
 import { setSmsServiciesData, setSmsServisies } from './store/appSlice';
 import { IHeaderType } from './pages/ApplicationPages/AccountsManager/Collumns';
@@ -33,10 +35,12 @@ import { IProxyData } from './pages/ApplicationPages/ProxyManager/ParseAccountsT
 import { IProxyHeaderType } from './pages/ApplicationPages/ProxyManager/Collumns';
 
 
-interface ILocalStorageParced {
+export interface ILocalStorageParced {
   id: string,
   mail: string,
-  nick: string
+  nick: string,
+  defaultAppHash: string,
+  defaultAppId: string,
 }
 
 const App: React.FC = () => {
@@ -243,8 +247,11 @@ const App: React.FC = () => {
       dispatch(setUserIsLogined(true))
       
       accountsFoldersFromBD(tokenData.mail)
-      // dispatch(setUserManagerFolders(AccountsManagerTableData))
       dispatch(setUserProxyFolders(ProxiesManagerTableData))
+
+      // App hash / ID
+      dispatch(setUserDefaulAppHash(tokenData.defaultAppHash))
+      dispatch(setUserDefaulAppId(Number(tokenData.defaultAppId)))
       
       setSmsServiciesFromDB() // get and set sms service from DB
       navigate("/app")
