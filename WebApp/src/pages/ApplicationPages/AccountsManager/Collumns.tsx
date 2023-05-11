@@ -64,7 +64,6 @@ export const TableHeaders = ({setDeleteModal}: ITableHeaders): ColumnsType<IHead
       title: 'Аккаунты',
       dataIndex: 'accountsAmount',
       render: (accountsAmount: number, record) => {
-        console.log(record)
         const accAmount = record.accounts.length || 0
         return (
           <div className="flex gap-1 items-center">

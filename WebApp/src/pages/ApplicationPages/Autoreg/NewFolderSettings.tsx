@@ -232,6 +232,13 @@ export const NewFolderSettings = ({current, value}: propsType) => {
           }
     
           const res = await axios.post(tgaAutoregUrl, request)
+          if (res) {
+            notification['success']({
+              message: 'Акаунты успешно зарегестрированы',
+              description: 'Акаунты были успешно зарегестрированы и добавлены в папку с акаунтами',
+              placement: 'bottomRight'
+            })
+          }
           console.log({res})
         } catch(err: any) {
           console.error(err)
