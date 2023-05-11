@@ -96,6 +96,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
     setFolderDescription(null)
     setApiHashInput(null)
     setApiIdInput(null)
+    setAccountsCount(null)
   }
 
   const pushAccountsToDb = async () => {
@@ -116,7 +117,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
       setApiIdInput({label: 0, value: "error"})
       return
     }
-
+    
     // Chek if input fields not filled
     const inputProps = [selectedSmsService, selectedCountry, selectedProxy, accountsCount]
     const inputErrStatus = [setSmsServiseErr, setCountryErr, setProxyErr, setCountErr]
@@ -126,7 +127,15 @@ export const NewFolderSettings = ({current, value}: propsType) => {
         return
       }
     })
-
+    if (!accountsCount) {
+      setCountErr("error")
+      return
+    }
+    if (accountsCount <= 0) {
+      setCountErr("error")
+      return
+    }
+    
     // Adding new folder to DB
     const addNewFolder = async () =>  {
       try {
@@ -135,7 +144,11 @@ export const NewFolderSettings = ({current, value}: propsType) => {
         let maxFolderKey: string
         if (accountsFolders) {
           const maxKey = Math.max(...accountsFolders?.map((folder) => Number(folder.key))) + 1
-          maxFolderKey = maxKey.toString()
+          if (maxKey === -Infinity) {
+            maxFolderKey = "0"
+          } else {
+            maxFolderKey = maxKey.toString()
+          }
         } else {
           maxFolderKey = '0'
         }
@@ -154,8 +167,9 @@ export const NewFolderSettings = ({current, value}: propsType) => {
         }
   
         const res = await axios.post(url, {mail: userMail, folder: newFolder})
-  
-        console.log({res})
+        console.log(res, newFolder)
+        return newFolder
+
       } catch (err: any) {
         if (err.response.data === 'Ошибка при создании новой папки') {
           notification['error']({
@@ -163,33 +177,45 @@ export const NewFolderSettings = ({current, value}: propsType) => {
             description: 'Измените параметры папки или попробуйте позже. Возможно ошибка сервера',
             placement: 'bottomRight'
           })
-          return
+        }
+        return null
+      }
+    }
+
+    const registerAccounts = async () => {
+      const newAddedFolder = await addNewFolder()
+      if (newAddedFolder) {
+        try {
+          const tgaAutoregUrl = `${process.env.REACT_APP_SERVER_END_POINT}/telegram/auto/register-user`
+    
+          const request = {
+            telegramUser: {
+              service: selectedSmsService,
+              contryId: selectedCountry?.value,
+              language: "ru"
+            },
+            user: {
+              email: userMail,
+              tgFolderKey: newAddedFolder.key,
+              apiId: "me",
+              apiHash: "me"
+            }
+          }
+    
+          const res = await axios.post(tgaAutoregUrl, request)
+          console.log({res})
+        } catch(err: any) {
+          console.error(err)
+          notification['error']({
+            message: 'Ошибка при решистрации аккаунтов',
+            description: 'Измените параметры создания аккаунтов или попробуйте позже. Возможно ошибка сервера',
+            placement: 'bottomRight'
+          })
         }
       }
     }
-    await addNewFolder()
 
-    // const request = {
-    //   telegramUser: {
-    //     service: selectedSmsService,
-    //     contryId: selectedCountry?.value,
-    //     language: "ru"
-    //   },
-    //   user: {
-    //     email: "test1@mail.ru",
-    //     tgFolderKey: '1',
-    //     proxyFolderKey: '1',
-    //     apiId: "me",
-    //     apiHash: "me"
-    //   }
-    // }
-
-    // console.log(request)
-
-    // const res = await axios.post(url, request)
-    // console.log(res)
-
-    // addNewAccounts()
+    registerAccounts()
   }
 
   // Set proxy clear data
@@ -293,6 +319,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
               upDateFields()
               setSelectedSmsService(service)
               setSmsServiseErr("")
+              setAccountsCount(null)
             }}
           />
         </div>
@@ -320,6 +347,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
               onChange={(_, countryData) => {
                 setSelectedCountry(countryData as {label: string, value: string});
                 setCountryErr("")
+                setAccountsCount(null)
               }}
               tokenSeparators={[',']}
               options={avaliableCountries || []}
@@ -365,6 +393,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
               max={avaliablePhones?.count !== undefined ? avaliablePhones?.count : 0} 
               addonBefore={<UserOutlined />} 
               className='w-full' 
+              value={Number(accountsCount) || 0}
               onChange={(e) => {
                 setAccountsCount(e)
                 setCountErr("")

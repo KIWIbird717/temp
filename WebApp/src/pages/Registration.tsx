@@ -68,6 +68,7 @@ export const Registration = () => {
   
       await axios.post(url, { nick, mail, password, defaultAppHash: "null" , defaultAppId: 0 })
         .then((res: any) => {
+          console.log(res)
           if (res.status === 201) {
             dispatch(setUserMail(mail))
             dispatch(setUserNick(res.data.nick))
