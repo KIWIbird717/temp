@@ -60,7 +60,7 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
   const requestUrl =
     language === "ru"
       ? "https://randomuser.me/api/?results=1&inc=name,gender,email,nat,picture&noinfo?nat=RS"
-      : "https://randomuser.me/api/?results=1&inc=name,gender,email,nat,picture&noinfo?nat=US";
+      : "https://randomuser.me/api/?results=1&inc=name,gender,email,nat,picture&noinfo";
 
   const response = await fetch(requestUrl);
   const data = await response.json();
@@ -136,10 +136,10 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
 
   const savedUser = await newUser.saveUser();
 
-  if (randomUser.picture.large) {
-    newUser.changeAvatar(randomUser.picture.large);
-    savedUser.avatar = randomUser.picture.large;
-  }
+  // if (randomUser.picture.large) {
+  //   newUser.changeAvatar(randomUser.picture.large);
+  //   savedUser.avatar = randomUser.picture.large;
+  // }
 
   if (!(req.body.user.apiId === "me")) {
     savedUser.apiId = req.body.user.apiId;

@@ -71,7 +71,7 @@ export const checkForErrorFromAxiosResponse = async (
   }
 
   const error = await checkForError(response.data, service);
-  if (error) {
-    throw new Error(`Service: ${service}, Error: ${error}`);
-  }
+  // if (error) {
+  //   throw new Error(`Service: ${service}, Error: ${error}`);
+  // }
 };
