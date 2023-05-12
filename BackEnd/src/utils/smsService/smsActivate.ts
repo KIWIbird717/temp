@@ -483,8 +483,8 @@ export async function getRegistrationCode(
   let code: string | null = null;
   let attempts = 0;
 
-  while (!code && attempts < 6) {
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+  while (!code && attempts < 4) {
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     attempts++;
 
     switch (service) {
@@ -596,7 +596,7 @@ export async function getRegistrationCode(
     }
   }
 
-  return null;
+  return null
 }
 
 export async function submitPhone(
