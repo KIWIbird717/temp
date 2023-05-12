@@ -313,9 +313,13 @@ export class telegramUser {
             },
             phoneNumber: async () => {
               try {
-                return formatPhoneNumber(this.statistic.phone);
+                return (
+                  formatPhoneNumber(this.statistic.phone) ??
+                  this.statistic.phone ??
+                  ""
+                );
               } catch {
-                return this.statistic.phone;
+                return this.statistic.phone ?? "";
               }
             },
             phoneCode: async (isCodeViaApp = false) => {
