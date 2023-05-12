@@ -162,14 +162,15 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     folder.key === req.body.proxyFolderKey ? proxyFolderData : folder
   );
 
-  const respErr: string[] = await newUser.getError();
+  const errorChecker = await newUser.getError();
+  const respErr: string = errorChecker.error.join("\n");
 
-  if (respErr && respErr.length > 0) {
-    const errorMessage: string = respErr.join("\n");
-    if (process.env.DEBUG === "true") {
-      console.log("\x1B[31m", `[ERROR]: ${errorMessage.toString()}`);
-    }
-    res.status(500).json({ error: errorMessage });
+  if (process.env.DEBUG === "true") {
+    console.log("\x1B[31m", `[ERROR]: ${respErr.toString()}`);
+  }
+
+  if (errorChecker.fatalError) {
+    return res.status(500).json({ error: respErr });
   }
 
   updateUser(email, {
@@ -177,8 +178,7 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     proxyManagerFolder: updatedProxyFolders,
   });
 
-
-  return res.status(200).json({ message: "Success" });
+  return res.status(200).json({ message: "Success", error: respErr ?? "" });
 });
 
 /*

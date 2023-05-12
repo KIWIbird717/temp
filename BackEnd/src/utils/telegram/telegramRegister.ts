@@ -233,7 +233,11 @@ export class telegramUser {
       this.statistic.userError.push(
         `User was registered with name: ${await this.client.getMe()}`
       );
-    } else if (isAvalible === "val-code") {
+    } else if (
+      isAvalible === "val-code" ||
+      (this.statistic.userError instanceof Array &&
+        this.statistic.userError.some((err) => ERROR_TYPES.includes(err)))
+    ) {
       await submitPhone(
         this.statistic.utils.servicePhone,
         this.statistic.utils.phoneId,
@@ -293,8 +297,13 @@ export class telegramUser {
     };
   }
 
-  public async getError(): Promise<string[]> {
-    return this.statistic.userError;
+  public async getError(): Promise<{ error: string[]; fatalError: boolean }> {
+    return {
+      error: this.statistic.userError,
+      fatalError:
+        this.statistic.userError instanceof Array &&
+        this.statistic.userError.some((err) => ERROR_TYPES.includes(err)),
+    };
   }
 
   private async autoRegister(): Promise<string> {
@@ -338,6 +347,9 @@ export class telegramUser {
                     phoneNumber: this.statistic.phone,
                   }
                 );
+                if (code === null) {
+                  this.statistic.userError.push("PHONE_CODE_INVALID")
+                }
                 return code.code;
               }
             },
@@ -399,3 +411,12 @@ export function addCodeToWaitingForVerify(
 ): void {
   waitingForVerify.push({ phoneNumber, code });
 }
+
+const ERROR_TYPES = [
+  "PHONE_CODE_EMPTY",
+  "PHONE_CODE_EXPIRED",
+  "PHONE_CODE_INVALID",
+  "PHONE_NUMBER_INVALID",
+  "PHONE_NUMBER_UNOCCUPIED",
+  "SIGN_IN_FAILED",
+];
