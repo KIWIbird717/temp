@@ -484,7 +484,7 @@ export async function getRegistrationCode(
   let attempts = 0;
 
   while (!code && attempts < 4) {
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await new Promise((resolve) => setTimeout(resolve, 10000));
     attempts++;
 
     switch (service) {

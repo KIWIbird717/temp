@@ -18,6 +18,7 @@ import {
   getTelegramCode,
   submitPhone,
 } from "../smsService/smsActivate";
+import { LogLevel } from "telegram/extensions/Logger";
 
 interface WaitingForVerify {
   phoneNumber: string;
@@ -141,6 +142,7 @@ export class telegramUser {
       }
     );
 
+    this.client.setLogLevel(LogLevel.ERROR)
     this.statistic.userExists = true;
   }
 
@@ -331,31 +333,37 @@ export class telegramUser {
                 return this.statistic.phone ?? "";
               }
             },
-            phoneCode: async (isCodeViaApp = false) => {
+            // NOT WORKING
+            phoneCode: async (isCodeViaApp) => {
+              console.log(isCodeViaApp, this.statistic.manual)
               if (isCodeViaApp) {
                 this.statistic.userError.push("CODE_VIA_APP");
+                return null
               }
               if (this.statistic.manual) {
                 const codeGenerator = waitForCode(this.statistic.phone);
                 const code = await codeGenerator.next();
                 return code.value;
-              } else {
-                const code = await getRegistrationCode(
-                  this.statistic.utils.servicePhone,
-                  {
-                    id: this.statistic.utils.phoneId,
-                    phoneNumber: this.statistic.phone,
-                  }
-                );
-                if (code === null) {
-                  this.statistic.userError.push("PHONE_CODE_INVALID")
-                }
-                return code.code;
               }
+              console.log(1)
+              const code = await getRegistrationCode(
+                this.statistic.utils.servicePhone,
+                {
+                  id: this.statistic.utils.phoneId,
+                  phoneNumber: this.statistic.phone,
+                }
+              );
+              console.log("2" + code)
+              if (code === null) {
+                this.statistic.userError.push("PHONE_CODE_INVALID");
+                return null
+              }
+              return code.code;
             },
             onError: (err: Error) => {
               this.statistic.userError.push(`Telegram register error: ${err}`);
             },
+            forceSMS: true,
           }
         );
       } catch (err) {

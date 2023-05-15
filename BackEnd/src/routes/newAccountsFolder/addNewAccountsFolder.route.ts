@@ -39,7 +39,7 @@ router.post('/add-accounts-to-user', async (req: Request, res: Response) => {
     { $push: { accountsManagerFolder: {...accounts} } }
   )
 
-  console.log({result})
+  // console.log({result})
 })
 
 export default router

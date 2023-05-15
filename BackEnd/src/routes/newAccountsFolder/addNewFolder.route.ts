@@ -33,7 +33,7 @@ router.post('/add-new-folder', async (req: Request, res: Response) => {
       { mail: mail },
       { $push: { accountsManagerFolder: folder } }
     )
-    console.log(result)
+    // console.log(result)
     if (result.modifiedCount > 0) {
       return res.status(200).json(result)
     } else {
