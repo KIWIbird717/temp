@@ -1,7 +1,6 @@
 import { TelegramClient, Api } from "telegram";
 import { StringSession } from "telegram/sessions";
 import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
-import { signInUser } from "telegram/client/auth";
 import { CustomFile } from "telegram/client/uploads";
 import { formatPhoneNumber } from "./utils";
 import {
@@ -142,7 +141,7 @@ export class telegramUser {
       }
     );
 
-    this.client.setLogLevel(LogLevel.ERROR)
+    this.client.setLogLevel(LogLevel.ERROR);
     this.statistic.userExists = true;
   }
 
@@ -215,39 +214,38 @@ export class telegramUser {
       }
     }
 
-    if (
-      this.statistic.userError === undefined ||
-      this.statistic.userError.length === 0
-    ) {
+    if (this.statistic.userError.length === 0) {
       await submitPhone(
         this.statistic.utils.servicePhone,
         this.statistic.utils.phoneId,
         true
       ); // Code received, complete activation
-    } else if (isAvalible === "reg-noacc") {
-      await submitPhone(
-        this.statistic.utils.servicePhone,
-        this.statistic.utils.phoneId,
-        false,
-        false
-      ); // No access for acount, deny
+    } else {
+      const lastError =
+        this.statistic.userError[this.statistic.userError.length - 1];
 
-      this.statistic.userError.push(
-        `User was registered with name: ${await this.client.getMe()}`
-      );
-    } else if (
-      isAvalible === "val-code" ||
-      (this.statistic.userError instanceof Array &&
-        this.statistic.userError.some((err) => ERROR_TYPES.includes(err)))
-    ) {
-      await submitPhone(
-        this.statistic.utils.servicePhone,
-        this.statistic.utils.phoneId,
-        false
-      );
-      this.statistic.userError.push(
-        `Valid sms code from service: ${this.statistic.utils.servicePhone} and phone number is: ${this.statistic.phone}`
-      );
+      if (lastError === "reg-noacc") {
+        await submitPhone(
+          this.statistic.utils.servicePhone,
+          this.statistic.utils.phoneId,
+          false,
+          false
+        ); // No access for account, deny
+
+        this.statistic.userError.push(
+          `User was registered with name: ${await this.client.getMe()}`
+        );
+      } else if (ERROR_TYPES.includes(lastError)) {
+        await submitPhone(
+          this.statistic.utils.servicePhone,
+          this.statistic.utils.phoneId,
+          false
+        );
+
+        this.statistic.userError.push(
+          `Valid SMS code from service: ${this.statistic.utils.servicePhone}, and phone number is: ${this.statistic.phone}`
+        );
+      }
     }
   }
 
@@ -309,79 +307,240 @@ export class telegramUser {
   }
 
   private async autoRegister(): Promise<string> {
-    return new Promise(async (res) => {
-      try {
-        await signInUser(
-          this.client,
-          { apiHash: this.apiHash, apiId: this.apiId },
-          {
-            firstAndLastNames: async () => {
-              this.statistic.userExists = false;
-              return [
-                this.statistic.tgUserStats.fisrtName,
-                this.statistic.tgUserStats.lastName,
-              ];
-            },
-            phoneNumber: async () => {
-              try {
-                return (
-                  formatPhoneNumber(this.statistic.phone) ??
-                  this.statistic.phone ??
-                  ""
-                );
-              } catch {
-                return this.statistic.phone ?? "";
-              }
-            },
-            // NOT WORKING
-            phoneCode: async (isCodeViaApp) => {
-              console.log(isCodeViaApp, this.statistic.manual)
-              if (isCodeViaApp) {
-                this.statistic.userError.push("CODE_VIA_APP");
-                return null
-              }
-              if (this.statistic.manual) {
-                const codeGenerator = waitForCode(this.statistic.phone);
-                const code = await codeGenerator.next();
-                return code.value;
-              }
-              console.log(1)
-              const code = await getRegistrationCode(
-                this.statistic.utils.servicePhone,
-                {
-                  id: this.statistic.utils.phoneId,
-                  phoneNumber: this.statistic.phone,
-                }
-              );
-              console.log("2" + code)
-              if (code === null) {
-                this.statistic.userError.push("PHONE_CODE_INVALID");
-                return null
-              }
-              return code.code;
-            },
-            onError: (err: Error) => {
-              this.statistic.userError.push(`Telegram register error: ${err}`);
-            },
-            forceSMS: true,
+    let signInResult: string = "";
+
+    try {
+      const sendCodeResult = (await this.client.invoke(
+        new Api.auth.SendCode({
+          phoneNumber: await this.phoneNumber(),
+          apiId: this.apiId,
+          apiHash: this.apiHash,
+          settings: new Api.CodeSettings({
+            allowFlashcall: false, // Force SMS by disabling flashcall
+            currentNumber: true, // Indicate that the phoneNumber is the current number of the user
+            allowAppHash: true,
+          }),
+        })
+      )) as Api.auth.TypeSentCode;
+
+      let phoneCodeHash = sendCodeResult["phoneCodeHash"];
+      let isCodeViaApp = sendCodeResult["type"].className === "auth.SentCodeTypeApp";
+      let phoneCode;
+      let isRegistrationRequired = false;
+      let termsOfService;
+
+      while (true) {
+        try {
+          phoneCode = await this.phoneCode(isCodeViaApp);
+
+          if (!phoneCode) {
+            throw new Error("Code is empty");
           }
-        );
-      } catch (err) {
-        if (err.message.includes("Code is empty")) {
-          // Valid code from sms
-          res("val-code");
-          await this.client.disconnect();
-        } else if (
-          err.message === "CODE_VIA_APP" ||
-          err.message === "AUTH_USER_CANCEL"
-        ) {
-          res("reg-noacc");
-          await this.client.disconnect();
-        } else {
-          this.statistic.userError.push(err);
+
+          const result = await this.client.invoke(
+            new Api.auth.SignIn({
+              phoneNumber: await this.phoneNumber(),
+              phoneCodeHash,
+              phoneCode,
+            })
+          );
+
+          if (result instanceof Api.auth.AuthorizationSignUpRequired) {
+            isRegistrationRequired = true;
+            termsOfService = result.termsOfService;
+            break;
+          }
+
+          signInResult = "successful";
+          await submitPhone(
+            this.statistic.utils.servicePhone,
+            this.statistic.utils.phoneId,
+            true
+          );
+          return signInResult;
+        } catch (err: any) {
+          if (err.message.includes("SESSION_PASSWORD_NEEDED")) {
+            // Implement signInWithPassword logic here.
+            // return this.signInWithPassword(apiCredentials, authParams);
+          } else {
+            const shouldWeStop = await this.handleError(err);
+            if (shouldWeStop) {
+              throw new Error("AUTH_USER_CANCEL");
+            }
+          }
         }
       }
+
+      if (isRegistrationRequired) {
+        while (true) {
+          try {
+            let [firstName, lastName] = await this.firstAndLastNames();
+
+            if (!firstName) {
+              throw new Error("First name is required");
+            }
+
+            const { user } = (await this.client.invoke(
+              new Api.auth.SignUp({
+                phoneNumber: await this.phoneNumber(),
+                phoneCodeHash,
+                firstName,
+                lastName,
+              })
+            )) as Api.auth.Authorization;
+
+            if (termsOfService) {
+              await this.client.invoke(
+                new Api.help.AcceptTermsOfService({
+                  id: termsOfService.id,
+                })
+              );
+            }
+
+            signInResult = "successful";
+            await submitPhone(
+              this.statistic.utils.servicePhone,
+              this.statistic.utils.phoneId,
+              true
+            );
+            return signInResult;
+          } catch (err: any) {
+            const shouldWeStop = await this.handleError(err);
+            if (shouldWeStop) {
+              throw new Error("AUTH_USER_CANCEL");
+            }
+          }
+        }
+      }
+
+      await this.handleError(new Error("Auth failed"));
+      return signInResult;
+    } catch (err) {
+      signInResult = err.message;
+
+      if (err.message.includes("Code is empty")) {
+        // Valid code from SMS
+        await submitPhone(
+          this.statistic.utils.servicePhone,
+          this.statistic.utils.phoneId,
+          false
+        );
+        await this.client.disconnect();
+      } else if (
+        err.message === "CODE_VIA_APP" ||
+        err.message === "AUTH_USER_CANCEL"
+      ) {
+        await submitPhone(
+          this.statistic.utils.servicePhone,
+          this.statistic.utils.phoneId,
+          false,
+          false
+        );
+        await this.client.disconnect();
+      } else {
+        this.statistic.userError.push(err);
+      }
+    }
+
+    return signInResult;
+  }
+
+  // Helper functions
+  private async firstAndLastNames(): Promise<string[]> {
+    this.statistic.userExists = false;
+    return [
+      this.statistic.tgUserStats.fisrtName,
+      this.statistic.tgUserStats.lastName,
+    ];
+  }
+
+  private async phoneNumber(): Promise<string> {
+    try {
+      return (
+        formatPhoneNumber(this.statistic.phone) ?? this.statistic.phone ?? ""
+      );
+    } catch {
+      return this.statistic.phone ?? "";
+    }
+  }
+
+  private async phoneCode(isCodeViaApp: boolean): Promise<string | null> {
+    if (isCodeViaApp) {
+      this.statistic.userError.push("CODE_VIA_APP");
+      return null;
+    }
+    if (this.statistic.manual) {
+      const codeGenerator = waitForCode(this.statistic.phone);
+      const code = await codeGenerator.next();
+      return code.value;
+    }
+    const code = await getRegistrationCode(this.statistic.utils.servicePhone, {
+      id: this.statistic.utils.phoneId,
+      phoneNumber: this.statistic.phone,
     });
+    if (code === null) {
+      this.statistic.userError.push("PHONE_CODE_INVALID");
+      return null;
+    }
+    return code.code;
+  }
+  private async handleError(err: Error): Promise<boolean> {
+    // Log the error for debugging
+
+    console.error(err);
+
+    // Define error messages
+    const errorMessages = [
+      "PHONE_CODE_EMPTY",
+      "PHONE_CODE_EXPIRED",
+      "PHONE_CODE_INVALID",
+      "PHONE_NUMBER_INVALID",
+      "PHONE_NUMBER_UNOCCUPIED",
+      "SIGN_IN_FAILED",
+    ];
+
+    // Check if error message is in the defined error messages
+    for (const errorMessage of errorMessages) {
+      if (err.message.includes(errorMessage)) {
+        // Handle specific error
+        switch (errorMessage) {
+          case "PHONE_CODE_EMPTY":
+            await submitPhone(
+              this.statistic.utils.servicePhone,
+              this.statistic.utils.phoneId,
+              false,
+              false
+            );
+            this.statistic.userError.push(errorMessage);
+            break;
+
+          case "PHONE_CODE_INVALID":
+            await submitPhone(
+              this.statistic.utils.servicePhone,
+              this.statistic.utils.phoneId,
+              false
+            );
+            this.statistic.userError.push(errorMessage);
+            break;
+
+          case "PHONE_NUMBER_INVALID":
+            await this.autoRegister();
+            this.statistic.userError.push(errorMessage);
+            break;
+
+          default:
+            this.statistic.userError.push(errorMessage);
+            break;
+        }
+
+        // Stop running `autoRegister`
+        return true;
+      }
+    }
+
+    // If we don't recognize the error message, log it and continue running `autoRegister`
+    this.statistic.userError.push(`Telegram register error: ${err}`);
+    return false;
   }
 }
 
