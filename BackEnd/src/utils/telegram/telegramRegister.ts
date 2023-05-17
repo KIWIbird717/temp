@@ -473,7 +473,6 @@ export class telegramUser {
       const code = await codeGenerator.next();
       return code.value;
     }
-
     const code = await getRegistrationCode(this.statistic.utils.servicePhone, {
       id: this.statistic.utils.phoneId,
       phoneNumber: this.statistic.phone,
