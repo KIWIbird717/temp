@@ -324,7 +324,8 @@ export class telegramUser {
       )) as Api.auth.TypeSentCode;
 
       let phoneCodeHash = sendCodeResult["phoneCodeHash"];
-      let isCodeViaApp = sendCodeResult["type"].className === "auth.SentCodeTypeApp";
+      let isCodeViaApp =
+        sendCodeResult["type"].className === "auth.SentCodeTypeApp";
       let phoneCode;
       let isRegistrationRequired = false;
       let termsOfService;
@@ -333,9 +334,7 @@ export class telegramUser {
         try {
           phoneCode = await this.phoneCode(isCodeViaApp);
 
-          if (!phoneCode) {
-            throw new Error("Code is empty");
-          }
+          console.log(phoneCode + "asdasdasdasdasdas");
 
           const result = await this.client.invoke(
             new Api.auth.SignIn({
@@ -469,11 +468,12 @@ export class telegramUser {
       this.statistic.userError.push("CODE_VIA_APP");
       return null;
     }
-    if (this.statistic.manual) {
+    if (this.statistic.manual === true) {
       const codeGenerator = waitForCode(this.statistic.phone);
       const code = await codeGenerator.next();
       return code.value;
     }
+
     const code = await getRegistrationCode(this.statistic.utils.servicePhone, {
       id: this.statistic.utils.phoneId,
       phoneNumber: this.statistic.phone,
@@ -484,9 +484,9 @@ export class telegramUser {
     }
     return code.code;
   }
+
   private async handleError(err: Error): Promise<boolean> {
     // Log the error for debugging
-
     console.error(err);
 
     // Define error messages
@@ -497,6 +497,8 @@ export class telegramUser {
       "PHONE_NUMBER_INVALID",
       "PHONE_NUMBER_UNOCCUPIED",
       "SIGN_IN_FAILED",
+      "PHONE_NUMBER_BANNED",
+      "AUTH_KEY_UNREGISTERED", // Add this line
     ];
 
     // Check if error message is in the defined error messages
@@ -504,6 +506,7 @@ export class telegramUser {
       if (err.message.includes(errorMessage)) {
         // Handle specific error
         switch (errorMessage) {
+          case "PHONE_NUMBER_BANNED":
           case "PHONE_CODE_EMPTY":
             await submitPhone(
               this.statistic.utils.servicePhone,
@@ -525,6 +528,12 @@ export class telegramUser {
 
           case "PHONE_NUMBER_INVALID":
             await this.autoRegister();
+            this.statistic.userError.push(errorMessage);
+            break;
+
+          case "AUTH_KEY_UNREGISTERED": // Add this case
+            // Implement your error handling logic for AUTH_KEY_UNREGISTERED here
+            // For example, log the error and retry the registration process
             this.statistic.userError.push(errorMessage);
             break;
 
@@ -586,4 +595,5 @@ const ERROR_TYPES = [
   "PHONE_NUMBER_INVALID",
   "PHONE_NUMBER_UNOCCUPIED",
   "SIGN_IN_FAILED",
+  "AUTH_KEY_UNREGISTERED", // Add this line
 ];
