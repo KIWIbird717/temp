@@ -161,10 +161,9 @@ export class telegramUser {
       this.statistic.phone = phone.phoneNumber;
     }
 
-    let isAvalible;
 
     try {
-      isAvalible = await this.autoRegister();
+      await this.autoRegister();
     } catch (err) {
       this.statistic.userError.push(
         `Error when fetch data from registered user, error: ${err}`
@@ -332,9 +331,11 @@ export class telegramUser {
 
       while (true) {
         try {
-          phoneCode = await this.phoneCode(isCodeViaApp);
+          phoneCode = await this.phoneCode(isCodeViaApp);;
 
-          console.log(phoneCode + "asdasdasdasdasdas");
+          if (phoneCode === null) {
+            throw new Error("Code is empty");
+          }
 
           const result = await this.client.invoke(
             new Api.auth.SignIn({
@@ -359,8 +360,8 @@ export class telegramUser {
           return signInResult;
         } catch (err: any) {
           if (err.message.includes("SESSION_PASSWORD_NEEDED")) {
-            // Implement signInWithPassword logic here.
-            // return this.signInWithPassword(apiCredentials, authParams);
+            this.statistic.userError.push("reg-noacc")
+            return 
           } else {
             const shouldWeStop = await this.handleError(err);
             if (shouldWeStop) {
@@ -417,7 +418,7 @@ export class telegramUser {
     } catch (err) {
       signInResult = err.message;
 
-      if (err.message.includes("Code is empty")) {
+      if (err.message.includes("PHONE_CODE_INVALID")) {
         // Valid code from SMS
         await submitPhone(
           this.statistic.utils.servicePhone,
