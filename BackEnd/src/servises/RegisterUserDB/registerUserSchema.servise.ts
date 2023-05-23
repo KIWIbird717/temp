@@ -1,4 +1,5 @@
 import { Schema, Model, model, Document } from "mongoose";
+import { ErrorService, ErrorType} from "../../utils/errorHandler";
 
 /**
  * interface for `Менеджер аккаунов` page
@@ -100,6 +101,11 @@ export interface IUserRes {
   recentAutoregActivity: IRecentAutoregActivity[];
   createdAt: Date;
   updatedAt: Date;
+  errorList: [{
+    service: ErrorService | string;
+    status: ErrorType | string;
+    message: string;
+  }];
   __v: number;
 }
 
