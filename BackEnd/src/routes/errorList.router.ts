@@ -1,15 +1,29 @@
 import express, { Router, Request, Response, NextFunction } from "express";
+import { ErrorService, ErrorType } from "../utils/errorHandler";
 import fs from "fs";
 import path from "path";
 
 const router: Router = express.Router();
 
+const validServices: ErrorService[] = ["telegram", "sms-service", "express"];
+const validTypes: ErrorType[] = ["error", "warn", "completed"];
+
 router.get("/error-list", async (req: Request, res: Response, next: NextFunction) => {
-  const service = req.query.service as string;
-  const type = req.query.type as string;
+  const service = req.query.service as ErrorService;
+  const type = req.query.type as ErrorType;
 
   if (!service || !type) {
     res.status(400).send("Service and type are required");
+    return;
+  }
+
+  if (!validServices.includes(service)) {
+    res.status(400).send("Invalid service");
+    return;
+  }
+
+  if (!validTypes.includes(type)) {
+    res.status(400).send("Invalid type");
     return;
   }
 

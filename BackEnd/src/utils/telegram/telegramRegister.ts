@@ -1,6 +1,5 @@
 import { TelegramClient, Api } from "telegram";
 import { StringSession } from "telegram/sessions";
-import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
 import { CustomFile } from "telegram/client/uploads";
 import { formatPhoneNumber } from "./utils";
 import {
@@ -10,69 +9,23 @@ import {
 import os from "os";
 
 import {
-  Service,
   rentPhoneRegistration,
   getRegistrationCode,
-  Country,
   getTelegramCode,
   submitPhone,
 } from "../smsService/smsActivate";
 import { LogLevel } from "telegram/extensions/Logger";
 
-interface WaitingForVerify {
-  phoneNumber: string;
-  code: string | number;
-}
-
-interface DeviceInfo {
-  os: string;
-  device: string;
-  appVersion: string | "last";
-}
-
-interface phoneVerify {
-  service?: Service;
-  country?: Country;
-  phone?: string;
-}
-
-interface userStatistic {
-  firstName: string;
-  lastName: string;
-  userName: string;
-  userString?: string;
-}
-
-export interface UserSettings {
-  language?: "ru" | "en";
-  device?: DeviceInfo;
-  proxy?: ProxyInterface;
-  phone: phoneVerify;
-  telegramUser: userStatistic;
-  manual?: boolean;
-}
+import type {
+  telegramUserShema,
+  UserSettings,
+  WaitingForVerify,
+} from "./telegram";
 
 export class telegramUser {
   private apiId: number;
   private apiHash: string;
-  public statistic: {
-    userError: string[];
-    phone: string;
-    utils: {
-      phoneId?: string;
-      servicePhone?: Service;
-      country?: Country;
-      sessionString: any;
-    };
-    manual?: boolean;
-    userExists: boolean;
-    tgUserStats: {
-      username: string;
-      fisrtName: string;
-      lastName: string;
-      description: string;
-    };
-  };
+  public statistic: telegramUserShema;
   public client: TelegramClient;
   constructor(apiId: number, apiHash: string, params: UserSettings) {
     this.apiId = apiId;
@@ -160,7 +113,6 @@ export class telegramUser {
       this.statistic.utils.phoneId = phone.id;
       this.statistic.phone = phone.phoneNumber;
     }
-
 
     try {
       await this.autoRegister();
@@ -331,7 +283,7 @@ export class telegramUser {
 
       while (true) {
         try {
-          phoneCode = await this.phoneCode(isCodeViaApp);;
+          phoneCode = await this.phoneCode(isCodeViaApp);
 
           if (phoneCode === null) {
             throw new Error("Code is empty");
@@ -360,8 +312,8 @@ export class telegramUser {
           return signInResult;
         } catch (err: any) {
           if (err.message.includes("SESSION_PASSWORD_NEEDED")) {
-            this.statistic.userError.push("reg-noacc")
-            return 
+            this.statistic.userError.push("reg-noacc");
+            return;
           } else {
             const shouldWeStop = await this.handleError(err);
             if (shouldWeStop) {
