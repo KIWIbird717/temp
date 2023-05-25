@@ -1,5 +1,6 @@
 import { logErrorToFile } from "../errorHandler";
 import type { WaitingForVerify, AuthInterface } from "./telegram";
+import { TelegramClient } from "telegram";
 import {
   IAccountsManagerFolder,
   RegisterUserSchema,
@@ -16,11 +17,16 @@ export class Authorization {
 private email: string;
 public success: boolean; 
 public statistic: AuthInterface;
+private client: TelegramClient
 
-  constructor(mail: string) {
+  constructor(mail: string, clienter: TelegramClient) {
     this.email = mail;
     this.success = true;
+    this.client = clienter
   }
+
+
+
   private async phoneCode(
     isCodeViaApp: boolean,
     manual: boolean
@@ -81,11 +87,11 @@ public statistic: AuthInterface;
           case "AUTH_KEY_UNREGISTERED": // Add this case
             // Implement your error handling logic for AUTH_KEY_UNREGISTERED here
             // For example, log the error and retry the registration process
-            this.statistic.userError.push(errorMessage);
+            logErrorToFile(new Error(errorMessage), "telegram", "warn");
             break;
 
           default:
-            this.statistic.userError.push(errorMessage);
+            logErrorToFile(new Error(errorMessage), "telegram", "warn");
             break;
         }
 
@@ -95,7 +101,7 @@ public statistic: AuthInterface;
     }
 
     // If we don't recognize the error message, log it and continue running `autoRegister`
-    this.statistic.userError.push(`Telegram register error: ${err}`);
+    logErrorToFile(new Error(`Telegram register error: ${err}`), "telegram", "warn");
     return false;
   }
 }
