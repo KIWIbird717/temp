@@ -3,7 +3,7 @@ import { Registration } from './pages/Registration';
 import { Logining } from './pages/Logining';
 import { Application } from './pages/Application';
 import { Routes, Route, useNavigate } from 'react-router-dom'
-import { IRootStoreState } from './store/types';
+import { IRootStoreState, smsServiciesDataType } from './store/types';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { 
@@ -52,12 +52,17 @@ const App: React.FC = () => {
   const setSmsServiciesFromDB = async (): Promise<void> => {
     try {
       const servicies = await axios.get(`${process.env.REACT_APP_SERVER_END_POINT}/telegram/get-service`)
-      const smsServiciesArray: smsServicesTypes[] = servicies.data.map((service: string) => (
+      const smsServiciesArray: smsServiciesDataType[] = servicies.data.map((service: string) => (
         {
           title: service,
+          balance: 'loading',
+          countries: 'loading',
+          cost: 'loading',
+          count: 'loading',
         }
       ))
       dispatch(setSmsServisies(smsServiciesArray))
+      dispatch(setSmsServiciesData(smsServiciesArray))
 
       if (servicies.data) {
         const smsServiciesData = await Promise.all(
@@ -80,6 +85,7 @@ const App: React.FC = () => {
     }
   }
 
+  // Set accounts folders from BD
   const accountsFoldersFromBD = async (mail: string): Promise<void> => {
     try {
       if (mail) {

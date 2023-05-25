@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react'
 import { contentStyle } from '../../../global-style/layoutStyle'
 import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
-import { Layout  } from 'antd'
+import { ConfigProvider, Layout  } from 'antd'
 import { Folders } from './Folders'
 import { AccountsTable } from './AccountsTable'
 import { useSelector } from 'react-redux'
 import { StoreState } from '../../../store/store'
+import { NoAccounts } from '../../../components/CustomNoData/NoAccounts'
 
 
 const { Content } = Layout
@@ -24,11 +25,13 @@ export const AccountsManagerPage = () => {
         <HeaderComponent title='Менеджер аккаунтов'/>
 
         <Content className='flex flex-col gap-10'>
-          {openFolder ? (
-            <AccountsTable />
-            ) : (
-            <Folders />
-          )}
+          <ConfigProvider renderEmpty={NoAccounts}>
+            {openFolder ? (
+              <AccountsTable />
+              ) : (
+              <Folders />
+            )}
+          </ConfigProvider>
         </Content>
       </Layout>
   )

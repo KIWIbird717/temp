@@ -129,10 +129,12 @@ export const AddToFolderSettings = ({current, value}: propsType) => {
   // Parce avaliable countries
   useEffect(() => {
     const selectCountriesList = smsServiciesData?.find((service) => service.title === selectedSmsService)
-    const countiesDebounceSelect = selectCountriesList?.countries?.map((country) => {
-      return { label: country.name, value: country.id }
-    })
-    setAvaliableCountries(countiesDebounceSelect || [])
+    if (selectCountriesList && selectCountriesList?.countries !== 'loading') {
+      const countiesDebounceSelect = selectCountriesList?.countries?.map((country) => {
+        return { label: country.name, value: country.id }
+      })
+      setAvaliableCountries(countiesDebounceSelect || [])
+    }
   }, [selectedSmsService])
 
   // Parse avaliable phones

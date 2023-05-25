@@ -6,6 +6,7 @@ import { ConfigProvider } from 'antd'
 import { colors } from './global-style/style-colors.module';
 import { Provider } from 'react-redux'
 import store from './store/store';
+import { ThemeProvider } from '@emotion/react';
 
 
 const root = ReactDOM.createRoot(
@@ -16,6 +17,7 @@ const theme = {
   token: {
     // Color paletee
     colorPrimary: colors.primary,
+    colorAccent: colors.accent,
     // Font
     colorText: colors.font,
     fontSizeHeading1: 38,

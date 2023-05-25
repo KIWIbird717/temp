@@ -8,6 +8,8 @@ import { Spin, Typography } from 'antd'
 import { colors } from '../../../global-style/style-colors.module'
 import { CheckOutlined, WarningOutlined } from '@ant-design/icons'
 import { useEffect, useState } from 'react'
+import Skeleton from '@mui/material/Skeleton'
+import { Typography as MuiTypography }  from '@mui/material'
 
 const { Title } = Typography
 
@@ -45,13 +47,25 @@ export const SmsServicies = ({height}: IProps): JSX.Element => {
         smsServicesList?.map((service: smsServiciesDataType) => (
           <div key={service.title} className='flex justify-between p-4 border-[1px] border-solid border-[#d9d9d9] rounded-[15px]'>
             {service.balance ? (
-              <div className="flex flex-col justify-between gap-2">
-                <Title className='m-0' level={5}>{service.title}</Title>
-                <div className="div">
-                  <p style={{ margin: 0, color: colors.dopFont }}>баланс</p>
-                  <Title style={{ color: colors.font, margin: 0 }} level={2}>{service.balance}₽</Title>
+              (service.balance === 'loading' ? (
+                <div className="flex flex-col justify-between gap-2">
+                  <Title className='m-0' level={5}>{service.title}</Title>
+                  <div>
+                    <p style={{ margin: 0, color: colors.dopFont }}>баланс</p>
+                    <MuiTypography variant="h3" style={{ minWidth: 110, margin: 0 }}>
+                      <Skeleton animation="wave" style={{ margin: 0 }}/>
+                    </MuiTypography>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="flex flex-col justify-between gap-2">
+                  <Title className='m-0' level={5}>{service.title}</Title>
+                  <div>
+                    <p style={{ margin: 0, color: colors.dopFont }}>баланс</p>
+                    <Title style={{ color: colors.font, margin: 0 }} level={2}>{service.balance}₽</Title>
+                  </div>
+                </div>
+              ))
             ) : (
               <div className="flex flex-col justify-between gap-2">
                 <Title className='m-0' level={5}>{service.title}</Title>
@@ -59,15 +73,22 @@ export const SmsServicies = ({height}: IProps): JSX.Element => {
             )}
             <div className="flex flex-col justify-between items-end">
               {service.balance ? (
-                <>
-                  <div style={{ backgroundColor: 'rgba(137, 217, 127, 0.4)' }} className='flex items-center rounded-full '>
-                    <div style={{ backgroundColor: colors.success }} className='flex items-center justify-center rounded-full w-[35px] h-[35px]'>
-                      <CheckOutlined style={{ color: colors.white, fontSize: 18 }}/>
-                    </div>
-                    <p style={{ margin: 0, color: colors.font, fontSize: 15 }} className='pl-3 pr-4'>активен</p>
+                (service.balance === 'loading' ? (
+                  <div className='min-w-[120px] flex flex-col h-full justify-between'>
+                    <Skeleton animation="wave" style={{ borderRadius: '9990px', height: 60, width: '100%' }} />
+                    <Skeleton animation="wave" style={{width: '100%'}}/>
                   </div>
-                  <div style={{ color: colors.dopFont }}><span style={{ fontWeight: 600, color: colors.font }}>{service.cost + '₽'}</span>/аккаунт</div>
-                </>
+                ) : (
+                  <>
+                    <div style={{ backgroundColor: 'rgba(137, 217, 127, 0.4)' }} className='flex items-center rounded-full '>
+                      <div style={{ backgroundColor: colors.success }} className='flex items-center justify-center rounded-full w-[35px] h-[35px]'>
+                        <CheckOutlined style={{ color: colors.white, fontSize: 18 }}/>
+                      </div>
+                      <p style={{ margin: 0, color: colors.font, fontSize: 15 }} className='pl-3 pr-4'>активен</p>
+                    </div>
+                    <div style={{ color: colors.dopFont }}><span style={{ fontWeight: 600, color: colors.font }}>{service.cost + '₽'}</span>/аккаунт</div>
+                  </>
+                ))
               ) : (
                 <>
                   <div style={{ backgroundColor: 'rgb(231, 218, 103, 0.4)' }} className='flex items-center rounded-full '>
