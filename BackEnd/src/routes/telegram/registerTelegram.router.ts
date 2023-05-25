@@ -2,8 +2,8 @@ import express, { Router, Request, Response } from "express";
 import {
   addCodeToWaitingForVerify,
   telegramUser,
-  UserSettings,
 } from "../../utils/telegram/telegramRegister";
+import type { UserSettings } from "../../utils/telegram/telegram";
 import { testProxyConnectivity } from "../../utils/telegram/utils";
 import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
