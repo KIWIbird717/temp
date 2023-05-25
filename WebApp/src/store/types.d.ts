@@ -17,11 +17,11 @@ export type smsServicesTypes = {
 }
 
 export type smsServiciesDataType = {
-  title: string,
-  balance: number | null,
-  countries: [{ id: number | string, name: string }] | null,
-  cost: null,
-  count: null
+  title: string | 'loading',
+  balance: number | null | 'loading',
+  countries: [{ id: number | string, name: string }] | null | 'loading',
+  cost: null | 'loading',
+  count: null | 'loading',
 }
 export interface IAppState {
   appPage: '1' | '2' | '3' | '4' | '5' | '6',

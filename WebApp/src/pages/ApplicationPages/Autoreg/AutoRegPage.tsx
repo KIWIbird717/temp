@@ -3,9 +3,6 @@ import { Card, Layout, Segmented } from 'antd'
 import { contentStyle } from '../../../global-style/layoutStyle'
 import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
 import { MCard } from '../../../components/Card/MCard'
-import img1 from '../../../images/img1.svg'
-import img2 from '../../../images/img2.svg'
-import img3 from '../../../images/img3.svg'
 import { AutoregHeader } from './AutoregHeader'
 import { NewFolderSettings } from './NewFolderSettings'
 import { AnimatePresence, motion } from 'framer-motion'
@@ -14,6 +11,11 @@ import { SmsServicies } from './SmsServicies'
 import { Col, Row } from 'antd';
 import { AddToFolderSettings } from './AddToFolderSettings'
 import { ManualSettings } from './ManualSettings'
+import { colors } from '../../../global-style/style-colors.module'
+
+import CreateNewFolderRoundedIcon from '@mui/icons-material/CreateNewFolderRounded';
+import FolderOpenRoundedIcon from '@mui/icons-material/FolderOpenRounded';
+import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 
 
 const { Content } = Layout
@@ -34,8 +36,11 @@ export const AutoRegPage: React.FC = () => {
       key: '1',
       label: (
         <div className=' h-[130px] flex flex-col items-center justify-center'>
-          <div className="object-conatin w-full h-[60px] mb-3">
-            <img className='h-full' src={img1} alt='img'/>
+          <div className="object-conatin w-full h-[60px] mb-3 flex flex-col items-center justify-center">
+            {/* <img className='h-full' src={img1} alt='img'/> */}
+            <div className="flex items-center justify-center w-[65px] h-[65px] bg-[#d7eafc] rounded-full">
+              <CreateNewFolderRoundedIcon style={{ color: colors.primary, fontSize: 40 }}/>
+            </div>
           </div>
           <p style={{ margin: '0 0' }} className='w-[90px] leading-[1.1]'>Новая папка</p>
         </div>
@@ -46,8 +51,11 @@ export const AutoRegPage: React.FC = () => {
       key: '2',
       label: (
         <div className=' h-[130px] flex flex-col items-center justify-center'>
-          <div className="object-conatin w-full h-[60px] mb-3">
-            <img className='h-full' src={img3} alt='img'/>
+          <div className="object-conatin w-full h-[60px] mb-3 flex flex-col items-center justify-center">
+            {/* <img className='h-full' src={img1} alt='img'/> */}
+            <div className="flex items-center justify-center w-[65px] h-[65px] bg-[#ffdcd0] rounded-full">
+              <FolderOpenRoundedIcon style={{ color: colors.accent, fontSize: 40 }}/>
+            </div>
           </div>
           <p style={{ margin: '0 0' }} className='w-[90px] leading-[1.1]'>Добавить</p>
         </div>
@@ -58,8 +66,11 @@ export const AutoRegPage: React.FC = () => {
       key: '3',
       label: (
         <div className=' h-[130px] flex flex-col items-center justify-center'>
-          <div className="object-conatin w-full h-[60px] mb-3">
-            <img className='h-full' src={img2} alt='img'/>
+          <div className="object-conatin w-full h-[60px] mb-3 flex flex-col items-center justify-center">
+            {/* <img className='h-full' src={img1} alt='img'/> */}
+            <div className="flex items-center justify-center w-[65px] h-[65px] bg-[#fff5c7] rounded-full">
+              <AssignmentRoundedIcon style={{ color: colors.accent2, fontSize: 40 }}/>
+            </div>
           </div>
           <p style={{ margin: '0 0' }} className='w-[90px] leading-[1.1]'>Ручной ввод</p>
         </div>
@@ -80,8 +91,8 @@ export const AutoRegPage: React.FC = () => {
 
       <Content className='flex flex-col gap-8'>
         <div className="w-full h-[400px]">
-          <Card className='w-full h-full bg-[#d29ded] flex items-center justify-center rounded-[20px]'>
-            <h1 className='text-[#e4b8e5] text-8xl font-black uppercase'>Тут будет банер</h1>
+          <Card className='w-full h-full bg-[#3d8de9] flex items-center justify-center rounded-[20px]'>
+            <h1 className='text-[#75a6df] text-8xl font-black uppercase'>Тут будет банер</h1>
           </Card>
         </div>
         <Row gutter={32}>
