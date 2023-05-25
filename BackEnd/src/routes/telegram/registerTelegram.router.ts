@@ -2,9 +2,9 @@ import express, { Router, Request, Response } from "express";
 import {
   addCodeToWaitingForVerify,
   telegramUser,
-} from "../../utils/telegram/telegramRegister";
-import type { UserSettings } from "../../utils/telegram/telegram";
-import { testProxyConnectivity } from "../../utils/telegram/utils";
+} from "../../utils/telegram1/telegramRegister";
+import type { UserSettings } from "../../utils/telegram1/telegram";
+import { testProxyConnectivity } from "../../utils/telegram1/utils";
 import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { updateUser } from "../../servises/RegisterUserDB/updateUser.servise";

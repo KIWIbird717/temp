@@ -1,6 +1,6 @@
 import { logErrorToFile } from "../errorHandler";
 import type { WaitingForVerify, AuthInterface } from "./telegram";
-import { TelegramClient } from "telegram";
+import { TelegramClient, Api } from "telegram";
 import {
   IAccountsManagerFolder,
   RegisterUserSchema,
@@ -13,29 +13,182 @@ import {
   submitPhone,
 } from "../smsService/smsActivate";
 
-export class Authorization {
-private email: string;
-public success: boolean; 
-public statistic: AuthInterface;
-private client: TelegramClient
+import { Service, Country } from "../smsService/smsActivate";
 
-  constructor(mail: string, clienter: TelegramClient) {
+interface UserAuth {
+  manual?: boolean;
+  servicePhone?: Service;
+  country?: Country;
+  phoneNumber?: string;
+}
+export class Authorization {
+  private email: string;
+  public success: boolean;
+  public statistic: AuthInterface;
+  private client: TelegramClient;
+  private apiId: number;
+  private apiHash: string;
+
+  constructor(
+    mail: string,
+    apiId: number,
+    apiHash: string
+  ) {
     this.email = mail;
     this.success = true;
-    this.client = clienter
+    this.apiHash = apiHash;
+    this.apiId = apiId;
   }
 
-
-
-  private async phoneCode(
-    isCodeViaApp: boolean,
-    manual: boolean
-  ): Promise<string | null> {
-    if (isCodeViaApp) {
-      logErrorToFile(new Error("CODE_VIA_APP"), "telegram", "warn", this.email);
-      this.success = false
-      return null;
+  public async authorization(params: UserAuth): Promise<boolean> {
+    if ((params.manual ?? false) === true) {
+      this.statistic.phone = params.phoneNumber;
+    } else {
+      const telegram_code = await getTelegramCode(params.servicePhone);
+      const phone = await rentPhoneRegistration(
+        params.servicePhone,
+        telegram_code,
+        params.country.id
+      );
+      this.statistic.utils.servicePhone = params.servicePhone;
+      this.statistic.utils.phoneId = phone.id;
+      this.statistic.phone = phone.phoneNumber;
     }
+
+    let isRegistrationRequired = false;
+    let termsOfService;
+
+    try {
+      const sendCodeResult = await this.client.invoke(
+        new Api.auth.SendCode({
+          phoneNumber: this.statistic.phone,
+          apiId: this.apiId,
+          apiHash: this.apiHash,
+          settings: new Api.CodeSettings({
+            allowFlashcall: false, // Force SMS by disabling flashcall
+            currentNumber: true, // Indicate that the phoneNumber is the current number of the user
+            allowAppHash: true,
+          }),
+        })
+      );
+
+      let phoneCodeHash = sendCodeResult["phoneCodeHash"];
+      let isCodeViaApp =
+        sendCodeResult["type"].className === "auth.SentCodeTypeApp";
+      const phoneCode = await this.phoneCode(params.manual ?? false);
+
+      if (phoneCode === null) {
+        logErrorToFile(
+          { message: "Code is empty" },
+          "telegram",
+          "error",
+          this.email
+        );
+        // Implement your handling logic here
+        return;
+      }
+
+      const result = await this.client.invoke(
+        new Api.auth.SignIn({
+          phoneNumber: this.statistic.phone,
+          phoneCodeHash,
+          phoneCode,
+        })
+      );
+
+      if (result instanceof Api.auth.AuthorizationSignUpRequired) {
+        isRegistrationRequired = true;
+        termsOfService = result.termsOfService;
+      }
+
+      if (isRegistrationRequired) {
+        let [firstName, lastName] = ["User", ""]; // Replace with logic to get user's first and last names
+
+        const { user } = (await this.client.invoke(
+          new Api.auth.SignUp({
+            phoneNumber: this.statistic.phone,
+            phoneCodeHash,
+            firstName,
+            lastName,
+          })
+        )) as Api.auth.Authorization;
+
+        if (termsOfService) {
+          await this.client.invoke(
+            new Api.help.AcceptTermsOfService({
+              id: termsOfService.id,
+            })
+          );
+        }
+
+        logErrorToFile(
+          { status: "success", details: { user: this.statistic.phone } },
+          "telegram",
+          "completed",
+          this.email
+        );
+      } else {
+        logErrorToFile(
+          { status: "success", details: { user: this.statistic.phone } },
+          "telegram",
+          "completed",
+          this.email
+        );
+      }
+    } catch (err) {
+      logErrorToFile(err, "telegram", "error", this.email);
+
+      const errorMessages = [
+        "PHONE_CODE_EMPTY",
+        "PHONE_CODE_EXPIRED",
+        "PHONE_CODE_INVALID",
+        "PHONE_NUMBER_INVALID",
+        "PHONE_NUMBER_UNOCCUPIED",
+        "SIGN_IN_FAILED",
+        "PHONE_NUMBER_BANNED",
+        "AUTH_KEY_UNREGISTERED",
+      ];
+
+      for (const errorMessage of errorMessages) {
+        if (err.message.includes(errorMessage)) {
+          switch (errorMessage) {
+            case "PHONE_NUMBER_BANNED":
+            case "PHONE_NUMBER_INVALID":
+            case "PHONE_CODE_EMPTY":
+              await submitPhone(
+                this.statistic.utils.servicePhone,
+                this.statistic.utils.phoneId,
+                false,
+                false
+              );
+              break;
+
+            case "PHONE_CODE_INVALID":
+              await submitPhone(
+                this.statistic.utils.servicePhone,
+                this.statistic.utils.phoneId,
+                false
+              );
+              break;
+
+            case "AUTH_KEY_UNREGISTERED":
+              break;
+
+            default:
+              break;
+          }
+          return false;
+        }
+      }
+      return true;
+    }
+  }
+
+  private async phoneCode(manual: boolean): Promise<string | null> {
+    // if (isCodeViaApp) {
+    //   logErrorToFile(new Error("CODE_VIA_APP"), "telegram", "warn", this.email);
+    //   this.success = false
+    // }
     if (manual === true) {
       const codeGenerator = waitForCode(this.statistic.phone);
       const code = await codeGenerator.next();
@@ -52,7 +205,7 @@ private client: TelegramClient
         "warn",
         this.email
       );
-      this.success = false
+      this.success = false;
       // Valid code from SMS
       await submitPhone(
         this.statistic.utils.servicePhone,
@@ -101,7 +254,11 @@ private client: TelegramClient
     }
 
     // If we don't recognize the error message, log it and continue running `autoRegister`
-    logErrorToFile(new Error(`Telegram register error: ${err}`), "telegram", "warn");
+    logErrorToFile(
+      new Error(`Telegram register error: ${err}`),
+      "telegram",
+      "warn"
+    );
     return false;
   }
 }

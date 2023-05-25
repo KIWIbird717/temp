@@ -14,7 +14,7 @@ interface ErrorWithStatus extends Error {
 }
 
 export async function logErrorToFile(
-  err: ErrorWithStatus,
+  err: ErrorWithStatus | any,
   service: ErrorService,
   type: ErrorType,
   email?: string // email is now optional
