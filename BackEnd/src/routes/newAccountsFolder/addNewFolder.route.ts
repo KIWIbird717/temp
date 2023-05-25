@@ -28,18 +28,16 @@ router.post('/add-new-folder', async (req: Request, res: Response) => {
   try {
     const { mail } = req.body
     const folder = req.body.folder
-  
+    console.log(folder)
     const result = await RegisterUserSchema.updateOne(
       { mail: mail },
       { $push: { accountsManagerFolder: folder } }
     )
-    // console.log(result)
     if (result.modifiedCount > 0) {
       return res.status(200).json(result)
     } else {
       return res.status(501).json('Ошибка при создании новой папки')
     }
-
   } catch(err) {
     return res.status(500).json(err)
   }

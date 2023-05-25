@@ -1,8 +1,4 @@
 import express, { Router, Request, Response } from "express";
-import {
-  RegisterUserSchema,
-  IAccountsManagerFolder
-} from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { updateUser } from "../../servises/RegisterUserDB/updateUser.servise";
 
 const router: Router = express.Router();

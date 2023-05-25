@@ -6,7 +6,7 @@ import { IRegisterUserSchema, IUserRes, RegisterUserSchema } from "./registerUse
  *
  * @param mail - user mail [string]
  * @param updateData - data you want to update [IRegisterUserSchema]
- * @returns updatedUser [new user DB field] || null on case of an error
+ * @returns updatedUser [new user DB field] || null in case of an error
  * 
  * @example 
  * updateUser('123@mail.ru', { nick: 'Oleg', password: 'newpassword' })

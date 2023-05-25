@@ -12,7 +12,7 @@ export interface IAccountsManagerFolder extends Document {
   dopTitle: string;
   accountsAmount: number;
   country: string;
-  latestActivity: Date;
+  latestActivity: Date | number;
   banned: number;
   accounts: [
     {
@@ -30,8 +30,8 @@ export interface IAccountsManagerFolder extends Document {
       telegramSession: string;
       apiId?: number;
       apiHash?: string;
-    },
-  ]
+    }
+  ];
 }
 
 
@@ -72,7 +72,7 @@ interface IRecentAutoregActivity extends Document {
 }
 
 /**
- * Global user interface for MongoDB
+ * MAIN USER INTERFACE for MongoDB and all application.
  */
 export interface IRegisterUserSchema extends Document {
   nick: string;
@@ -108,6 +108,8 @@ export interface IUserRes {
   }];
   __v: number;
 }
+
+// There are Schemas for MongoDB
 
 interface IRegisterUserModel extends Model<IRegisterUserSchema> {}
 

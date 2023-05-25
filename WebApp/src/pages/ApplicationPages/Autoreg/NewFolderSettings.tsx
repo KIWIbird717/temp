@@ -180,8 +180,8 @@ export const NewFolderSettings = ({current, value}: propsType) => {
   
         const newFolder = {
           key: maxFolderKey,
-          apiHash: apiHashInput.label,
           apiId: apiIdInput.label,
+          apiHash: apiHashInput.label,
           folder: folderTitle.label,
           dopTitle: folderDescription.label,
           accountsAmount: 0,
@@ -190,16 +190,41 @@ export const NewFolderSettings = ({current, value}: propsType) => {
           banned: 0,
           accounts: []
         }
-  
+        console.log(newFolder)
         const res = await axios.post(url, {mail: userMail, folder: newFolder})
+          .then((res) => {
+            return 200
+          })
+          .catch((err) => {
+            console.error(err)
+            if (err.response.statusText === "Internal Server Error") {
+              notification['error']({
+                message: 'Ошибка при внесении новой папки в базу данных',
+                description: 'Сервер базы данных перегружен, поробуйте позже',
+                placement: 'bottomRight'
+              })
+            } else {
+              notification['error']({
+                message: 'Ошибка при внесении новой папки в базу данных',
+                description: 'Возможно ошибка сервера, попробуйте позже',
+                placement: 'bottomRight'
+              })
+            }
+            return
+          })
         // Setting up new folders
         if (userMail) {
           await accountsFoldersFromBD(userMail)
+          if (res === 200) return newFolder
         }
-
-        return newFolder
       } catch (err: any) {
         if (err.response.data === 'Ошибка при создании новой папки') {
+          notification['error']({
+            message: 'Ошибка при создании новой папки',
+            description: 'Измените параметры папки или попробуйте позже. Возможно ошибка сервера',
+            placement: 'bottomRight'
+          })
+        } else {
           notification['error']({
             message: 'Ошибка при создании новой папки',
             description: 'Измените параметры папки или попробуйте позже. Возможно ошибка сервера',
@@ -214,6 +239,7 @@ export const NewFolderSettings = ({current, value}: propsType) => {
     const registerAccounts = async () => {
       const newAddedFolder = await addNewFolder()
       if (newAddedFolder) {
+        console.log(newAddedFolder)
         try {
           const tgaAutoregUrl = `${process.env.REACT_APP_SERVER_END_POINT}/telegram/auto/register-user`
     
