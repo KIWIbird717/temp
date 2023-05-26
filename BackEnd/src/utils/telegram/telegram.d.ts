@@ -1,44 +1,9 @@
-import { Country, Service } from "../smsService/smsActivate";
 import { ProxyInterface } from "telegram/network/connection/TCPMTProxy";
+import { Service, Country } from "../smsService/smsActivate";
 
-export interface WaitingForVerify {
+interface WaitingForVerify {
   phoneNumber: string;
   code: string | number;
-}
-export interface AuthInterface {
-  phone: string;
-  utils: {
-    servicePhone?: Service;
-    phoneId?: string;
-  };
-  manual?: boolean;
-  userExists: boolean;
-}
-export interface telegramUserShema {
-  phone: string;
-  utils: {
-    phoneId?: string;
-    servicePhone?: Service;
-    country?: Country;
-    sessionString?: any;
-  };
-  manual?: boolean;
-  userExists: boolean;
-  tgUserStats: {
-    username: string;
-    fisrtName: string;
-    lastName: string;
-    description: string;
-  };
-}
-
-export interface UserSettings {
-  language?: "ru" | "en";
-  device?: DeviceInfo;
-  proxy?: ProxyInterface;
-  phone: phoneVerify;
-  telegramUser: userStatistic;
-  manual?: boolean;
 }
 
 interface DeviceInfo {
@@ -58,4 +23,33 @@ interface userStatistic {
   lastName: string;
   userName: string;
   userString?: string;
+}
+
+export interface UserSettings {
+  language?: "ru" | "en";
+  device?: DeviceInfo;
+  proxy?: ProxyInterface;
+  phone: phoneVerify;
+  telegramUser: userStatistic;
+  manual?: boolean;
+}
+
+interface telegramUserShema {
+  phone: string;
+  utils: {
+    phoneId?: string;
+    servicePhone?: Service;
+    country?: Country;
+    sessionString?: any;
+  };
+  manual?: boolean;
+  userExists: boolean;
+  tgUserStats: {
+    username: string;
+    fisrtName: string;
+    lastName: string;
+    description: string;
+  };
+  email: string;
+  success: boolean;
 }

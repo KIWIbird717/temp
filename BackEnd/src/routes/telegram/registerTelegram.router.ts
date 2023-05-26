@@ -2,9 +2,9 @@ import express, { Router, Request, Response } from "express";
 import {
   addCodeToWaitingForVerify,
   telegramUser,
-} from "../../utils/telegram1/telegramRegister";
-import type { UserSettings } from "../../utils/telegram1/telegram";
-import { testProxyConnectivity } from "../../utils/telegram1/utils";
+} from "../../utils/telegram/telegramRegister";
+import type { UserSettings } from "../../utils/telegram/telegram";
+import { testProxyConnectivity } from "../../utils/telegram/utils";
 import { IUserRes } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { RegisterUserSchema } from "../../servises/RegisterUserDB/registerUserSchema.servise";
 import { updateUser } from "../../servises/RegisterUserDB/updateUser.servise";
@@ -130,8 +130,8 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     }
   }
 
-  const newUser = new telegramUser(apiId, apiHash, userSettings);
-  await newUser.createTelegramUser();
+  const newUser = new telegramUser(apiId, apiHash, email, userSettings);
+  await newUser.authorization();
 
   const savedUser = await newUser.saveUser();
 
@@ -162,15 +162,8 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     folder.key === req.body.proxyFolderKey ? proxyFolderData : folder
   );
 
-  const errorChecker = await newUser.getError();
-  const respErr: string = errorChecker.error.join("\n");
-
-  if (process.env.DEBUG === "true") {
-    console.log("\x1B[31m", `[ERROR]: ${respErr.toString()}`);
-  }
-
-  if (errorChecker.fatalError) {
-    return res.status(500).json({ error: respErr });
+  if (newUser.statistic.success === false) {
+    return res.status(500).json({ error: "Account not registered" });
   }
 
   updateUser(email, {
@@ -178,7 +171,7 @@ router.post("/auto/register-user", async (req: Request, res: Response) => {
     proxyManagerFolder: updatedProxyFolders,
   });
 
-  return res.status(200).json({ message: "Success", error: respErr ?? "" });
+  return res.status(200).json({ message: "Success"});
 });
 
 /*
@@ -204,166 +197,170 @@ What need to containe inside body:
 }
 */
 
-router.post("/manual/register-user", async (req: Request, res: Response) => {
-  const { email, tgFolderKey } = req.body.user;
-  let proxyFolderData;
-  let apiId = 0;
-  let apiHash = "";
-  const userData: IUserRes | null = await RegisterUserSchema.findOne({
-    mail: email,
-  }); // All data about user
 
-  if (!userData) {
-    throw new Error("User not found in the database");
-  }
-  const folderData = userData.accountsManagerFolder.find(
-    (folder) => folder.key === tgFolderKey
-  ); // Folder of user
-  if (!folderData) {
-    throw new Error("Telegram folder not exists");
-  }
-  if (req.body.user.apiId === "me") {
-    apiId = folderData.apiId;
-  } else {
-    apiId = req.body.user.apiId;
-  }
-  if (req.body.user.apiHash === "me") {
-    apiHash = folderData.apiHash;
-  } else {
-    apiHash = req.body.user.apiHash;
-  }
 
-  const userSettings: UserSettings = {
-    telegramUser: {
-      firstName: req.body.telegramUser.firstName,
-      lastName: req.body.telegramUser.lastName,
-      userName:
-        req.body.telegramUser.userName ??
-        `${req.body.telegramUser.firstName}_${req.body.telegramUser.lastName}`,
-    },
-    phone: {
-      phone: req.body.telegramUser.phone,
-    },
-    manual: true,
-  };
+// router.post("/manual/register-user", async (req: Request, res: Response) => {
+//   const { email, tgFolderKey } = req.body.user;
+//   let proxyFolderData;
+//   let apiId = 0;
+//   let apiHash = "";
+//   const userData: IUserRes | null = await RegisterUserSchema.findOne({
+//     mail: email,
+//   }); // All data about user
 
-  const autoGenerate = req.body.telegramUser.auto ?? true;
+//   if (!userData) {
+//     throw new Error("User not found in the database");
+//   }
+//   const folderData = userData.accountsManagerFolder.find(
+//     (folder) => folder.key === tgFolderKey
+//   ); // Folder of user
+//   if (!folderData) {
+//     throw new Error("Telegram folder not exists");
+//   }
+//   if (req.body.user.apiId === "me") {
+//     apiId = folderData.apiId;
+//   } else {
+//     apiId = req.body.user.apiId;
+//   }
+//   if (req.body.user.apiHash === "me") {
+//     apiHash = folderData.apiHash;
+//   } else {
+//     apiHash = req.body.user.apiHash;
+//   }
 
-  let userAvatar;
+//   const userSettings: UserSettings = {
+//     telegramUser: {
+//       firstName: req.body.telegramUser.firstName,
+//       lastName: req.body.telegramUser.lastName,
+//       userName:
+//         req.body.telegramUser.userName ??
+//         `${req.body.telegramUser.firstName}_${req.body.telegramUser.lastName}`,
+//     },
+//     phone: {
+//       phone: req.body.telegramUser.phone,
+//     },
+//     manual: true,
+//   };
 
-  if (autoGenerate === true) {
-    // Implement for auto generating telegramUser
-    const language = req.body.user.language;
-    userSettings.language = language ?? "en";
-    const requestUrl =
-      language === "ru"
-        ? "https://randomuser.me/api/?results=1&inc=name,gender,email,nat,picture&noinfo?nat=RS"
-        : "https://randomuser.me/api/?results=1&inc=name,gender,email,nat,picture&noinfo?nat=US";
+//   const autoGenerate = req.body.telegramUser.auto ?? true;
 
-    const response = await fetch(requestUrl);
-    const data = await response.json();
-    const randomUser = data.results[0];
+//   let userAvatar;
 
-    userSettings.telegramUser.firstName = randomUser.name.first;
-    userSettings.telegramUser.lastName = randomUser.name.last;
-    userSettings.telegramUser.userName = `${randomUser.name.first}_${randomUser.name.last}`;
-    userAvatar = randomUser.picture.large;
-  }
+//   if (autoGenerate === true) {
+//     // Implement for auto generating telegramUser
+//     const language = req.body.user.language;
+//     userSettings.language = language ?? "en";
+//     const requestUrl =
+//       language === "ru"
+//         ? "https://randomuser.me/api/?results=1&inc=name,gender,email,nat,picture&noinfo?nat=RS"
+//         : "https://randomuser.me/api/?results=1&inc=name,gender,email,nat,picture&noinfo?nat=US";
 
-  if (req.body.telegramUser.photo) {
-    userAvatar = req.body.telegramUser.photo;
-  }
+//     const response = await fetch(requestUrl);
+//     const data = await response.json();
+//     const randomUser = data.results[0];
 
-  // if (!/^[a-zA-Z0-9_]+$/.test(userSettings.telegramUser.userName)) {
-  //   throw new Error("Not correct username or it's containe non latin alphabet");
-  // }
+//     userSettings.telegramUser.firstName = randomUser.name.first;
+//     userSettings.telegramUser.lastName = randomUser.name.last;
+//     userSettings.telegramUser.userName = `${randomUser.name.first}_${randomUser.name.last}`;
+//     userAvatar = randomUser.picture.large;
+//   }
 
-  // Check if the proxyFolderKey is provided
-  if (req.body.proxyFolderKey) {
-    // Find the folder with the specified proxyFolderKey in the proxyManagerFolder array
-    proxyFolderData = userData.proxyManagerFolder.find(
-      (folder) => folder.key === req.body.proxyFolderKey
-    );
+//   if (req.body.telegramUser.photo) {
+//     userAvatar = req.body.telegramUser.photo;
+//   }
 
-    if (proxyFolderData) {
-      // Check if a proxy exists within the folder
-      const proxy = proxyFolderData.proxies.find(
-        (proxy) => proxy.key === req.body.proxyKey
-      );
+//   // if (!/^[a-zA-Z0-9_]+$/.test(userSettings.telegramUser.userName)) {
+//   //   throw new Error("Not correct username or it's containe non latin alphabet");
+//   // }
 
-      if (proxy) {
-        // Prepare the proxy settings
-        const proxySettings = {
-          ip: proxy.ip,
-          port: parseInt(proxy.port),
-          username: proxy.login,
-          password: proxy.pass,
-        };
+//   // Check if the proxyFolderKey is provided
+//   if (req.body.proxyFolderKey) {
+//     // Find the folder with the specified proxyFolderKey in the proxyManagerFolder array
+//     proxyFolderData = userData.proxyManagerFolder.find(
+//       (folder) => folder.key === req.body.proxyFolderKey
+//     );
 
-        // Test the proxy connectivity
-        const isProxyWorking = await testProxyConnectivity(proxySettings);
+//     if (proxyFolderData) {
+//       // Check if a proxy exists within the folder
+//       const proxy = proxyFolderData.proxies.find(
+//         (proxy) => proxy.key === req.body.proxyKey
+//       );
 
-        if (isProxyWorking) {
-          // Assign the proxy to the userSettings object with the ProxyInterface format
-          userSettings.proxy = proxySettings;
+//       if (proxy) {
+//         // Prepare the proxy settings
+//         const proxySettings = {
+//           ip: proxy.ip,
+//           port: parseInt(proxy.port),
+//           username: proxy.login,
+//           password: proxy.pass,
+//         };
 
-          // Update the proxy status to "success"
-          proxy.status = "success";
-        } else {
-          // Update the proxy status to "error"
-          proxy.status = "error";
-          throw new Error(
-            "The proxy is not working with either SOCKS4 or SOCKS5"
-          );
-        }
-      } else {
-        throw new Error("Proxy not found");
-      }
-    } else {
-      throw new Error("Proxy folder not found");
-    }
-  }
+//         // Test the proxy connectivity
+//         const isProxyWorking = await testProxyConnectivity(proxySettings);
 
-  const newUser = new telegramUser(apiId, apiHash, userSettings);
+//         if (isProxyWorking) {
+//           // Assign the proxy to the userSettings object with the ProxyInterface format
+//           userSettings.proxy = proxySettings;
 
-  await newUser.createTelegramUser();
+//           // Update the proxy status to "success"
+//           proxy.status = "success";
+//         } else {
+//           // Update the proxy status to "error"
+//           proxy.status = "error";
+//           throw new Error(
+//             "The proxy is not working with either SOCKS4 or SOCKS5"
+//           );
+//         }
+//       } else {
+//         throw new Error("Proxy not found");
+//       }
+//     } else {
+//       throw new Error("Proxy folder not found");
+//     }
+//   }
 
-  const savedUser = await newUser.saveUser();
+//   const newUser = new telegramUser(apiId, apiHash, userSettings);
 
-  if (userAvatar) {
-    await newUser.changeAvatar(userAvatar);
-    savedUser.avatar = userAvatar;
-  }
+//   await newUser.createTelegramUser();
 
-  if (!savedUser.key) {
-    savedUser.key = "0";
-  }
+//   const savedUser = await newUser.saveUser();
 
-  if (!(req.body.user.apiId === "me")) {
-    savedUser.apiId = req.body.user.apiId;
-  }
-  if (!(req.body.user.apiHash === "me")) {
-    savedUser.apiHash = req.body.user.apiHash;
-  }
+//   if (userAvatar) {
+//     await newUser.changeAvatar(userAvatar);
+//     savedUser.avatar = userAvatar;
+//   }
 
-  if (req.body.user.proxyFolderKey) {
-    savedUser.proxy = req.body.user.proxyFolderKey;
-  }
+//   if (!savedUser.key) {
+//     savedUser.key = "0";
+//   }
 
-  folderData.accounts.push(savedUser);
+//   if (!(req.body.user.apiId === "me")) {
+//     savedUser.apiId = req.body.user.apiId;
+//   }
+//   if (!(req.body.user.apiHash === "me")) {
+//     savedUser.apiHash = req.body.user.apiHash;
+//   }
 
-  // Update the proxyManagerFolder with the modified proxyFolderData
-  const updatedProxyFolders = userData.proxyManagerFolder.map((folder) =>
-    folder.key === req.body.proxyFolderKey ? proxyFolderData : folder
-  );
+//   if (req.body.user.proxyFolderKey) {
+//     savedUser.proxy = req.body.user.proxyFolderKey;
+//   }
 
-  updateUser(email, {
-    accountsManagerFolder: [folderData],
-    proxyManagerFolder: updatedProxyFolders,
-  });
+//   folderData.accounts.push(savedUser);
 
-  return res.status(200).json({ message: "Success" });
-});
+//   // Update the proxyManagerFolder with the modified proxyFolderData
+//   const updatedProxyFolders = userData.proxyManagerFolder.map((folder) =>
+//     folder.key === req.body.proxyFolderKey ? proxyFolderData : folder
+//   );
+
+//   updateUser(email, {
+//     accountsManagerFolder: [folderData],
+//     proxyManagerFolder: updatedProxyFolders,
+//   });
+
+//   return res.status(200).json({ message: "Success" });
+// });
+
+
 
 router.post("/manual/add-code", async (req: Request, res: Response) => {
   const { code, phone } = req.query;
