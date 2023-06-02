@@ -185,3 +185,48 @@
     at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
     at processTicksAndRejections (node:internal/process/task_queues:96:5)
 
+ 
+ | Time: Wed May 31 2023 00:22:38 GMT+0300 (Moscow Standard Time)
+ | Error: socket hang up
+ | Stack: Error: socket hang up
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketOnEnd (node:_http_client:466:9)
+    at TLSSocket.emit (node:events:538:35)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Wed May 31 2023 00:22:43 GMT+0300 (Moscow Standard Time)
+ | Error: socket hang up
+ | Stack: Error: socket hang up
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketOnEnd (node:_http_client:466:9)
+    at TLSSocket.emit (node:events:538:35)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Wed May 31 2023 00:22:49 GMT+0300 (Moscow Standard Time)
+ | Error: socket hang up
+ | Stack: Error: socket hang up
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketOnEnd (node:_http_client:466:9)
+    at TLSSocket.emit (node:events:538:35)
+    at TLSSocket.emit (node:domain:475:12)
+
