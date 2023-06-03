@@ -28,4 +28,4 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 1. Do not foget to remove `cors policy` in `src/middlewares/login.moddleware.ts`
 2. While testing set REACT_APP_SERVER_END_POINT=http://localhost:8080
-3. On release set it to REACT_APP_SERVER_END_POINT=http://81.200.152.82:8080
+3. On release set it to REACT_APP_SERVER_END_POINT=http://94.228.115.40:8080
