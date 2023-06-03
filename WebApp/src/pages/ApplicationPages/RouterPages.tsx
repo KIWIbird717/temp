@@ -8,6 +8,7 @@ import { LogsPage } from './Logs/LogsPage'
 import { ProxyManagerPage } from './ProxyManager/ProxyManagerPage'
 import { SettingsPage } from './Settings/SettingsPage'
 import { WarmingUpPage } from './WarmingUp/WarmingUpPage'
+import { ParsingPage } from './ParsingPage/ParsingPage'
 
 /**
  * Routing system for application
@@ -30,8 +31,9 @@ export const RouterPages = () => {
       {page === '2' && <AccountsManagerPage />}
       {page === '3' && <ProxyManagerPage />}
       {page === '4' && <WarmingUpPage />}
-      {page === '5' && <LogsPage />}
-      {page === '6' && <SettingsPage />}
+      {page === '5' && <ParsingPage />}
+      {page === '6' && <LogsPage />}
+      {page === '7' && <SettingsPage />}
     </>
   )
 }

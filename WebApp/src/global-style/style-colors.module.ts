@@ -26,7 +26,7 @@ export const colors = {
   accent2: yellow.primary,
   danger: 'rgb(255, 77, 79)',
   dangerBg: 'rgba(255, 77, 79, 0.1)',
-  background: '#fff',
+  background: '#F5F5F8',
   white: '#FFFFFF',
   font: '#393D55',
   dopFont: '#888B99',

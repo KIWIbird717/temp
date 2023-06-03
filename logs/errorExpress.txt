@@ -230,3 +230,633 @@
     at TLSSocket.emit (node:events:538:35)
     at TLSSocket.emit (node:domain:475:12)
 
+ 
+ | Time: Sat Jun 03 2023 03:33:01 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:33:01 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:40:24 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:40:24 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:44:12 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:44:13 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:44:37 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:44:37 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:45:01 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:45:01 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:45:31 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:45:31 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:45:39 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:45:39 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:46:02 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:46:02 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:46:34 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:46:34 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:48:10 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:48:10 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:48:37 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:48:37 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:49:15 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:49:15 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:52:05 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:52:05 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:53:06 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:53:06 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:53:43 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:53:44 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:59:29 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 03:59:30 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:26:23 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:26:23 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:27:22 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:27:22 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:30:56 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:30:57 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:36:37 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:36:38 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:53:14 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Sat Jun 03 2023 04:53:14 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+

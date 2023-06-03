@@ -24,7 +24,7 @@ export type smsServiciesDataType = {
   count: null | 'loading',
 }
 export interface IAppState {
-  appPage: '1' | '2' | '3' | '4' | '5' | '6',
+  appPage: '1' | '2' | '3' | '4' | '5' | '6' | '7' | string,
   accountsManagerFolder: React.Key | null,
   proxyManagerFolder: React.Key | null,
   userAvatar: string | null,

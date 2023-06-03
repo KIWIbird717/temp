@@ -7,7 +7,7 @@ export const NoAccounts = () => {
   const dispatch = useDispatch()
 
   return (
-    <div className='flex flex-col gap-2 items-center justify-center'>
+    <div className='flex flex-col gap-2 items-center justify-center h-[300px]'>
       <div style={{ textAlign: 'center' }}>
         <SmileOutlined style={{ fontSize: 20 }} />
         <p>Тут пока нет зарегестрированных аккаунтов</p>

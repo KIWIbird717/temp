@@ -17,7 +17,7 @@ const siderStyle: React.CSSProperties = {
   color: '#fff',
   backgroundColor: colors.white,
   padding: '0 20px',
-  borderRight: `1px solid ${colors.stroke}`,
+  // borderRight: `1px solid ${colors.stroke}`,
   overflow: 'auto',
   height: '100vh',
   position: 'fixed',

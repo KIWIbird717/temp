@@ -11,7 +11,7 @@ import {
   LockOutlined,
   ExclamationCircleFilled,
   CodeOutlined,
-  ContactsTwoTone
+  BuildOutlined,
 } from '@ant-design/icons';
 import { colors } from '../../global-style/style-colors.module';
 import { useDispatch, useSelector } from 'react-redux';
@@ -52,10 +52,11 @@ export const SiderComponent: React.FC = () => {
       getItem('Менеджер аккаунтов', '2', <UsergroupAddOutlined />, null, null, () => setItem("2"), menuItemsStyle),
       getItem('Менеджер прокси', '3', <LockOutlined />, null, null, () => setItem("3"), menuItemsStyle),
       getItem('Прогрев', '4', <MessageOutlined />, null, null, () => setItem("4"), menuItemsStyle),
-      getItem('Логи', '5', <CodeOutlined />, null, null, () => setItem("5"), menuItemsStyle),
+      getItem('Парсинг', '5', <BuildOutlined />, null, null, () => setItem("5"), menuItemsStyle),
   
     getItem('', 'grp2', null, [
-      getItem('Настройки', '6', <SettingOutlined />, null, null, () => setItem("6"), menuItemsStyle),
+      getItem('Логи', '6', <CodeOutlined />, null, null, () => setItem("6"), menuItemsStyle),
+      getItem('Настройки', '7', <SettingOutlined />, null, null, () => setItem("7"), menuItemsStyle),
     ], 'group')
   ]
 
@@ -63,7 +64,7 @@ export const SiderComponent: React.FC = () => {
     getItem('', 'grp3', null, [ 
       getItem(
         'Выход', 
-        '6', 
+        '8', 
         <LogoutOutlined />, 
         null, 
         null, 
@@ -71,7 +72,7 @@ export const SiderComponent: React.FC = () => {
         {
           marginTop: 'fillAvaliable',
           color: colors.danger, 
-          backgroundColor: hoveredKey === '6' ? colors.dangerBg : colors.white,
+          backgroundColor: hoveredKey === '8' ? colors.dangerBg : colors.white,
           ...menuItemsStyle
         }, 
         handleMenuItemMouseEnter, 

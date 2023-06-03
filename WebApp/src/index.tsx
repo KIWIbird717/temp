@@ -6,7 +6,6 @@ import { ConfigProvider } from 'antd'
 import { colors } from './global-style/style-colors.module';
 import { Provider } from 'react-redux'
 import store from './store/store';
-import { ThemeProvider } from '@emotion/react';
 
 
 const root = ReactDOM.createRoot(
