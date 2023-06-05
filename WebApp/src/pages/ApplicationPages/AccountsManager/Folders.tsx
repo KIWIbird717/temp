@@ -17,8 +17,6 @@ import type { DragEndEvent } from '@dnd-kit/core';
 import { DndContext } from '@dnd-kit/core';
 import { FolderRow } from './FolderRow'
 import { ColumnsType } from 'antd/es/table'
-import { MSelect } from '../../../components/Select/MSelect'
-import { MSearch } from '../../../components/Search/MSearch'
 import { useSelector, useDispatch } from 'react-redux'
 import { StoreState } from '../../../store/store'
 import { setUserManagerFolders } from '../../../store/userSlice'
@@ -34,7 +32,7 @@ interface IEditButton {
 }
 
 export const Folders = () => {
-  const [messageApi, contextHolder] = message.useMessage()
+  const [messageApi] = message.useMessage()
 
   const dispatch = useDispatch()
   const folders = useSelector((state: StoreState) => state.user.userManagerFolders)

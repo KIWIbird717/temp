@@ -59,6 +59,91 @@ interface IProxyManagerFolder extends Document {
   ];
 }
 
+
+/**
+ * Interface for Parsing manager
+ */
+interface IParsingManagerFolders {
+  key: string
+  title: string
+  dopTitle: string
+  latestEdit: Date
+  type: string
+  accounts: [
+    {
+      account_id: number 
+      fullInfo: {
+        id: number
+        is_self: boolean
+        contact: boolean
+        mutual_contact: boolean
+        deleted: boolean
+        bot: boolean
+        bot_chat_history: boolean
+        bot_nochats: boolean
+        verified: boolean
+        restricted: boolean
+        min: boolean
+        bot_inline_geo: boolean
+        support: boolean
+        scam: boolean
+        fake: boolean
+        bot_attach_menu: boolean
+        premium: boolean
+        attach_menu_enabled: boolean
+        access_hash: string
+        first_name: string
+        last_name: string
+        username: string
+        phone: string
+        bot_info_version: string
+        restriction_reason: string
+        bot_inline_placeholder: string
+        lang_code: string
+        emoji_status: string
+        usernames: string
+      }
+    }
+  ]
+  groups: [
+    {
+      group_id: number 
+      group_name: string
+      fullInfo: {
+        id: number
+        is_self: boolean
+        contact: boolean
+        mutual_contact: boolean
+        deleted: boolean
+        bot: boolean
+        bot_chat_history: boolean
+        bot_nochats: boolean
+        verified: boolean
+        restricted: boolean
+        min: boolean
+        bot_inline_geo: boolean
+        support: boolean
+        scam: boolean
+        fake: boolean
+        bot_attach_menu: boolean
+        premium: boolean
+        attach_menu_enabled: boolean
+        access_hash: string
+        first_name: string
+        last_name: string
+        username: string
+        phone: string
+        bot_info_version: string
+        restriction_reason: string
+        bot_inline_placeholder: string
+        lang_code: string
+        emoji_status: string
+        usernames: string
+      }
+    }
+  ]
+}
+
 /**
  * interface for `Авторегистратор` page
  * Sidebar component with recent user`s registered accounts
@@ -83,6 +168,7 @@ export interface IRegisterUserSchema extends Document {
   accountsManagerFolder: IAccountsManagerFolder[];
   proxyManagerFolder: IProxyManagerFolder[];
   recentAutoregActivity: IRecentAutoregActivity[];
+  parsingManagerFolder: IParsingManagerFolders[];
 }
 
 /**
@@ -99,6 +185,7 @@ export interface IUserRes {
   accountsManagerFolder: IAccountsManagerFolder[];
   proxyManagerFolder: IProxyManagerFolder[];
   recentAutoregActivity: IRecentAutoregActivity[];
+  parsingManagerFolder: IParsingManagerFolders[];
   createdAt: Date;
   updatedAt: Date;
   errorList: [{
@@ -164,6 +251,87 @@ const ProxyManagerFolderSchema = new Schema<IProxyManagerFolder>({
   ],
 });
 
+const ParsingManagerFoldersSchema = new Schema<IParsingManagerFolders>({
+  key: String,
+  title: String,
+  dopTitle: String,
+  latestEdit: Date,
+  type: String,
+  accounts: [
+    {
+      account_id: Number,
+      fullInfo: {
+        id: Number,
+        is_self: Boolean,
+        contact: Boolean,
+        mutual_contact: Boolean,
+        deleted: Boolean,
+        bot: Boolean,
+        bot_chat_history: Boolean,
+        bot_nochats: Boolean,
+        verified: Boolean,
+        restricted: Boolean,
+        min: Boolean,
+        bot_inline_geo: Boolean,
+        support: Boolean,
+        scam: Boolean,
+        fake: Boolean,
+        bot_attach_menu: Boolean,
+        premium: Boolean,
+        attach_menu_enabled: Boolean,
+        access_hash: String,
+        first_name: String,
+        last_name: String,
+        username: String,
+        phone: String,
+        bot_info_version: String,
+        restriction_reason: String,
+        bot_inline_placeholder: String,
+        lang_code: String,
+        emoji_status: String,
+        usernames: String,
+      }
+    }
+  ],
+  groups: [
+    {
+      group_id: Number,
+      group_name: String,
+      fullInfo: {
+        id: Number,
+        is_self: Boolean,
+        contact: Boolean,
+        mutual_contact: Boolean,
+        deleted: Boolean,
+        bot: Boolean,
+        bot_chat_history: Boolean,
+        bot_nochats: Boolean,
+        verified: Boolean,
+        restricted: Boolean,
+        min: Boolean,
+        bot_inline_geo: Boolean,
+        support: Boolean,
+        scam: Boolean,
+        fake: Boolean,
+        bot_attach_menu: Boolean,
+        premium: Boolean,
+        attach_menu_enabled: Boolean,
+        access_hash: String,
+        first_name: String,
+        last_name: String,
+        username: String,
+        phone: String,
+        bot_info_version: String,
+        restriction_reason: String,
+        bot_inline_placeholder: String,
+        lang_code: String,
+        emoji_status: String,
+        usernames: String,
+      }
+    }
+  ]
+})
+
 const RecentAutoregActivitySchema = new Schema<IRecentAutoregActivity>({
   key: String,
   status: { type: String, enum: ["success", "warning", "error"] },
@@ -184,6 +352,7 @@ const registerUserSchema: Schema = new Schema(
       require: false,
     },
     proxyManagerFolder: { type: [ProxyManagerFolderSchema], require: false },
+    parsingManagerFolder: { type: [ParsingManagerFoldersSchema], require: false },
     recentAutoregActivity: {
       type: [RecentAutoregActivitySchema],
       require: false,

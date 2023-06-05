@@ -16,6 +16,7 @@ const CreateNewUser = async (props: IRegisterUserSchema): Promise<IRegisterUserS
     defaultAppId: props.defaultAppId,
     accountsManagerFolder: props.accountsManagerFolder,
     proxyManagerFolder: props.proxyManagerFolder,
+    parsingManagerFolder: props.parsingManagerFolder,
     recentAutoregActivity: props.recentAutoregActivity
   })
   const savePost = await post.save()

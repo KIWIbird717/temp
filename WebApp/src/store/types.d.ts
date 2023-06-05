@@ -1,6 +1,16 @@
 import { IHeaderType } from "../pages/ApplicationPages/AccountsManager/Collumns"
 import type { smsServicesTypes } from '../globalTypes'
 
+export interface IParseFolders {
+  key: React.Key
+  title: string,
+  dopTitle: string
+  latestEdit: Date
+  type: 'accounts' | 'groups'
+  accounts: []
+  groups: []
+}
+
 export interface IUserState {
   nick: string | null,
   mail: string | null,
@@ -10,6 +20,7 @@ export interface IUserState {
   isUserLogined: boolean,
   userManagerFolders: IHeaderType[] | null,
   userProxyFolders: IProxyHeaderType[] | null
+  userParsingFolders: IParseFolders[] | null
 }
 
 export type smsServicesTypes = {
@@ -27,6 +38,7 @@ export interface IAppState {
   appPage: '1' | '2' | '3' | '4' | '5' | '6' | '7' | string,
   accountsManagerFolder: React.Key | null,
   proxyManagerFolder: React.Key | null,
+  parseManagerFolder: React.Key | null,
   userAvatar: string | null,
   smsServisies: smsServicesTypes[] | null,
   smsServiciesData: smsServiciesDataType[] | null

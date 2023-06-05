@@ -7,7 +7,7 @@ const router: Router = express.Router()
 
 router.post('/registration', async (req: Request, res: Response) => {
   // Get the data from the request body
-  const { nick, mail, password, defaultAppHash, defaultAppId, accountsManagerFolder, proxyManagerFolder, recentAutoregActivity }: IRegisterUserSchema = req.body
+  const { nick, mail, password, defaultAppHash, defaultAppId, accountsManagerFolder, proxyManagerFolder, parsingManagerFolder, recentAutoregActivity }: IRegisterUserSchema = req.body
 
   // Check if user already exists
   const existingUser: IUserRes | null = await RegisterUserSchema.findOne({$or: [{ mail }]})
@@ -26,6 +26,7 @@ router.post('/registration', async (req: Request, res: Response) => {
             defaultAppId: existingUserAfterReg.defaultAppId,
             accountsManagerFolder: existingUserAfterReg.accountsManagerFolder,
             proxyManagerFolder: existingUserAfterReg.proxyManagerFolder,
+            parsingManagerFolder: existingUserAfterReg.parsingManagerFolder,
             recentAutoregActivity: existingUserAfterReg.recentAutoregActivity,
             createdAt: existingUserAfterReg.createdAt,
             updatedAt: existingUserAfterReg.updatedAt,
@@ -46,6 +47,7 @@ router.post('/registration', async (req: Request, res: Response) => {
     defaultAppId,
     accountsManagerFolder, 
     proxyManagerFolder, 
+    parsingManagerFolder,
     recentAutoregActivity
   } as IRegisterUserSchema)
   const existingUserAfterReg: IUserRes = await RegisterUserSchema.findOne({$or: [{ mail }]})
@@ -60,6 +62,7 @@ router.post('/registration', async (req: Request, res: Response) => {
         defaultAppId: existingUserAfterReg.defaultAppId,
         accountsManagerFolder: existingUserAfterReg.accountsManagerFolder,
         proxyManagerFolder: existingUserAfterReg.proxyManagerFolder,
+        parsingManagerFolder: existingUserAfterReg.parsingManagerFolder,
         recentAutoregActivity: existingUserAfterReg.recentAutoregActivity,
         createdAt: existingUserAfterReg.createdAt,
         updatedAt: existingUserAfterReg.updatedAt,

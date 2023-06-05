@@ -28,7 +28,7 @@ router.post('/add-new-folder', async (req: Request, res: Response) => {
   try {
     const { mail } = req.body
     const folder = req.body.folder
-    console.log(folder)
+
     const result = await RegisterUserSchema.updateOne(
       { mail: mail },
       { $push: { accountsManagerFolder: folder } }
@@ -56,7 +56,6 @@ router.get('/get-accounts-folders/:mail', async (req: Request, res: Response) =>
     const accountFolders = user.accountsManagerFolder
     res.status(200).json(accountFolders)
   } catch(err) {
-    console.error(err)
     res.status(500).json({ message: 'Failed to get account folders' })
   }
 })

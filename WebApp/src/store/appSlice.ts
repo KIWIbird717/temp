@@ -5,6 +5,7 @@ const initialState: IAppState = {
   appPage: '1',
   accountsManagerFolder: null,
   proxyManagerFolder: null,
+  parseManagerFolder: null,
   userAvatar: null,
   smsServisies: null,
   smsServiciesData: null,
@@ -29,6 +30,9 @@ export const appSlice = createSlice({
     setProxyManagerFolder: (state, action: PayloadAction<IAppState["proxyManagerFolder"]>) => {
       state.proxyManagerFolder = action.payload
     },
+    setParseManagerFolder: (state, action: PayloadAction<IAppState["parseManagerFolder"]>) => {
+      state.parseManagerFolder = action.payload
+    },
     setUserAvatar: (state, action:PayloadAction<IAppState["userAvatar"]>) => {
       state.userAvatar = action.payload
     },
@@ -45,6 +49,7 @@ export const {
   setAppPage,
   setAccountsManagerFolder,
   setProxyManagerFolder,
+  setParseManagerFolder,
   setUserAvatar,
   setSmsServisies,
   setSmsServiciesData,

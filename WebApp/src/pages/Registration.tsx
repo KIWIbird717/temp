@@ -66,7 +66,7 @@ export const Registration = () => {
       setLoading(true)
       const url: string = `${process.env.REACT_APP_SERVER_END_POINT as string}/newUser/registration`
   
-      await axios.post(url, { nick, mail, password, defaultAppHash: "null" , defaultAppId: 0 })
+      await axios.post(url, { nick, mail, password, defaultAppHash: "Не указано" , defaultAppId: 0 })
         .then((res: any) => {
           if (res.status === 201) {
             dispatch(setUserMail(mail))
