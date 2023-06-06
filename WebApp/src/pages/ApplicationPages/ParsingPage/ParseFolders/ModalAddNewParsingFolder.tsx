@@ -15,7 +15,7 @@ interface IModalAddNewProxy {
   open: boolean,
   onOk: () => void,
   onCancel: () => void,
-  setSelectedFolder?: (a: any) => any
+  setSelectedFolder?: React.Dispatch<React.SetStateAction<IParseFolders | null>>
   className?: string
 }
 
@@ -35,19 +35,23 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
   const [inputStatus, setInputStatus] = useState<IInputStatus>({status: "", msg: ''})
   const [textAreaStatus, setTextAreaStatus] = useState<IInputStatus>({status: "", msg: ''})
 
+  // modal button props
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false)
+
 
   const resetAllData = () => {
     setFolderTitle(null)
     setFolderDescription(null)
   }
 
-  const parsingFoldersFromDB = async (mail: string): Promise<void> => {
+  const parsingFoldersFromDB = async (mail: string): Promise<IParseFolders[] | void> => {
     try {
       const url = `${process.env.REACT_APP_SERVER_END_POINT}/parsingFolder/get-pasing-folders/${mail}`
       if (mail) {
         const folders = await axios.get(url)
         if (folders.status === 200) {
           dispatch(setUserParsingFolders(folders.data))
+          return folders.data
         } else {
           console.error('Error occured while trying handle accounts folders')
         }
@@ -75,13 +79,16 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
   }
 
   const handleNewParsingFolder = async () => {
+    setButtonLoading(true)
     try {
       if (folderTitle === '') {
         setInputStatus({status: "error", msg: "Введите название папки"})
+        setButtonLoading(false)
         return
       }
       if (folderDescription === '') {
         setTextAreaStatus({status: "error", msg: "Введите описание папки"})
+        setButtonLoading(false)
         return
       }
   
@@ -100,7 +107,6 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
   
       const url = `${process.env.REACT_APP_SERVER_END_POINT}/parsingFolder/add-new-folder`
       const res = await axios.post(url, { mail: userMail, folder: newParsingFolder })
-        .then((res) => 200)
         .catch((err) => {
           console.error(err)
           if (err.response.statusText === "Internal Server Error") {
@@ -119,21 +125,18 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
           return
         })
       
-        // Setting up new folders
-        if (userMail) {
-          await parsingFoldersFromDB(userMail)
+      // update folder (need to get folder _id from DB)
+      if (parsingData && userMail) {
+        // setting up sellected folder for parsing function
+        const folders = await parsingFoldersFromDB(userMail)
+        const current = folders?.filter((folder) => folder.key == newParsingFolder.key)[0]
+        if (current && setSelectedFolder) {
+          setSelectedFolder(current)
         }
-   
-      if (setSelectedFolder) setSelectedFolder(newParsingFolder)
-      
-      if (parsingData) {
-        const newProxyData = [...parsingData, newParsingFolder]
-        dispatch(setUserParsingFolders(newProxyData))
-      } else {
-        const newProxyData = [newParsingFolder]
-        dispatch(setUserParsingFolders(newProxyData))
       }
+
       resetAllData()
+      setButtonLoading(false)
       onCancel()
     } catch (err: any) {
       if (err.response.data === 'Ошибка при создании новой папки') {
@@ -159,7 +162,7 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
       open={open}
       onOk={() => handleNewParsingFolder()}
       onCancel={() => {resetAllData(); onCancel()}}
-      okButtonProps={{ title: 'Добавить' }}
+      okButtonProps={{ title: 'Добавить', loading: buttonLoading }}
       cancelButtonProps={{ title: 'Отмена' }}
       okText='Добавить'
       cancelText='Отмена'

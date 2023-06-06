@@ -1,4 +1,4 @@
-import { useState, useRef, ReactNode } from 'react'
+import { useState, useRef, ReactNode, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from 'antd'
 import { LeftOutlined, RightOutlined } from '@ant-design/icons'
@@ -22,7 +22,7 @@ interface IProps<TArray> {
  * @param render ReactNode. Rendedred element of `SliderDriwer` component
  */
 export const SliderDriwer = <TArray,>({dataSource, open, visibleAmount, render}: IProps<TArray>) => {
-  const [data, _] = useState<ArrayIntoGroupsType<TArray>>(divideArrayIntoGroups(dataSource, visibleAmount))
+  const [data, setData] = useState<ArrayIntoGroupsType<TArray>>(divideArrayIntoGroups(dataSource, visibleAmount))
   const [slide, setSlide] = useState<number>(0)
 
   const groupsPars = useRef<HTMLInputElement>(null)
@@ -43,6 +43,11 @@ export const SliderDriwer = <TArray,>({dataSource, open, visibleAmount, render}:
     }
   }
 
+  useEffect(() => {
+    setSlide(0)
+    setData(divideArrayIntoGroups(dataSource, visibleAmount))
+  }, [dataSource, open])
+
   return (
     <AnimatePresence>
       <motion.div 
@@ -62,6 +67,7 @@ export const SliderDriwer = <TArray,>({dataSource, open, visibleAmount, render}:
           >
             {data.map((dividedArray, index) => (
               <motion.div 
+                key={index}
                 ref={groupsPars} 
                 className="flex flex-col min-w-full gap-2"
                 initial={{ scale: slide === index ? 1 : 0.8 }}
@@ -69,8 +75,9 @@ export const SliderDriwer = <TArray,>({dataSource, open, visibleAmount, render}:
                 transition={{ duration: 0.15 }}
               >
                 {dividedArray.map((group: any, index) => (
-                  <AnimatePresence>
+                  <AnimatePresence key={index}>
                     <motion.div 
+                      key={index}
                       initial={{ scale: open ? 1 : 0.8 }}
                       animate={{ scale: open ? 1 : 0.8 }}
                       transition={{ duration: 0.15, delay: 0.04 * index }}

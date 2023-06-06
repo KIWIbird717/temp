@@ -1,23 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { AccordionStyled } from '../Accordion/AccordionStyled'
-import { Row, Col, Popover, Input, Statistic, Spin, Checkbox, Divider, Modal, Button, Segmented } from "antd"
+import { Button, Col, Divider, Input, Modal, Popover, Row, Spin, Statistic } from 'antd'
+import { BuildOutlined, CommentOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
-import { BuildOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { colors } from '../../../../global-style/style-colors.module'
-import { ModalAddNewFolder } from '../../Autoreg/ModalAddNewFolder'
-import { IHeaderType } from '../../AccountsManager/Collumns'
-import { SliderDriwer } from '../../../../components/SliderDrawer/SliderDriwer'
+import { useState } from 'react'
+import { IParseFolders } from '../../../../store/types'
 import { useSelector } from 'react-redux'
 import { StoreState } from '../../../../store/store'
 import groupFolder from '../../../../images/groupFolder.svg'
 import accountsFolder from '../../../../images/accountsFolder.svg'
-
-import styles from '../../Autoreg/folder-selection-style.module.css'
-import { IParseFolders } from '../../../../store/types'
 import { ModalAddNewParsingFolder } from '../ParseFolders/ModalAddNewParsingFolder'
-
+import { SliderDriwer } from '../../../../components/SliderDrawer/SliderDriwer'
+import styles from '../../Autoreg/folder-selection-style.module.css'
 
 const { Title } = Typography
+
 
 interface IProps {
   id: number,
@@ -25,7 +23,7 @@ interface IProps {
   onChange: (event: React.SyntheticEvent<Element, Event>, expanded: boolean) => void,
 }
 
-export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
+export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
   const pasingFoldersRaw: IParseFolders[] | null = useSelector((state: StoreState) => state.user.userParsingFolders)
 
   const [avaliableAccountsLoading, setAvaliableAccountsLoading] = useState<boolean>(false)
@@ -36,9 +34,40 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
   const [modal, setModal] = useState<boolean>(false)
   const [accaountsFolders, setAccountsFolders] = useState<IParseFolders[] | null>(pasingFoldersRaw)
 
+  // Chanale link field
+  type chanaleLinkType = {status: "warning" | "error" | "", link: string}
+  const [chatLink, setChatLink] = useState<chanaleLinkType>({status: "", link: ""})
+
+  // Button
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false)
+  const [buttonError, setButtonError] = useState<boolean>(false)
+
   useEffect(() => {
     setAccountsFolders(pasingFoldersRaw)
   }, [pasingFoldersRaw])
+
+  const runParsing = async () => {
+    // Set button loading
+    setButtonLoading(true)
+
+    // Chek filds
+    if (!chatLink.link) {
+      setButtonLoading(false)
+      setChatLink({status: "error", link: ""})
+      return
+    }
+    if (!selectedFolder) {
+      setButtonLoading(false)
+      setButtonError(true)
+      setTimeout(() => {
+        setButtonError(false)
+      }, 2000)
+      return
+    }
+
+
+    setButtonLoading(false)
+  }
 
   return (
     <div className="div" style={{ lineHeight: 0 }}>
@@ -96,8 +125,8 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
       </Modal>
 
       <AccordionStyled
-        title={'Парсинг участноков чатов'}
-        dopTitle={'Парсинг всех доступных участников из телеграм чата'}
+        title={'Парсинг из комментариев'}
+        dopTitle={'Парсинг всех доступных участников из  комметнариев под постами'}
         id={id}
         expanded={expanded}
         onChange={onChange}
@@ -108,17 +137,17 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
               <Col span={12}>
                 <div className="w-full flex flex-col gap-1">
                   <div className="flex gap-2 items-center">
-                    <Title level={5} style={{ margin: '0 0' }}>Ссылка на телеграм чат</Title>
-                    <Popover className='cursor-pointer' title="Ссылка на телеграм чат" content='Ссылку на группу или чат можно взять, нажав "троеточие" -> "info"'>
+                    <Title level={5} style={{ margin: '0 0' }}>Ссылка на телеграм пост</Title>
+                    <Popover className='cursor-pointer' title="Ссылка на телеграм пост" content='Вставьте ссылку на пост из телеграм, чтобы спарсить акаунты из комментариев'>
                       <InfoCircleOutlined />
                     </Popover>
                   </div>
                   <Input
                     size='large'
-                    placeholder='Ссылка на телеграм чат'
-                    // status={folderTitle?.value || ""} 
-                    // value={folderTitle?.label}
-                    // onChange={(e) => setFolderTitle({label: e.currentTarget.value, value: ""})}
+                    placeholder='Ссылка на телеграм пост'
+                    status={chatLink?.status || ""} 
+                    value={chatLink?.link}
+                    onChange={(e) => setChatLink({status: "", link: e.currentTarget.value})}
                   />
                 </div>
               </Col>
@@ -143,13 +172,6 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
               </Col>
             </Row>
           </div>
-          <div className="" style={{ lineHeight: 0 }}> 
-            <Checkbox 
-              // onChange={onChange}
-            >
-              <Title level={5} style={{ margin: '0 0', fontWeight: 'normal', color: colors.dopFont }}>Парсить только участников, которые писали в чат</Title>
-            </Checkbox>
-          </div>
 
           <Divider style={{ margin: '0 0' }}/>
 
@@ -168,12 +190,13 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
                     type="dashed"
                     size='large'
                     icon={<FolderOpenOutlined />}
+                    danger={buttonError}
                     onClick={() => setModal(true)}
                   >Папка для аккаунтов</Button>
                 )}
               </Col>
               <Col span={12}>
-                <Segmented size="large" options={['По истории', 'Лайв режим']} />
+
               </Col>
             </Row>
           </div>
@@ -184,6 +207,8 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
             type='primary'
             size='large'
             icon={<BuildOutlined />}
+            loading={buttonLoading}
+            onClick={() => runParsing()}
           >
             Парсить аккаунты
           </Button>

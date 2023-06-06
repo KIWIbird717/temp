@@ -11,6 +11,7 @@ import { Dispatch, SetStateAction } from 'react';
 import { dateToFormat } from '../../../utils/dateToFormat';
 
 export interface IHeaderType {
+  _id?: string;
   key: React.Key,
   apiHash?: string,
   apiId?: number,

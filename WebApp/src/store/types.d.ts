@@ -7,8 +7,81 @@ export interface IParseFolders {
   dopTitle: string
   latestEdit: Date
   type: 'accounts' | 'groups'
-  accounts: []
-  groups: []
+  _id?: string
+  accounts?: [
+    {
+      account_id: number 
+      fullInfo: {
+        id: number
+        is_self: boolean
+        contact: boolean
+        mutual_contact: boolean
+        deleted: boolean
+        bot: boolean
+        bot_chat_history: boolean
+        bot_nochats: boolean
+        verified: boolean
+        restricted: boolean
+        min: boolean
+        bot_inline_geo: boolean
+        support: boolean
+        scam: boolean
+        fake: boolean
+        bot_attach_menu: boolean
+        premium: boolean
+        attach_menu_enabled: boolean
+        access_hash: string
+        first_name: string
+        last_name: string
+        username: string
+        phone: string
+        bot_info_version: string
+        restriction_reason: string
+        bot_inline_placeholder: string
+        lang_code: string
+        emoji_status: string
+        usernames: string
+      }
+    }
+  ] | []
+  groups?: [
+    {
+      group_id: number 
+      group_name: string
+      fullInfo: {
+        id: number
+        title: string
+        date: Date
+        creator: boolean
+        left: boolean
+        broadcast: boolean
+        verified: boolean
+        megagroup: boolean
+        restricted: boolean
+        signatures: boolean
+        min: boolean
+        scam: boolean
+        has_link: boolean
+        has_geo: boolean
+        slowmode_enabled: boolean
+        call_active: boolean
+        call_not_empty: boolean
+        fake: boolean
+        gigagroup: boolean
+        noforwards: boolean
+        join_to_send: boolean
+        join_request: boolean
+        forum: boolean
+        access_hash: number
+        username: string
+        restriction_reason: string
+        admin_rights: string
+        banned_rights: string
+        participants_count: number
+        usernames: string
+      }
+    }
+  ] | []
 }
 
 export interface IUserState {

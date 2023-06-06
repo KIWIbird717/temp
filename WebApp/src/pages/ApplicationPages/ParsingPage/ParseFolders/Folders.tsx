@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { MCard } from '../../../../components/Card/MCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button, ConfigProvider, Dropdown, Modal, Table, Tooltip } from 'antd'
-import { CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined } from '@ant-design/icons'
+import { CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined, ToTopOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import styles from '../../ProxyManager/style.module.css'
 import { ColumnsType } from 'antd/es/table'
@@ -48,7 +48,7 @@ const TableHeaders = ({setDeleteModal}: ITableHeaders) => {
             <div className="flex flex-col gap-1">
               <Title style={{ margin: '0 0', color: colors.font }} level={4}>{record.title}</Title>
               <Title style={{ margin: '0 0', fontWeight: '400', color: colors.dopFont }} level={5}>{record.title}</Title>
-
+              <Title style={{ margin: '0 0', fontWeight: '400', color: colors.dopFont }} level={5}>{record.accounts?.length}</Title>
             </div>
           </div>
         </div>)
@@ -65,14 +65,23 @@ const TableHeaders = ({setDeleteModal}: ITableHeaders) => {
                 items: [
                   {
                     key: '1',
+                    label: 'Экспортировать',
+                    icon: <ToTopOutlined />,
+                    onClick: () => console.error('Export is not asigned'),
+                  },
+                  {
+                    type: 'divider'
+                  },
+                  {
+                    key: '2',
                     label: 'Удалить',
                     icon: <DeleteOutlined />,
                     danger: true,
-                    onClick: () => setDeleteModal({open: true, record: record})
+                    onClick: () => setDeleteModal({open: true, record: record}),
                   },
                 ],
                 onClick: ({ key }) => {
-                  if (key === '2' || key === '0' ) {
+                  if (key == '1' ) {
                     message.warning(`Временно не доступно`)
                   }
                 }
@@ -90,7 +99,6 @@ const TableHeaders = ({setDeleteModal}: ITableHeaders) => {
 }
 
 export const Folders = () => {
-  const [messageApi] = message.useMessage()
   const dispatch = useDispatch()
   const userMail = useSelector((state: StoreState) => state.user.mail)
 
@@ -103,6 +111,8 @@ export const Folders = () => {
   const [selectedFolders, setSelectedFolders] = useState<IParseFolders[]>([])
 
   const [deleteModal, setDeleteModal] = useState<{open: boolean, record: IParseFolders | null}>({open: false, record: null})
+
+  const [tableLoading, setTableLoading] = useState<boolean>(true)
   
 
   const parsingFoldersFromDB = async (mail: string): Promise<void> => {
@@ -149,7 +159,7 @@ export const Folders = () => {
       axios.post(url, { mail: userMail, folderKey: record.key })
         .then((res) => {
           if (res.status === 200) {
-            message.success(`Папка успешно удалена`)
+            // message.success(`Папка успешно удалена из базы данных`)
           } else {
             message.error('Ошибка при удалении папки')
             if (tableDataRaw) {
@@ -174,6 +184,9 @@ export const Folders = () => {
 
   useEffect(() => {
     setTableData(tableDataRaw)
+    if (tableDataRaw && tableDataRaw?.length > 0) {
+      setTableLoading(false)
+    }
   }, [tableDataRaw])
 
   const exportSelectedFolders = () => {
@@ -223,46 +236,6 @@ export const Folders = () => {
               <Title style={{ margin: '0 0' }} level={4}>Группы, чаты, каналы</Title>
             </div>
             <div className="flex gap-3">
-              {selectionType ? (
-                <AnimatePresence>
-                  <motion.div
-                    initial={{ x: 100, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.3, type: 'spring', delay: 0.1 }}
-                    className='flex gap-3'
-                  >
-                    <Tooltip title='Экспорт в архив'>
-                      <Button className={`border-[0px] shadow-md`} size='large' shape="circle" icon={<ContainerOutlined />} onClick={() => exportSelectedFolders()}/>
-                    </Tooltip>
-                  </motion.div>
-                  {/* <motion.div
-                    initial={{ x: 100, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    transition={{ duration: 0.3, type: 'spring' }}
-                    className='flex gap-3'
-                  >
-                    <Tooltip title='Удалить выделенное'>
-                      <Button 
-                        danger 
-                        size='large' 
-                        shape="circle" 
-                        icon={<DeleteOutlined />} 
-                        className={`border-[0px] shadow-md`} 
-                        onClick={() => deleteSelectedAccounts()}
-                      />
-                    </Tooltip>
-                  </motion.div> */}
-                </AnimatePresence>
-              ) : (
-                <div className="w-[40px] h-[40px]" />
-              )}
-              <Button 
-                className='border-[0px] shadow-md' 
-                size='large' 
-                shape="circle" 
-                icon={selectionType ? <CloseOutlined /> : <EditOutlined />} 
-                onClick={() => setSelectionType(!selectionType)} 
-              />
               <Tooltip title='Добавить новую папку'>
                 <Button 
                   className='border-[0px] shadow-md' 
@@ -288,7 +261,8 @@ export const Folders = () => {
                 rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
                 columns={TableHeaders({setDeleteModal})}
                 dataSource={tableData || []}
-                pagination={{ pageSize: 5 }}
+                pagination={{ pageSize: 4 }}
+                loading={tableLoading}
               />
             </ConfigProvider> 
           </div>

@@ -2,9 +2,12 @@ import Layout, { Content } from "antd/es/layout/layout"
 import { HeaderComponent } from "../../../components/HeaderComponent/HeaderComponent"
 import { contentStyle } from "../../../global-style/layoutStyle"
 import { useState } from "react"
-import { ParseChatParticipants } from "./ParceChateParticipants/ParseChatParticipants"
+import { ParseChatParticipants } from "./ParceChatParticipants/ParseChatParticipants"
 import { ParseFoldersManager } from "./ParseFolders/ParseFoldersManager"
 import { Row, Col } from 'antd'
+import { ParseFromComments } from "./ParseFromComments/ParseFromComments"
+import { ParseByGeo } from "./ParseByGeo/ParseByGeo"
+import { ParseByKeywords } from "./ParseByKeywords/ParseByKeywords"
 
 
 export const ParsingPage: React.FC = () => {
@@ -19,12 +22,9 @@ export const ParsingPage: React.FC = () => {
           <Row gutter={20}>
             <Col span={12} className="flex flex-col gap-3">
               <ParseChatParticipants id={1} expanded={accordionState} onChange={() => setAccordionState(`panel${1}`)}/>
-              <ParseChatParticipants id={2} expanded={accordionState} onChange={() => setAccordionState(`panel${2}`)}/>
-              <ParseChatParticipants id={3} expanded={accordionState} onChange={() => setAccordionState(`panel${3}`)}/>
-              <ParseChatParticipants id={4} expanded={accordionState} onChange={() => setAccordionState(`panel${4}`)}/>
-              <ParseChatParticipants id={5} expanded={accordionState} onChange={() => setAccordionState(`panel${5}`)}/>
-              <ParseChatParticipants id={6} expanded={accordionState} onChange={() => setAccordionState(`panel${6}`)}/>
-
+              <ParseFromComments id={2} expanded={accordionState} onChange={() => setAccordionState(`panel${2}`)}/>
+              <ParseByGeo id={3} expanded={accordionState} onChange={() => setAccordionState(`panel${3}`)}/>
+              <ParseByKeywords id={4} expanded={accordionState} onChange={() => setAccordionState(`panel${4}`)}/>
             </Col>
             <Col span={12}>
               <div className="div">

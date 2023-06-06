@@ -75,8 +75,8 @@ export const SmsServicies = ({height}: IProps): JSX.Element => {
               {service.balance ? (
                 (service.balance === 'loading' ? (
                   <div className='min-w-[120px] flex flex-col h-full justify-between'>
-                    <Skeleton animation="wave" style={{ borderRadius: '9990px', height: 60, width: '100%' }} />
-                    <Skeleton animation="wave" style={{width: '100%'}}/>
+                    <Skeleton animation="wave" style={{ height: 60, width: '100%', lineHeight: 0, padding: 0, margin: 0 }} />
+                    <Skeleton animation="wave" style={{ width: '100%', lineHeight: 0, padding: 0, margin: 0 }}/>
                   </div>
                 ) : (
                   <>
@@ -84,7 +84,7 @@ export const SmsServicies = ({height}: IProps): JSX.Element => {
                       <div style={{ backgroundColor: colors.success }} className='flex items-center justify-center rounded-full w-[35px] h-[35px]'>
                         <CheckOutlined style={{ color: colors.white, fontSize: 18 }}/>
                       </div>
-                      <p style={{ margin: 0, color: colors.font, fontSize: 15 }} className='pl-3 pr-4'>активен</p>
+                      <p style={{ margin: 0, color: '#4CA947', fontSize: 15 }} className='pl-3 pr-4'>активен</p>
                     </div>
                     <div style={{ color: colors.dopFont }}><span style={{ fontWeight: 600, color: colors.font }}>{service.cost + '₽'}</span>/аккаунт</div>
                   </>
@@ -95,7 +95,7 @@ export const SmsServicies = ({height}: IProps): JSX.Element => {
                     <div style={{ backgroundColor: colors.warning }} className='flex items-center justify-center rounded-full w-[35px] h-[35px]'>
                       <WarningOutlined style={{ color: colors.white, fontSize: 18, marginBottom: 3 }}/>
                     </div>
-                    <p style={{ margin: 0, color: colors.font, fontSize: 15 }} className='pl-3 pr-4'>не активен</p>
+                    <p style={{ margin: 0, color: '#BABA23', fontSize: 15 }} className='pl-1 pr-2'>нет доступа</p>
                   </div>
                 </>
               )}
