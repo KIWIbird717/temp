@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { AccordionStyled } from '../Accordion/AccordionStyled'
-import { Row, Col, Popover, Input, Statistic, Spin, Checkbox, Divider, Modal, Button, Segmented } from "antd"
+import { Row, Col, Popover, Input, Statistic, Spin, Checkbox, Divider, Modal, Button, Segmented, message, Select } from "antd"
 import { Typography } from 'antd'
 import { BuildOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { colors } from '../../../../global-style/style-colors.module'
@@ -13,6 +13,9 @@ import accountsFolder from '../../../../images/accountsFolder.svg'
 import styles from '../../Autoreg/folder-selection-style.module.css'
 import { IParseFolders } from '../../../../store/types'
 import { ModalAddNewParsingFolder } from '../ParseFolders/ModalAddNewParsingFolder'
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { parsingFoldersFromDB } from '../ParseFolders/Folders'
 
 
 const { Title } = Typography
@@ -24,19 +27,133 @@ interface IProps {
 }
 
 export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
+  const dispatch = useDispatch()
+  const userMail = useSelector((state: StoreState) => state.user.mail)
   const pasingFoldersRaw: IParseFolders[] | null = useSelector((state: StoreState) => state.user.userParsingFolders)
+  const accountsFolders = useSelector((state: StoreState) => state.user.userManagerFolders)
 
   const [avaliableAccountsLoading, setAvaliableAccountsLoading] = useState<boolean>(false)
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
   const [selectedFolder, setSelectedFolder] = useState<IParseFolders | null>(null)
 
+  // Input valus
+  const [cityInput, setCityInput] = useState<{status: "warning" | "error" | "", city: string}>({status: "", city: ""})
+  const [coordinats, setCoordinats] = useState<{status: "warning" | "error" | "", coordinats: string}>({status: "", coordinats: ""})
+  // received cities
+  type ReceivedCityType = {
+    country: string
+    name: string
+    state: string
+    lat: number
+    lon: number
+    local_names?: [ {[index: string]: string} ]
+  }
+  const [receivedCity, setReceivedCity] = useState<ReceivedCityType[] | null>(null)
+  const [citySelection, setCitySelection] = useState<{status: "warning" | "error" | "", city: string | null}>({status: "warning", city: null})
+
+  // Buttons
+  const [buttonError, setButtonError] = useState<boolean>(false)
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false)
+
   // Modal
   const [modal, setModal] = useState<boolean>(false)
-  const [accaountsFolders, setAccountsFolders] = useState<IParseFolders[] | null>(pasingFoldersRaw)
 
-  useEffect(() => {
-    setAccountsFolders(pasingFoldersRaw)
-  }, [pasingFoldersRaw])
+  const resetFields = () => {
+    setCityInput({status: "", city: ""})
+    setCoordinats({status: "", coordinats: ""})
+    setSelectedFolder(null)
+    setButtonLoading(false)
+    setReceivedCity(null)
+    setCitySelection({status: "", city: null})
+  }
+
+  const runParsing = async () => {
+    // Chek fileds
+    if (!cityInput || !coordinats) {
+      if (!cityInput) {
+        setCityInput({status: "error", city: ""})
+        return
+      }
+    }
+    if (receivedCity && !citySelection.city) {
+      setCitySelection({status: "error", city: null})
+      return
+    }
+    if (!selectedFolder) {
+      setButtonError(true)
+      setTimeout(() => {
+        setButtonError(false)
+      }, 2000)
+      return
+    }
+    if (!accountsFolders) {
+      message.error('Нет свободных номеров')
+      return
+    }
+
+    // set button loading
+    setButtonLoading(true)
+
+    // url request
+    const url = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/parser/users-by-geo`
+    try {
+      let params
+      if (citySelection.city) {
+        params = {
+          mail: userMail,
+          folder: accountsFolders[0]._id,
+          folder_to_save: selectedFolder._id,
+          lat: Number(JSON.parse(citySelection.city).lat),
+          long: Number(JSON.parse(citySelection.city).lon),
+        }
+      } else if (coordinats.coordinats) {
+        params = {
+          mail: userMail,
+          folder: accountsFolders[0]._id,
+          folder_to_save: selectedFolder._id,
+          lat: Number(coordinats.coordinats.split(',')[0]),
+          long: Number(coordinats.coordinats.split(',')[1]),
+        }
+      } else {
+        params = {
+          mail: userMail,
+          folder: accountsFolders[0]._id,
+          folder_to_save: selectedFolder._id,
+          city: cityInput.city,
+        }
+      }
+      console.log(params)
+      const res = await axios.get(url, {
+        params: params
+      })
+      console.log(res)
+      if (res.status == 200) {
+        if (res.data.code == 100) {
+          message.warning('Уточните выбранную локацию')
+          setReceivedCity(res.data.body)
+          setButtonLoading(false)
+          return
+        }
+        if (res.data.code == 200) {
+          message.info('Начат парсинг аккаунтов')
+          setTimeout(() => {
+            parsingFoldersFromDB(userMail as string, dispatch)
+            message.success('Парсинг аккаунтов завершен')
+            setButtonLoading(false)
+            resetFields()
+          }, 20_000)
+        }
+        if (res.data.code == 204) {
+          message.error('Не найдено ни одной локации')
+          return
+        }
+      }
+    } catch (err) {
+      setButtonLoading(false)
+      message.error("Ошибка при парсинге акаунтов")
+      console.error(err)
+    }
+  }
 
   return (
     <div className="div" style={{ lineHeight: 0 }}>
@@ -55,6 +172,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
         onCancel={() => setModal(false)}
         footer={[
           <Button
+            key={1}
             icon={<PlusOutlined />}
             type='primary'
             onClick={() => {setModal(false); setNewFolderModal(true)}}
@@ -65,7 +183,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
       >
         <div className="flex flex-col gap-3 my-5">
           <SliderDriwer 
-            dataSource={accaountsFolders || []}
+            dataSource={pasingFoldersRaw || []}
             open={true}
             visibleAmount={3}
             render={(el) => (
@@ -82,7 +200,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
                     <Title style={{ margin: '0px 0px' }} level={4}>{el.title}</Title>
                     <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
                     <div className="flex gap-1 items-start">
-                      <Title className='m-0' level={5}>{5}</Title>
+                      <Title className='m-0' level={5}>{el.accounts?.length}</Title>
                       <UserOutlined className='my-1 mt-[5px]' />
                     </div>
                   </div>
@@ -111,13 +229,28 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
                       <InfoCircleOutlined />
                     </Popover>
                   </div>
-                  <Input
-                    size='large'
-                    placeholder='Город'
-                    // status={folderTitle?.value || ""} 
-                    // value={folderTitle?.label}
-                    // onChange={(e) => setFolderTitle({label: e.currentTarget.value, value: ""})}
-                  />
+                  {receivedCity ? (
+                    <Select 
+                      size='large'
+                      placeholder="Уточните локацию"
+                      status={citySelection?.status || ""}
+                      options={receivedCity.map((city, index) => ({
+                          key: index,
+                          value: JSON.stringify({lat: city.lat, lon: city.lon}), 
+                          label: `${city.country}, ${city.name}, ${city.state}`
+                        }))
+                      }
+                      onChange={(value) => setCitySelection({status: "", city: value})}
+                    />
+                  ) : (
+                    <Input
+                      size='large'
+                      placeholder='Город'
+                      status={cityInput?.status || ""} 
+                      value={cityInput?.city}
+                      onChange={(e) => setCityInput({status: "", city: e.currentTarget.value})}
+                    />
+                  )}
                 </div>
               </Col>
               <Col span={12}>
@@ -131,9 +264,9 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
                   <Input
                     size='large'
                     placeholder='Геолокация'
-                    // status={folderTitle?.value || ""} 
-                    // value={folderTitle?.label}
-                    // onChange={(e) => setFolderTitle({label: e.currentTarget.value, value: ""})}
+                    status={coordinats?.status || ""} 
+                    value={coordinats?.coordinats}
+                    onChange={(e) => setCoordinats({status: "", coordinats: e.currentTarget.value})}
                   />
                 </div>
               </Col>
@@ -156,6 +289,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
                   <Button 
                     type="dashed"
                     size='large'
+                    danger={buttonError}
                     icon={<FolderOpenOutlined />}
                     onClick={() => setModal(true)}
                   >Папка для аккаунтов</Button>
@@ -165,11 +299,21 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
           </div>
         </div>
 
-        <div className="m-2 mt-9 flex justify-end">
+        <div className="m-2 mt-9 flex justify-between">
+          <Button
+            type='link'
+            danger={true}
+            disabled={cityInput.city || selectedFolder || coordinats.coordinats ? false : true}
+            onClick={() => resetFields()}
+          >
+            Отмена
+          </Button>
           <Button
             type='primary'
             size='large'
+            loading={buttonLoading}
             icon={<BuildOutlined />}
+            onClick={() => runParsing()}
           >
             Парсить аккаунты
           </Button>

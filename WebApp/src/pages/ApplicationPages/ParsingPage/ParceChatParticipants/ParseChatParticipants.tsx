@@ -15,6 +15,9 @@ import { IParseFolders } from '../../../../store/types'
 import { ModalAddNewParsingFolder } from '../ParseFolders/ModalAddNewParsingFolder'
 import axios from 'axios'
 import { message } from 'antd'
+import { parsingFoldersFromDB } from '../ParseFolders/Folders'
+import { userInfo } from 'os'
+import { useDispatch } from 'react-redux'
 
 
 const { Title } = Typography
@@ -26,6 +29,7 @@ interface IProps {
 }
 
 export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
+  const dispatch = useDispatch()
   const userMail = useSelector((state: StoreState) => state.user.mail)
   const pasingFoldersRaw: IParseFolders[] | null = useSelector((state: StoreState) => state.user.userParsingFolders)
   const accountsFolders = useSelector((state: StoreState) => state.user.userManagerFolders)
@@ -37,7 +41,7 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
   // Modal
   const [modal, setModal] = useState<boolean>(false)
   const [accaountsFolders, setAccountsFolders] = useState<IParseFolders[] | null>(pasingFoldersRaw)
-  console.log(accaountsFolders)
+
   // Chanale link field
   type chanaleLinkType = {status: "warning" | "error" | "", link: string}
   const [chanalLink, setChanalLink] = useState<chanaleLinkType>({status: "", link: ""})
@@ -62,18 +66,12 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
   }
 
   const runParsing = async () => {
-    // Set button loading
-    setButtonLoading(true)
-    console.log(pasingFoldersRaw)
-
     // Chek filds
     if (!chanalLink.link) {
-      setButtonLoading(false)
       setChanalLink({status: "error", link: ""})
       return
     }
     if (!selectedFolder) {
-      setButtonLoading(false)
       setButtonError(true)
       setTimeout(() => {
         setButtonError(false)
@@ -81,11 +79,14 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
       return
     }
     if (!accountsFolders) {
-      setButtonLoading(false)
       message.error('Нет свободных номеров')
       return
     }
 
+    // Set button loading
+    setButtonLoading(true)
+
+    // url request
     const url = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/parser/chat-members`
     try {
       const res = await axios.get(url, {
@@ -99,9 +100,13 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
       })
       console.log(res)
       if (res.status == 200) {
-        message.success('Парсинг акаунтов завершён')
-        setButtonLoading(false)
-        resetFields()
+        message.info('Начат парсинг аккаунтов')
+        setTimeout(() => {
+          parsingFoldersFromDB(userMail as string, dispatch)
+          message.success('Парсинг аккаунтов завершен')
+          setButtonLoading(false)
+          resetFields()
+        }, 20_000)
       }
     } catch (err) {
       setButtonLoading(false)
@@ -194,7 +199,7 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
                 </div>
               </Col>
               <Col span={12}>
-                {avaliableAccountsLoading ? (
+                {/* {avaliableAccountsLoading ? (
                   <Statistic 
                     valueStyle={{ color: colors.primary }} 
                     className='w-full' 
@@ -210,7 +215,7 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
                     // value={avaliablePhones?.count !== undefined ? avaliablePhones?.count : '-'} 
                     prefix={ <UserSwitchOutlined />} 
                   />
-                )}
+                )} */}
               </Col>
             </Row>
           </div>
@@ -246,7 +251,11 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
                 )}
               </Col>
               <Col span={12}>
-                <Segmented size="large" options={['По истории', 'Лайв режим']} />
+                <Segmented 
+                  size="large" 
+                  options={['По истории', 'Лайв режим']} 
+                  disabled={true}
+                />
               </Col>
             </Row>
           </div>

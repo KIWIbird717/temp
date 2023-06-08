@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { MCard } from '../../../../components/Card/MCard'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Button, ConfigProvider, Dropdown, Modal, Table, Tooltip } from 'antd'
-import { CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, MoreOutlined, PlusOutlined, ToTopOutlined } from '@ant-design/icons'
+import { CloseOutlined, ContainerOutlined, DeleteOutlined, EditOutlined, InfoCircleOutlined, MoreOutlined, PlusOutlined, ToTopOutlined } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import styles from '../../ProxyManager/style.module.css'
 import { ColumnsType } from 'antd/es/table'
@@ -20,6 +20,7 @@ import { colors } from '../../../../global-style/style-colors.module'
 import { NoParseFolders } from '../../../../components/CustomNoData/NoParseFolders'
 import { setUserParsingFolders } from '../../../../store/userSlice'
 import axios from 'axios'
+import { AnyAction } from 'redux'
 
 
 const { Title } = Typography
@@ -47,7 +48,7 @@ const TableHeaders = ({setDeleteModal}: ITableHeaders) => {
             </div>
             <div className="flex flex-col gap-1">
               <Title style={{ margin: '0 0', color: colors.font }} level={4}>{record.title}</Title>
-              <Title style={{ margin: '0 0', fontWeight: '400', color: colors.dopFont }} level={5}>{record.title}</Title>
+              <Title style={{ margin: '0 0', fontWeight: '400', color: colors.dopFont }} level={5}>{record.dopTitle}</Title>
               <Title style={{ margin: '0 0', fontWeight: '400', color: colors.dopFont }} level={5}>{record.accounts?.length}</Title>
             </div>
           </div>
@@ -98,6 +99,22 @@ const TableHeaders = ({setDeleteModal}: ITableHeaders) => {
   return tableHeaders
 }
 
+export const parsingFoldersFromDB = async (mail: string, dispatch: Dispatch<AnyAction>): Promise<void> => {
+  try {
+    const url = `${process.env.REACT_APP_SERVER_END_POINT}/parsingFolder/get-pasing-folders/${mail}`
+    if (mail) {
+      const folders = await axios.get(url)
+      if (folders.status === 200) {
+        dispatch(setUserParsingFolders(folders.data))
+      } else {
+        console.error('Error occured while trying handle accounts folders')
+      }
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export const Folders = () => {
   const dispatch = useDispatch()
   const userMail = useSelector((state: StoreState) => state.user.mail)
@@ -110,26 +127,15 @@ export const Folders = () => {
 
   const [selectedFolders, setSelectedFolders] = useState<IParseFolders[]>([])
 
+  // modal
   const [deleteModal, setDeleteModal] = useState<{open: boolean, record: IParseFolders | null}>({open: false, record: null})
+  const [aditioanlInfoModal, setAditioanlInfoModal] = useState<{open: boolean, record: IParseFolders | null}>({open: false, record: null})
 
   const [tableLoading, setTableLoading] = useState<boolean>(true)
-  
 
-  const parsingFoldersFromDB = async (mail: string): Promise<void> => {
-    try {
-      const url = `${process.env.REACT_APP_SERVER_END_POINT}/parsingFolder/get-pasing-folders/${mail}`
-      if (mail) {
-        const folders = await axios.get(url)
-        if (folders.status === 200) {
-          dispatch(setUserParsingFolders(folders.data))
-        } else {
-          console.error('Error occured while trying handle accounts folders')
-        }
-      }
-    } catch (err) {
-      console.error(err)
-    }
-  }
+  // button delete modal state
+  const [deleteModalButton, setDeleteModalButton] = useState<boolean>(false)
+  
 
   const rowSelection = {
     onChange: (selectedRowKey: React.Key[], selectedRows: IParseFolders[]) => {
@@ -146,6 +152,8 @@ export const Folders = () => {
     if (!record) return
     if (!userMail) return
 
+    // set button loading
+    setDeleteModalButton(true)
     try {
       const url = `${process.env.REACT_APP_SERVER_END_POINT}/parsingFolder/delete-parsing-folder`
 
@@ -156,7 +164,7 @@ export const Folders = () => {
       }
 
       // update folders in DB
-      axios.post(url, { mail: userMail, folderKey: record.key })
+      await axios.post(url, { mail: userMail, folderKey: record.key })
         .then((res) => {
           if (res.status === 200) {
             // message.success(`Папка успешно удалена из базы данных`)
@@ -170,15 +178,16 @@ export const Folders = () => {
           }
         })
 
-        setDeleteModal({open: false, record: null})
+      setDeleteModalButton(false)
+      setDeleteModal({open: false, record: null})
     } catch (err) {
-      
+      setDeleteModalButton(false)
     }
   }
 
   useEffect(() => {
     if (userMail) {
-      parsingFoldersFromDB(userMail)
+      parsingFoldersFromDB(userMail, dispatch)
     }
   }, [])
 
@@ -208,7 +217,7 @@ export const Folders = () => {
         open={deleteModal.open}
         onOk={() => deleteFolders(deleteModal.record)}
         onCancel={() => setDeleteModal({open: false, record: null})}
-        okButtonProps={{ danger: true }}
+        okButtonProps={{ danger: true, loading: deleteModalButton }}
         okText='Удалить'
         cancelText='Отмена'
       >

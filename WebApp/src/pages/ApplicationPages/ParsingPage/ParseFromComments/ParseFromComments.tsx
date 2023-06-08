@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { AccordionStyled } from '../Accordion/AccordionStyled'
-import { Button, Col, Divider, Input, Modal, Popover, Row, Spin, Statistic } from 'antd'
+import { Button, Col, Divider, Input, Modal, Popover, Row, Spin, Statistic, message } from 'antd'
 import { BuildOutlined, CommentOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
 import { colors } from '../../../../global-style/style-colors.module'
@@ -13,6 +13,9 @@ import accountsFolder from '../../../../images/accountsFolder.svg'
 import { ModalAddNewParsingFolder } from '../ParseFolders/ModalAddNewParsingFolder'
 import { SliderDriwer } from '../../../../components/SliderDrawer/SliderDriwer'
 import styles from '../../Autoreg/folder-selection-style.module.css'
+import axios from 'axios'
+import { parsingFoldersFromDB } from '../ParseFolders/Folders'
+import { useDispatch } from 'react-redux'
 
 const { Title } = Typography
 
@@ -24,7 +27,10 @@ interface IProps {
 }
 
 export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
+  const dispatch = useDispatch()
+  const userMail = useSelector((state: StoreState) => state.user.mail)
   const pasingFoldersRaw: IParseFolders[] | null = useSelector((state: StoreState) => state.user.userParsingFolders)
+  const accountsFolders = useSelector((state: StoreState) => state.user.userManagerFolders)
 
   const [avaliableAccountsLoading, setAvaliableAccountsLoading] = useState<boolean>(false)
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
@@ -36,7 +42,7 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
 
   // Chanale link field
   type chanaleLinkType = {status: "warning" | "error" | "", link: string}
-  const [chatLink, setChatLink] = useState<chanaleLinkType>({status: "", link: ""})
+  const [postLink, setPostLink] = useState<chanaleLinkType>({status: "", link: ""})
 
   // Button
   const [buttonLoading, setButtonLoading] = useState<boolean>(false)
@@ -46,14 +52,18 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
     setAccountsFolders(pasingFoldersRaw)
   }, [pasingFoldersRaw])
 
-  const runParsing = async () => {
-    // Set button loading
-    setButtonLoading(true)
+  const resetFields = () => {
+    setButtonLoading(false)
+    setButtonError(false)
+    setPostLink({status: "", link: ""})
+    setSelectedFolder(null)
+  }
 
+  const runParsing = async () => {
     // Chek filds
-    if (!chatLink.link) {
+    if (!postLink.link) {
       setButtonLoading(false)
-      setChatLink({status: "error", link: ""})
+      setPostLink({status: "error", link: ""})
       return
     }
     if (!selectedFolder) {
@@ -64,9 +74,40 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
       }, 2000)
       return
     }
+    if (!accountsFolders) {
+      message.error('Нет свободных номеров')
+      return
+    }
 
+    // Set button loading
+    setButtonLoading(true)
 
-    setButtonLoading(false)
+    // run parsing
+    const url = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/parser/channel-comment-members`
+    try {
+      const res = await axios.get(url, {
+        params: {
+          mail: userMail,
+          post_link: postLink.link,
+          folder: accountsFolders[0]._id,
+          folder_to_save: selectedFolder._id,
+        }
+      })
+      console.log(res)
+      if (res.status == 200) {
+        message.info('Начат парсинг аккаунтов')
+        setTimeout(() => {
+          parsingFoldersFromDB(userMail as string, dispatch)
+          message.success('Парсинг аккаунтов завершен')
+          setButtonLoading(false)
+          resetFields()
+        }, 20_000);
+      }
+    } catch (err) {
+      setButtonLoading(false)
+      message.error('Ошибка при парсинге акаунтов')
+      console.error(err)
+    }
   }
 
   return (
@@ -86,6 +127,7 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
         onCancel={() => setModal(false)}
         footer={[
           <Button
+            key={1} // Чтобы react не ругался на отсутствие key in map function
             icon={<PlusOutlined />}
             type='primary'
             onClick={() => {setModal(false); setNewFolderModal(true)}}
@@ -96,8 +138,8 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
       >
         <div className="flex flex-col gap-3 my-5">
           <SliderDriwer 
-            dataSource={accaountsFolders || []}
-            open={true}
+            dataSource={pasingFoldersRaw || []}
+            open={modal}
             visibleAmount={3}
             render={(el) => (
               <div 
@@ -113,7 +155,7 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
                     <Title style={{ margin: '0px 0px' }} level={4}>{el.title}</Title>
                     <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
                     <div className="flex gap-1 items-start">
-                      <Title className='m-0' level={5}>{5}</Title>
+                      <Title className='m-0' level={5}>{el.accounts?.length}</Title>
                       <UserOutlined className='my-1 mt-[5px]' />
                     </div>
                   </div>
@@ -145,14 +187,14 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
                   <Input
                     size='large'
                     placeholder='Ссылка на телеграм пост'
-                    status={chatLink?.status || ""} 
-                    value={chatLink?.link}
-                    onChange={(e) => setChatLink({status: "", link: e.currentTarget.value})}
+                    status={postLink?.status || ""} 
+                    value={postLink?.link}
+                    onChange={(e) => setPostLink({status: "", link: e.currentTarget.value})}
                   />
                 </div>
               </Col>
               <Col span={12}>
-                {avaliableAccountsLoading ? (
+                {/* {avaliableAccountsLoading ? (
                   <Statistic 
                     valueStyle={{ color: colors.primary }} 
                     className='w-full' 
@@ -168,7 +210,7 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
                     // value={avaliablePhones?.count !== undefined ? avaliablePhones?.count : '-'} 
                     prefix={ <UserSwitchOutlined />} 
                   />
-                )}
+                )} */}
               </Col>
             </Row>
           </div>
@@ -202,7 +244,15 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
           </div>
         </div>
 
-        <div className="m-2 mt-9 flex justify-end">
+        <div className="m-2 mt-9 flex justify-between">
+          <Button
+            type='link'
+            danger={true}
+            disabled={postLink.link || selectedFolder ? false : true}
+            onClick={() => resetFields()}
+          >
+            Отмена
+          </Button>
           <Button
             type='primary'
             size='large'
