@@ -17,6 +17,7 @@ interface IModalAddNewProxy {
   onCancel: () => void,
   setSelectedFolder?: React.Dispatch<React.SetStateAction<IParseFolders | null>>
   className?: string
+  folder?: "groups" | "accounts"
 }
 
 interface IInputStatus {
@@ -24,7 +25,7 @@ interface IInputStatus {
   msg: string
 }
 
-export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolder, className}: IModalAddNewProxy) => {
+export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolder, className, folder}: IModalAddNewProxy) => {
   const dispatch = useDispatch()
   const parsingData: IParseFolders[] | null = useSelector((state: StoreState) => state.user.userParsingFolders)
   const userMail = useSelector((state: StoreState) => state.user.mail)
@@ -38,6 +39,16 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
   // modal button props
   const [buttonLoading, setButtonLoading] = useState<boolean>(false)
 
+
+  useEffect(() => {
+    if (folder) {
+      if (folder == 'groups') {
+        setFolderType('groups')
+      } else {
+        setFolderType('accounts')
+      }
+    }
+  }, [])
 
   const resetAllData = () => {
     setFolderTitle(null)
@@ -158,7 +169,7 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
 
   return (
     <Modal
-      title="Новая папка для proxy"
+      title="Новая папка"
       open={open}
       onOk={() => handleNewParsingFolder()}
       onCancel={() => {resetAllData(); onCancel()}}
@@ -188,11 +199,29 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
           showCount
           maxLength={50}
         />
-        <Segmented 
-          style={{ width: 'fit-content' }}
-          options={[{label: 'Аккаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
-          onChange={(e) => setFolderType(e as "groups" | "accounts")}
-        />
+        {folder ? (
+          folder == 'groups' ? (
+            <Segmented 
+              style={{ width: 'fit-content' }}
+              options={[{label: 'Аккаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
+              value={'groups'}
+              disabled={true}
+            />
+          ) : (
+            <Segmented 
+              style={{ width: 'fit-content' }}
+              options={[{label: 'Аккаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
+              value={'accounts'}
+              disabled={true}
+            />
+          )
+        ) : (
+          <Segmented 
+            style={{ width: 'fit-content' }}
+            options={[{label: 'Аккаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
+            onChange={(e) => setFolderType(e as "groups" | "accounts")}
+          />
+        )}
       </div>
     </div>
     </Modal>

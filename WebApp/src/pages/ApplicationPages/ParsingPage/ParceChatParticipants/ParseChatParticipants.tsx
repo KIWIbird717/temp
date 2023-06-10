@@ -122,6 +122,7 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
         onCancel={() => setNewFolderModal(false)}
         onOk={() => setNewFolderModal(false)}
         setSelectedFolder={setSelectedFolder}
+        folder={'accounts'}
       />
 
       <Modal 
@@ -160,7 +161,11 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
                     <Title style={{ margin: '0px 0px' }} level={4}>{el.title}</Title>
                     <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
                     <div className="flex gap-1 items-start">
-                      <Title className='m-0' level={5}>{el.accounts?.length}</Title>
+                      {el.type == 'accounts' ? (
+                        <Title className='m-0' level={5}>{el.accounts?.length}</Title>
+                      ) : (
+                        <Title className='m-0' level={5}>{el.groups?.length}</Title>
+                      )}
                       <UserOutlined className='my-1 mt-[5px]' />
                     </div>
                   </div>

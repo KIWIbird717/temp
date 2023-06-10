@@ -21,9 +21,48 @@ import { NoParseFolders } from '../../../../components/CustomNoData/NoParseFolde
 import { setUserParsingFolders } from '../../../../store/userSlice'
 import axios from 'axios'
 import { AnyAction } from 'redux'
-
+import * as XLSX from 'xlsx'
+import { saveAs } from 'file-saver'
 
 const { Title } = Typography
+
+interface IDataToWrite {
+  ID: number
+  username: string
+  firstName: string
+  lastName: string
+  phoneNaumber: string
+}
+
+// Export to Exel
+const exportToExel = (data: IParseFolders, fileName: string, sheetName: string) => {
+  if (!data.accounts) {
+    message.warning('Нет акаунтов для экспорта')
+    return
+  }
+
+  if (data.type == 'groups') {
+    message.warning('Нет поддержки экспорта папки с группами')
+    return
+  }
+
+  let dataToWrite: IDataToWrite[] = data.accounts.map((account) => ({
+      ID: account.fullInfo.id,
+      username: account.fullInfo.username,
+      firstName: account.fullInfo.first_name,
+      lastName: account.fullInfo.last_name,
+      phoneNaumber: account.fullInfo.phone,
+    }))
+
+  const worksheet = XLSX.utils.json_to_sheet(dataToWrite)
+  const workbook = XLSX.utils.book_new()
+  XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)
+  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+  const excelData = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' })
+  saveAs(excelData, `${fileName}.xlsx`)
+
+  message.success('Папка экспортирована в загрузки')
+}
 
 interface ITableHeaders {
   setDeleteModal: Dispatch<SetStateAction<{ open: boolean; record: IParseFolders | null; }>>
@@ -49,7 +88,11 @@ const TableHeaders = ({setDeleteModal}: ITableHeaders) => {
             <div className="flex flex-col gap-1">
               <Title style={{ margin: '0 0', color: colors.font }} level={4}>{record.title}</Title>
               <Title style={{ margin: '0 0', fontWeight: '400', color: colors.dopFont }} level={5}>{record.dopTitle}</Title>
-              <Title style={{ margin: '0 0', fontWeight: '400', color: colors.dopFont }} level={5}>{record.accounts?.length}</Title>
+              {record.type == 'accounts' ? (
+                <Title style={{ margin: '0 0', fontWeight: '400', color: colors.dopFont }} level={5}>{record.accounts?.length}</Title>
+              ) : (
+                <Title style={{ margin: '0 0', fontWeight: '400', color: colors.dopFont }} level={5}>{record.groups?.length}</Title>
+              )}
             </div>
           </div>
         </div>)
@@ -68,7 +111,7 @@ const TableHeaders = ({setDeleteModal}: ITableHeaders) => {
                     key: '1',
                     label: 'Экспортировать',
                     icon: <ToTopOutlined />,
-                    onClick: () => console.error('Export is not asigned'),
+                    onClick: () => exportToExel(record, record.title, record.title),
                   },
                   {
                     type: 'divider'
@@ -82,7 +125,7 @@ const TableHeaders = ({setDeleteModal}: ITableHeaders) => {
                   },
                 ],
                 onClick: ({ key }) => {
-                  if (key == '1' ) {
+                  if (key == '999' ) {
                     message.warning(`Временно не доступно`)
                   }
                 }
@@ -228,20 +271,6 @@ export const Folders = () => {
         <div className="flex flex-col gap-7">
           <div className="flex items-center justify-between">
             <div className="flex gap-3 mr-2">
-              {/* <MSelect 
-                size='large'
-                defaultValue="Страна"
-                style={{ width: 200 }}
-                onChange={handleChange}
-                options={options}
-              />
-              <MSearch 
-                placeholder="Поиск по папкам"
-                allowClear
-                enterButton="Поиск"
-                size="large"
-                onSearch={() => console.log('search)}
-              /> */}
               <Title style={{ margin: '0 0' }} level={4}>Группы, чаты, каналы</Title>
             </div>
             <div className="flex gap-3">
@@ -266,7 +295,6 @@ export const Folders = () => {
             <ConfigProvider renderEmpty={NoParseFolders}>
               <Table
                 style={{ margin: '0 0' }}
-                // size='large'
                 rowSelection={selectionType ? { type: 'checkbox', ...rowSelection } : undefined}
                 columns={TableHeaders({setDeleteModal})}
                 dataSource={tableData || []}

@@ -8,6 +8,7 @@ import { Row, Col } from 'antd'
 import { ParseFromComments } from "./ParseFromComments/ParseFromComments"
 import { ParseByGeo } from "./ParseByGeo/ParseByGeo"
 import { ParseByKeywords } from "./ParseByKeywords/ParseByKeywords"
+import { ParseGroupsByKeyword } from "./ParseGroupsByKeywords/ParseGroupsByKeywords"
 
 
 export const ParsingPage: React.FC = () => {
@@ -25,6 +26,7 @@ export const ParsingPage: React.FC = () => {
               <ParseFromComments id={2} expanded={accordionState} onChange={() => setAccordionState(`panel${2}`)}/>
               <ParseByGeo id={3} expanded={accordionState} onChange={() => setAccordionState(`panel${3}`)}/>
               <ParseByKeywords id={4} expanded={accordionState} onChange={() => setAccordionState(`panel${4}`)}/>
+              <ParseGroupsByKeyword id={5} expanded={accordionState} onChange={() => setAccordionState(`panel${5}`)}/>
             </Col>
             <Col span={12}>
               <div className="div">

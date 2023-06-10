@@ -117,6 +117,7 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
         onCancel={() => setNewFolderModal(false)}
         onOk={() => setNewFolderModal(false)}
         setSelectedFolder={setSelectedFolder}
+        folder='accounts'
       />
 
       <Modal 
@@ -155,7 +156,11 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
                     <Title style={{ margin: '0px 0px' }} level={4}>{el.title}</Title>
                     <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
                     <div className="flex gap-1 items-start">
-                      <Title className='m-0' level={5}>{el.accounts?.length}</Title>
+                      {el.type == 'accounts' ? (
+                        <Title className='m-0' level={5}>{el.accounts?.length}</Title>
+                      ) : (
+                        <Title className='m-0' level={5}>{el.groups?.length}</Title>
+                      )}
                       <UserOutlined className='my-1 mt-[5px]' />
                     </div>
                   </div>
@@ -192,25 +197,6 @@ export const ParseFromComments = ({id, expanded, onChange}: IProps) => {
                     onChange={(e) => setPostLink({status: "", link: e.currentTarget.value})}
                   />
                 </div>
-              </Col>
-              <Col span={12}>
-                {/* {avaliableAccountsLoading ? (
-                  <Statistic 
-                    valueStyle={{ color: colors.primary }} 
-                    className='w-full' 
-                    title="Доступно номеров" 
-                    value={' '}
-                    prefix={ <div><UserSwitchOutlined /> <Spin/> </div>} 
-                  />
-                ) : (
-                  <Statistic 
-                    valueStyle={{ color: colors.primary }} 
-                    className='w-full' 
-                    title="Доступно аккаунтов" 
-                    // value={avaliablePhones?.count !== undefined ? avaliablePhones?.count : '-'} 
-                    prefix={ <UserSwitchOutlined />} 
-                  />
-                )} */}
               </Col>
             </Row>
           </div>

@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { AccordionStyled } from '../Accordion/AccordionStyled'
-import { Button, Col, ConfigProvider, Divider, Dropdown, Form, FormInstance, Input, InputRef, Modal, Popconfirm, Popover, Row, Spin, Statistic, Table, message } from 'antd'
-import { BuildOutlined, CommentOutlined, DeleteOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
+import { Button, Col, ConfigProvider, Divider, Form, FormInstance, Input, InputRef, Modal, Popover, Row, Table, message } from 'antd'
+import { BuildOutlined, DeleteOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
 import { useState } from 'react'
 import { IParseFolders } from '../../../../store/types'
@@ -126,7 +126,7 @@ interface IProps {
   onChange: (event: React.SyntheticEvent<Element, Event>, expanded: boolean) => void,
 }
 
-export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
+export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
   const dispatch = useDispatch()
   const userMail = useSelector((state: StoreState) => state.user.mail)
   const pasingFoldersRaw: IParseFolders[] | null = useSelector((state: StoreState) => state.user.userParsingFolders)
@@ -143,9 +143,6 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
   // Buttons
   const [buttonError, setButtonError] = useState<boolean>(false)
   const [buttonLoading, setButtonLoading] = useState<boolean>(false)
-
-  //chat link
-  const [chatLink, setChatLink] = useState<{status: "error" | "warning" | "", link: string}>({status: "", link: ""})
 
   // Table data
   const [dataSource, setDataSource] = useState<DataType[]>([])
@@ -166,12 +163,16 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
       message.warning('Добавте ключевые слова')
       return
     }
-    if (!chatLink.link) {
-      setChatLink({status: "error", link: ""})
-      return
-    }
     if (!selectedFolder) {
       setButtonError(true)
+      setTimeout(() => {
+        setButtonError(false)
+      }, 2000)
+      return
+    }
+    if (selectedFolder.type != 'groups') {
+      setButtonError(true)
+      message.error('Выберите папку типа \'Группы\'')
       setTimeout(() => {
         setButtonError(false)
       }, 2000)
@@ -185,28 +186,31 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
     // set button loading
     setButtonLoading(true)
 
-    const url = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/parser/chat-members`
+    const url = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/parser/chats-by-keywords`
     try {
       const res = await axios.get(url, {
         params: {
           mail: userMail,
           folder: accountsFolders[0]._id,
           folder_to_save: selectedFolder._id,
-          chat: chatLink.link,
           keywords: keywords,
         }
       })
 
       console.log(res)
-      if (res.status == 200) {
+      if (res.data.msg == 'Start Server...') {
         message.info('Начат парсинг аккаунтов. Это может занять около 30 минут')
-        // setTimeout(() => {
-        //   parsingFoldersFromDB(userMail as string, dispatch)
-        //   message.success('Парсинг аккаунтов завершен')
-        // }, 20_000)
+        setTimeout(() => {
+          parsingFoldersFromDB(userMail as string, dispatch)
+          message.success('Парсинг групп завершен')
+          setButtonLoading(false)
+          resetFields()
+        }, 20_000)
+      } 
+      if (res.data.code == 400) {
+        message.error('Ошибка при парсинге акаунтов')
+        setButtonLoading(false)
       }
-      setButtonLoading(false)
-      resetFields()
     } catch (err) {
       setButtonLoading(false)
       message.error('Ошибка при парсинге акаунтов')
@@ -237,27 +241,27 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
           />
         ) : null,
     },
-  ];
+  ]
 
   const handleAdd = () => {
     const newData: DataType = {
       key: count,
       keyword: 'Слово',
-    };
-    setDataSource([...dataSource, newData]);
-    setCount(count + 1);
-  };
+    }
+    setDataSource([...dataSource, newData])
+    setCount(count + 1)
+  }
 
   const handleSave = (row: DataType) => {
-    const newData = [...dataSource];
-    const index = newData.findIndex((item) => row.key === item.key);
-    const item = newData[index];
+    const newData = [...dataSource]
+    const index = newData.findIndex((item) => row.key === item.key)
+    const item = newData[index]
     newData.splice(index, 1, {
       ...item,
       ...row,
-    });
-    setDataSource(newData);
-  };
+    })
+    setDataSource(newData)
+  }
 
   const components = {
     body: {
@@ -268,7 +272,7 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
 
   const columns = defaultColumns.map((col) => {
     if (!col.editable) {
-      return col;
+      return col
     }
     return {
       ...col,
@@ -279,8 +283,8 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
         title: col.title,
         handleSave,
       }),
-    };
-  });
+    }
+  })
 
 
   return (
@@ -290,7 +294,7 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
         onCancel={() => setNewFolderModal(false)}
         onOk={() => setNewFolderModal(false)}
         setSelectedFolder={setSelectedFolder}
-        folder='accounts'
+        folder='groups'
       />
 
       <Modal 
@@ -345,8 +349,8 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
       </Modal>
 
       <AccordionStyled
-        title={'Парсинг юзеров по ключевым словам'}
-        dopTitle={'Парсинг по словам из описания профиля аккаунта'}
+        title={'Парсинг групп по ключевым словам'}
+        dopTitle={'Парсинг групп по словам из описания'}
         id={id}
         expanded={expanded}
         onChange={onChange}
@@ -384,23 +388,6 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
 
           <div className="div">
             <Row gutter={20}>
-              <Col span={12}>
-                <div className="w-full flex flex-col gap-1">
-                  <div className="flex gap-2 items-center">
-                    <Title level={5} style={{ margin: '0 0' }}>Ссылка на телеграм чат</Title>
-                    <Popover className='cursor-pointer' title="Ссылка на телеграм чат" content='Ссылку на группу или чат можно взять, нажав "троеточие" -> "info"'>
-                      <InfoCircleOutlined />
-                    </Popover>
-                  </div>
-                  <Input
-                    size='large'
-                    placeholder='Ссылка на телеграм чат'
-                    status={chatLink?.status || ""} 
-                    value={chatLink?.link}
-                    onChange={(e) => setChatLink({status: "", link: e.currentTarget.value})}
-                  />
-                </div>
-              </Col>
               <Col span={12} className='flex items-end'>
                 {selectedFolder ? (
                   <div className="flex gap-2">
@@ -416,14 +403,22 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
                     danger={buttonError}
                     icon={<FolderOpenOutlined />}
                     onClick={() => setModal(true)}
-                  >Папка для аккаунтов</Button>
+                  >Папка для групп</Button>
                 )}
               </Col>
             </Row>
           </div>
         </div>
 
-        <div className="m-2 mt-9 flex justify-end">
+        <div className="m-2 mt-9 flex justify-between">
+          <Button
+            type='link'
+            danger={true}
+            disabled={dataSource.length || selectedFolder ? false : true}
+            onClick={() => resetFields()}
+          >
+            Отмена
+          </Button>
           <Button
             type='primary'
             size='large'

@@ -8,6 +8,8 @@ import { useSelector } from 'react-redux'
 import { StoreState } from '../../../../store/store'
 import { NoParseFolders } from '../../../../components/CustomNoData/NoParseFolders'
 import { setParseManagerFolder } from '../../../../store/appSlice'
+import { IParseFolders } from '../../../../store/types'
+import Link from 'antd/es/typography/Link'
 
 
 const { Title } = Typography
@@ -23,6 +25,16 @@ const TableHeaders = () => {
       title: 'Название группы',
       dataIndex: 'group_id',
       render: (_, record: any) => <div>{record.fullInfo.title}</div>
+    },
+    {
+      title: 'Ссылка',
+      dataIndex: 'group_id',
+      width: '30%',
+      render: (_, record: any) => <div>
+        <Link href={`https://t.me/${record.group_name}`}>
+          @{record.group_name}
+        </Link>
+      </div>
     },
     {
       title: 'Колличество участников',
@@ -69,7 +81,6 @@ export const Groups = () => {
                 columns={TableHeaders() as (ColumnGroupType<object> | ColumnType<object>)[]}
                 dataSource={currentParseFolder?.groups || []}
                 pagination={{ pageSize: 15 }}
-                
               />
             </ConfigProvider> 
           </div>

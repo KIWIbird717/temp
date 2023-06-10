@@ -122,7 +122,6 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
           city: cityInput.city,
         }
       }
-      console.log(params)
       const res = await axios.get(url, {
         params: params
       })
@@ -162,6 +161,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
         onCancel={() => setNewFolderModal(false)}
         onOk={() => setNewFolderModal(false)}
         setSelectedFolder={setSelectedFolder}
+        folder='accounts'
       />
 
       <Modal 
@@ -184,7 +184,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
         <div className="flex flex-col gap-3 my-5">
           <SliderDriwer 
             dataSource={pasingFoldersRaw || []}
-            open={true}
+            open={modal}
             visibleAmount={3}
             render={(el) => (
               <div 
@@ -200,7 +200,11 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
                     <Title style={{ margin: '0px 0px' }} level={4}>{el.title}</Title>
                     <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
                     <div className="flex gap-1 items-start">
-                      <Title className='m-0' level={5}>{el.accounts?.length}</Title>
+                      {el.type == 'accounts' ? (
+                        <Title className='m-0' level={5}>{el.accounts?.length}</Title>
+                      ) : (
+                        <Title className='m-0' level={5}>{el.groups?.length}</Title>
+                      )}
                       <UserOutlined className='my-1 mt-[5px]' />
                     </div>
                   </div>
