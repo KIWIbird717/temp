@@ -1,9 +1,8 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { AccordionStyled } from '../Accordion/AccordionStyled'
-import { Row, Col, Popover, Input, Statistic, Spin, Checkbox, Divider, Modal, Button, Segmented, message, Select } from "antd"
+import { Row, Col, Popover, Input, Divider, Modal, Button, message, Select } from "antd"
 import { Typography } from 'antd'
-import { BuildOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
-import { colors } from '../../../../global-style/style-colors.module'
+import { BuildOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
 import { SliderDriwer } from '../../../../components/SliderDrawer/SliderDriwer'
 import { useSelector } from 'react-redux'
 import { StoreState } from '../../../../store/store'
@@ -32,7 +31,6 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
   const pasingFoldersRaw: IParseFolders[] | null = useSelector((state: StoreState) => state.user.userParsingFolders)
   const accountsFolders = useSelector((state: StoreState) => state.user.userManagerFolders)
 
-  const [avaliableAccountsLoading, setAvaliableAccountsLoading] = useState<boolean>(false)
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
   const [selectedFolder, setSelectedFolder] = useState<IParseFolders | null>(null)
 
@@ -86,11 +84,18 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
       }, 2000)
       return
     }
-    if (!accountsFolders) {
+    if (selectedFolder.type != 'accounts') {
+      message.error('Выберите папку типа \'Акаунты\'')
+      setButtonError(true)
+      setTimeout(() => {
+        setButtonError(false)
+      }, 2000)
+      return
+    }
+    if (!accountsFolders || accountsFolders && accountsFolders.length < 1) {
       message.error('Нет свободных номеров')
       return
     }
-
     // set button loading
     setButtonLoading(true)
 

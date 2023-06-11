@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { AccordionStyled } from '../Accordion/AccordionStyled'
-import { Button, Col, ConfigProvider, Divider, Dropdown, Form, FormInstance, Input, InputRef, Modal, Popconfirm, Popover, Row, Spin, Statistic, Table, message } from 'antd'
-import { BuildOutlined, CommentOutlined, DeleteOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined, UserSwitchOutlined } from '@ant-design/icons'
+import { Button, Col, ConfigProvider, Divider, Form, FormInstance, Input, InputRef, Modal, Popover, Row, Table, message } from 'antd'
+import { BuildOutlined, DeleteOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
 import { useState } from 'react'
 import { IParseFolders } from '../../../../store/types'
@@ -13,7 +13,6 @@ import { ModalAddNewParsingFolder } from '../ParseFolders/ModalAddNewParsingFold
 import { SliderDriwer } from '../../../../components/SliderDrawer/SliderDriwer'
 import styles from '../../Autoreg/folder-selection-style.module.css'
 import axios from 'axios'
-import { parsingFoldersFromDB } from '../ParseFolders/Folders'
 import { useDispatch } from 'react-redux'
 import { NoKeywordsData } from '../../../../components/CustomNoData/NoKeywordsData'
 
@@ -156,6 +155,7 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
     setSelectedFolder(null)
     setButtonError(false)
     setButtonLoading(false)
+    setChatLink({status: "", link: ""})
   }
 
   const runParsing = async () => {
@@ -177,7 +177,15 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
       }, 2000)
       return
     }
-    if (!accountsFolders) {
+    if (selectedFolder.type != 'accounts') {
+      message.error('Выберите папку типа \'Акаунты\'')
+      setButtonError(true)
+      setTimeout(() => {
+        setButtonError(false)
+      }, 2000)
+      return
+    }
+    if (!accountsFolders || accountsFolders && accountsFolders.length < 1) {
       message.error('Нет свободных номеров')
       return
     }
@@ -423,7 +431,15 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
           </div>
         </div>
 
-        <div className="m-2 mt-9 flex justify-end">
+        <div className="m-2 mt-9 flex justify-between">
+          <Button
+            type='link'
+            danger={true}
+            disabled={dataSource.length || selectedFolder || chatLink.link ? false : true}
+            onClick={() => resetFields()}
+          >
+            Отмена
+          </Button>
           <Button
             type='primary'
             size='large'

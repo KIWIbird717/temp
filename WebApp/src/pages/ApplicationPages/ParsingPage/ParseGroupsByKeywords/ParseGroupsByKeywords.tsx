@@ -132,13 +132,11 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
   const pasingFoldersRaw: IParseFolders[] | null = useSelector((state: StoreState) => state.user.userParsingFolders)
   const accountsFolders = useSelector((state: StoreState) => state.user.userManagerFolders)
 
-  const [avaliableAccountsLoading, setAvaliableAccountsLoading] = useState<boolean>(false)
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
   const [selectedFolder, setSelectedFolder] = useState<IParseFolders | null>(null)
 
   // Modal
   const [modal, setModal] = useState<boolean>(false)
-  const [accaountsFolders, setAccountsFolders] = useState<IParseFolders[] | null>(pasingFoldersRaw)
 
   // Buttons
   const [buttonError, setButtonError] = useState<boolean>(false)
@@ -178,7 +176,15 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
       }, 2000)
       return
     }
-    if (!accountsFolders) {
+    if (selectedFolder.type != 'groups') {
+      message.error('Выберите папку типа \'Группы\'')
+      setButtonError(true)
+      setTimeout(() => {
+        setButtonError(false)
+      }, 2000)
+      return
+    }
+    if (!accountsFolders || accountsFolders && accountsFolders.length < 1) {
       message.error('Нет свободных номеров')
       return
     }

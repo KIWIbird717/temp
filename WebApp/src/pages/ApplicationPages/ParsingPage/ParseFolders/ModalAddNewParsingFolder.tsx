@@ -203,14 +203,14 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
           folder == 'groups' ? (
             <Segmented 
               style={{ width: 'fit-content' }}
-              options={[{label: 'Аккаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
+              options={[{label: 'Акаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
               value={'groups'}
               disabled={true}
             />
           ) : (
             <Segmented 
               style={{ width: 'fit-content' }}
-              options={[{label: 'Аккаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
+              options={[{label: 'Акаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
               value={'accounts'}
               disabled={true}
             />
@@ -218,7 +218,7 @@ export const ModalAddNewParsingFolder = ({open, onOk, onCancel, setSelectedFolde
         ) : (
           <Segmented 
             style={{ width: 'fit-content' }}
-            options={[{label: 'Аккаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
+            options={[{label: 'Акаунты', value: 'accounts'}, {label: 'Группы', value: 'groups'}]}
             onChange={(e) => setFolderType(e as "groups" | "accounts")}
           />
         )}

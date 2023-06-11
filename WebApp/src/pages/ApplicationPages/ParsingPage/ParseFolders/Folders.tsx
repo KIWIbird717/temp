@@ -236,7 +236,7 @@ export const Folders = () => {
 
   useEffect(() => {
     setTableData(tableDataRaw)
-    if (tableDataRaw && tableDataRaw?.length > 0) {
+    if (tableDataRaw) {
       setTableLoading(false)
     }
   }, [tableDataRaw])

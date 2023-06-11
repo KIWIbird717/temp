@@ -10,9 +10,9 @@ const initialState: IUserState = {
   defaultAppId: null,
   id: null,
   isUserLogined: false,
-  userManagerFolders: [],
+  userManagerFolders: null,
   userProxyFolders: [],
-  userParsingFolders: []
+  userParsingFolders: null,
 }
 
 export const userSlice = createSlice({

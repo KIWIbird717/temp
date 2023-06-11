@@ -78,7 +78,15 @@ export const ParseChatParticipants = ({id, expanded, onChange}: IProps) => {
       }, 2000)
       return
     }
-    if (!accountsFolders) {
+    if (selectedFolder.type != 'accounts') {
+      message.error('Выберите папку типа \'Акаунты\'')
+      setButtonError(true)
+      setTimeout(() => {
+        setButtonError(false)
+      }, 2000)
+      return
+    }
+    if (!accountsFolders || accountsFolders && accountsFolders.length < 1) {
       message.error('Нет свободных номеров')
       return
     }
