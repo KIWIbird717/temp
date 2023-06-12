@@ -30,6 +30,7 @@ export interface IAccountsManagerFolder extends Document {
       telegramSession: string;
       apiId?: number;
       apiHash?: string;
+      sessionPath?: string; 
     }
   ];
 }
@@ -216,6 +217,7 @@ const AccountsDataSchema = new Schema<IAccountsManagerFolder["accounts"][0]>({
   telegramSession: String,
   apiId: {type: Number, require: false},
   apiHash: {type: String, require: false},
+  sessionPath: {type: String, require: false},
 })
 
 const AccountsManagerFolderSchema = new Schema<IAccountsManagerFolder>({

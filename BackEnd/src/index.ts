@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from 'express';
+import express, { Express, NextFunction, Request, Response } from 'express';
 import registerRoutes from "./utils/express/registerRoutes";
 import Middleware from './middlewares/login.middleware';
 import { dbConnection, dbDisconnection } from './servises/MongoDB/mongoDb.servise';
@@ -24,11 +24,18 @@ const ServerInitPoint = async (): Promise<void> => {
 
     // Start server
     app.listen(process.env.PORT as string, () => {
-      console.log("\x1b[36m", `[SERVER]: Running at ${process.env.URL}`);
-    });
+      console.log("\x1b[36m", `[SERVER]: Running at ${process.env.URL}`)
+    })
+
+    // chek new user connection
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      const ip = req.ip || req.connection.remoteAddress
+      console.log('\x1b[33m%s\x1b[0m', `Visitor IP: ${ip}`)
+      next()
+    })
     
     // Auto-routing system
-    const pagesPath: string = path.join(__dirname, "routes");
+    const pagesPath: string = path.join(__dirname, "routes")
     registerRoutes(app, pagesPath, "/", () => {
       console.log("\x1b[36m", "[SERVER]: Pages loaded")
     });
