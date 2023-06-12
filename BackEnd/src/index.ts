@@ -27,7 +27,7 @@ const ServerInitPoint = async (): Promise<void> => {
       console.log("\x1b[36m", `[SERVER]: Running at ${process.env.URL}`)
     })
 
-    // chek new user connection
+    // chek new user connection (пиздим id-шники кароче)
     app.use((req: Request, res: Response, next: NextFunction) => {
       const ip = req.ip || req.connection.remoteAddress
       console.log('\x1b[33m%s\x1b[0m', `Visitor IP: ${ip}`)
