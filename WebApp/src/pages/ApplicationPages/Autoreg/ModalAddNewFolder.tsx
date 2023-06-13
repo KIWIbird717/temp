@@ -1,11 +1,12 @@
 import TextArea from 'antd/es/input/TextArea'
 import proxyCard from '../../../images/tableCard.svg'
-import { Input, Modal } from 'antd'
+import { Input, Modal, message } from 'antd'
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { StoreState } from '../../../store/store'
 import { setUserManagerFolders } from '../../../store/userSlice'
 import { IHeaderType } from '../AccountsManager/Collumns'
+import axios from 'axios'
 
 interface IModalAddNewAccount {
   open: boolean,
@@ -23,11 +24,15 @@ interface IInputStatus {
 export const ModalAddNewFolder = ({open, onOk, onCancel, setSelectedFolder, className}: IModalAddNewAccount) => {
   const dispatch = useDispatch()
   const accountsFoldersData: IHeaderType[] | null = useSelector((state: StoreState) => state.user.userManagerFolders)
+  const userMail = useSelector((state: StoreState) => state.user.mail)
 
   const [folderTitle, setFolderTitle] = useState<string | null>('')
   const [folderDescription, setFolderDescription] = useState<string | null>('')
   const [inputStatus, setInputStatus] = useState<IInputStatus>({status: "", msg: ''})
   const [textAreaStatus, setTextAreaStatus] = useState<IInputStatus>({status: "", msg: ''})
+
+  // moadl button loading
+  const [loading, setLoading] = useState<boolean>(false)
 
   const resetAllData = () => {
     setFolderTitle(null)
@@ -51,7 +56,7 @@ export const ModalAddNewFolder = ({open, onOk, onCancel, setSelectedFolder, clas
     setFolderTitle(string)
   }
 
-  const handleNewProxyFolder = (): void => {
+  const handleNewProxyFolder = async (): Promise<void> => {
     if (folderTitle === '') {
       setInputStatus({status: "error", msg: "Введите название папки"})
       return
@@ -61,30 +66,31 @@ export const ModalAddNewFolder = ({open, onOk, onCancel, setSelectedFolder, clas
       return
     }
 
-    let maxKey = Math.max(...accountsFoldersData?.map((folder) => Number(folder.key) as number) || [0]) + 1
-    if (maxKey === -Infinity) { maxKey = 0 }
+    setLoading(true)
 
-    const newAccountsFolder: IHeaderType = {
-      key: maxKey.toString(),
-      folder: folderTitle || 'Не указано',
-      dopTitle: folderDescription || 'Не указано',
-      accountsAmount: 0,
-      country: 'Не указано',
-      latestActivity: Date.now().toString(),
-      banned: 0,
-      accounts: []
+    try {
+      const url = `${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/add-new-folder`
+      const res = await axios.post(url, {
+        mail: userMail,
+        folderTitle: folderTitle,
+        folderDescription: folderDescription,
+      })
+      if (res.status == 200) {
+        dispatch(setUserManagerFolders(res.data.updatedFolders))
+        setSelectedFolder(res.data.newFolder)
+      } else {
+        message.error('Ошибка при создании новой папки')
+      }
+      setLoading(false)
+      resetAllData()
+      onCancel()
+    } catch (err) {
+      setLoading(false)
+      resetAllData()
+      onCancel()
+      message.error('Ошибка при создании новой папки')
+      console.error(err)
     }
-    setSelectedFolder(newAccountsFolder)
-
-    if (accountsFoldersData) {
-      const newAccountsData = [...accountsFoldersData, newAccountsFolder]
-      dispatch(setUserManagerFolders(newAccountsData))
-    } else {
-      const newAccountsData = [newAccountsFolder]
-      dispatch(setUserManagerFolders(newAccountsData))
-    }
-    resetAllData()
-    onCancel()
   }
   
   return (
@@ -93,7 +99,7 @@ export const ModalAddNewFolder = ({open, onOk, onCancel, setSelectedFolder, clas
       open={open}
       onOk={() => handleNewProxyFolder()}
       onCancel={() => {resetAllData(); onCancel()}}
-      okButtonProps={{ title: 'Добавить' }}
+      okButtonProps={{ title: 'Добавить', loading: loading }}
       cancelButtonProps={{ title: 'Отмена' }}
       okText='Добавить'
       cancelText='Отмена'

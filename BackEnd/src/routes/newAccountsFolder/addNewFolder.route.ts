@@ -7,39 +7,50 @@ import {
 
 const router: Router = express.Router();
 
-/**
- * request example:
- * {
- *  mail: string,
- *  folder: [
-      key: string;
-      apiHash: string;
-      apiId: number;
-      folder: string;
-      dopTitle: string;
-      accountsAmount: number;
-      country: string;
-      latestActivity: Date;
-      banned: number;
-      accounts: []
- * }
- */
 router.post('/add-new-folder', async (req: Request, res: Response) => {
   try {
-    const { mail } = req.body
-    const folder = req.body.folder
+    const { mail, folderTitle, folderDescription } = req.body
 
-    const result = await RegisterUserSchema.updateOne(
-      { mail: mail },
-      { $push: { accountsManagerFolder: folder } }
-    )
-    if (result.modifiedCount > 0) {
-      return res.status(200).json(result)
-    } else {
-      return res.status(501).json('Ошибка при создании новой папки')
+    // validate request
+    if (!mail) return res.status(400).json({ message: 'Bad request. Select mail' })
+    if (!folderTitle) return res.status(400).json({ message: 'Bad request. Select folderTitle' })
+    if (!folderDescription) return res.status(400).json({ message: 'Bad request. Select folderDescription' })
+
+    const user = await RegisterUserSchema.findOne({ mail })
+    if (!user) return res.status(404).json({ message: 'User not found' })
+
+    // find latest folder key
+    const accountsManagerFolders = user.accountsManagerFolder
+    let dinamicKey = Math.max(...accountsManagerFolders.map((folder) => Number(folder.key)))
+    console.log(dinamicKey)
+    if (dinamicKey < 0) dinamicKey = 0
+
+    // create new folder
+    const newKey = dinamicKey + 1
+    const newFolder = {
+      key: newKey.toString(),
+      apiHash: null,
+      apiId: null,
+      folder: folderTitle,
+      dopTitle: folderDescription,
+      accountsAmount: 0,
+      country: 'Не указано',
+      latestActivity: new Date(),
+      banned: 0,
+      accounts: [],
     }
+
+    const updatedUser = await RegisterUserSchema.findOneAndUpdate(
+      { mail: mail },
+      { $push: { 'accountsManagerFolder': newFolder } },
+      { new: true },
+    )
+
+    const newFolderFromDB = updatedUser.accountsManagerFolder.filter((folder) => folder.key == newKey.toString())
+    
+    return res.status(200).json({ message: 'Seccessfully added new folder', updatedFolders: updatedUser.accountsManagerFolder, newFolder: newFolderFromDB[0] })
   } catch(err) {
-    return res.status(500).json(err)
+    return res.status(500).json({ error: err })
   }
 })
 

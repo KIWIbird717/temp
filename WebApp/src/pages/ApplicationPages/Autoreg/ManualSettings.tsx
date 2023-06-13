@@ -37,6 +37,7 @@ export const ManualSettings = ({current, value}: propsType) => {
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
 
   const [selectedFolder, setSelectedFolder] = useState<null | IHeaderType>(null)
+  console.log(selectedFolder)
 
   // Uploaded files
   const [fileListRaw, setFileListRaw] = useState<UploadFile<any>[]>([])
@@ -230,6 +231,7 @@ export const ManualSettings = ({current, value}: propsType) => {
           {selectedFolder ? (
             <Button 
               danger 
+              onClick={() => resetAllData()}
               type='link'
             >
               Отменить

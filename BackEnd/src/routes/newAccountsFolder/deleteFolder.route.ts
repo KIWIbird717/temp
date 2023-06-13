@@ -16,19 +16,15 @@ router.post('/delete-accounts-folder', async (req: Request, res: Response) => {
     }
 
     // Find the folder index based on the folder key
-     const folderIndex = user.accountsManagerFolder.findIndex((folder) => folder.key === folderKey)
-
-     if (folderIndex === -1) {
-      return res.status(404).json({ message: 'Folder not found' })
-    }
+    const newFolders = user.accountsManagerFolder.filter((folder) => folder.key !== folderKey)
 
     // Remove the folder from the user's accountManagerFolder array
-     user.accountsManagerFolder.splice(folderIndex, 1)
+    user.accountsManagerFolder = newFolders
 
     // Save the updated user
     await user.save()
 
-    return res.status(200).json({ message: 'Folder deleted successfully' })
+    return res.status(200).json({ message: 'Folder deleted successfully', updatedFolders: user.accountsManagerFolder })
   } catch(err) {
     console.error(err)
     return res.status(500).json({ message: 'Server error' })

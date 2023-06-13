@@ -20,7 +20,7 @@ import { ColumnsType } from 'antd/es/table'
 import { useSelector, useDispatch } from 'react-redux'
 import { StoreState } from '../../../store/store'
 import { setUserManagerFolders } from '../../../store/userSlice'
-import { deleteAccountsFolderFromDb } from '../../../utils/dbUtils/deleteAccountsFolderFromDB'
+import axios from 'axios'
 
 
 interface IEditButton {
@@ -32,8 +32,6 @@ interface IEditButton {
 }
 
 export const Folders = () => {
-  const [messageApi] = message.useMessage()
-
   const dispatch = useDispatch()
   const folders = useSelector((state: StoreState) => state.user.userManagerFolders)
   const userMail = useSelector((state: StoreState) => state.user.mail)
@@ -48,29 +46,44 @@ export const Folders = () => {
   const [headers, setHeaders] = useState<ColumnsType<IHeaderType>>(TableHeaders({setDeleteModal}))
   const [dragHandler, setDragHandler] = useState<boolean>(false)
 
+  const [buttomLoading, setButtomLoading] = useState<boolean>(false)
+
 
   const deleteFolder = async (record: IHeaderType | null) => {
     if (record) {
       const newAccountsFolders = folders?.filter((folder) => folder.key !== record.key)
-      if (userMail) {
-        deleteAccountsFolderFromDb({dispatch, userMail, folderKey: record.key})
-          .then((res: number) => {
-            if (res === 200) {
-              messageApi.open({
-                type: 'success',
-                content: 'Папка успешно удалена',
-              })
-            } else {
-              messageApi.open({
-                type: 'error',
-                content: 'Ошибка',
-              })
-            }
-          })
+
+      if (!userMail) {
+        message.error('Пользователя не существует')
+        return
+      }
+
+      setButtomLoading(true)
+
+      const url = `${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/delete-accounts-folder`
+      try {
+        const res = await axios.post(url, {
+          mail: userMail,
+          folderKey: record.key,
+        })
+  
+        if (res.status == 200) {
+          message.success('Папка успешно удалена')
+          dispatch(setUserManagerFolders(res.data.updatedFolders))
+          setDataSource(res.data.updatedFolders || null)
+        } else {
+          message.error('Ошибка при удалении папки')
+        }
+        
+        setButtomLoading(false)
+        setDeleteModal({open: false, record: null})
+      } catch (err) {
+        setButtomLoading(false)
+        setDeleteModal({open: false, record: null})
+        console.error(err)
       }
 
       setDataSource(newAccountsFolders || null)
-      setDeleteModal({open: false, record: null})
     }
   }
 
@@ -157,7 +170,7 @@ export const Folders = () => {
         open={deleteModal.open}
         onOk={() => deleteFolder(deleteModal.record)}
         onCancel={() => setDeleteModal({open: false, record: null})}
-        okButtonProps={{ danger: true }}
+        okButtonProps={{ danger: true, loading: buttomLoading }}
         okText='Удалить'
         cancelText='Отмена'
       >
