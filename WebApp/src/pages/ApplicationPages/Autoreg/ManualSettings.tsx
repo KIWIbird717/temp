@@ -72,7 +72,7 @@ export const ManualSettings = ({current, value}: propsType) => {
       formData.append('files', file.originFileObj as unknown as Blob)
     })
     try {
-      const url = `${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/add-new-account-handwrite`
+      const url = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/accounts/add-session-upload/`
       const res = await axios.post(url, formData)
 
       if (res.status == 200 && res.data.accountsManagerFolder && res.data.accountsManagerFolder.length > 0) {
