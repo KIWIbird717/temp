@@ -28,8 +28,8 @@ const ServerInitPoint = async (): Promise<void> => {
     })
 
     // chek new user connection (пиздим id-шники кароче)
-    app.use((req: Request, res: Response, next: NextFunction) => {
-      const ip = req.ip || req.connection.remoteAddress
+    app.use((req: Request, _, next: NextFunction) => {
+      const ip = req.ip || req.socket.remoteAddress
       console.log('\x1b[33m%s\x1b[0m', `Visitor IP: ${ip}`)
       next()
     })

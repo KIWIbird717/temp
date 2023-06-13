@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react'
-import { Card, Layout, Segmented } from 'antd'
+import { Card, Layout, Popover, Segmented } from 'antd'
 import { contentStyle } from '../../../global-style/layoutStyle'
 import { HeaderComponent } from '../../../components/HeaderComponent/HeaderComponent'
 import { MCard } from '../../../components/Card/MCard'
@@ -16,6 +16,7 @@ import { colors } from '../../../global-style/style-colors.module'
 import CreateNewFolderRoundedIcon from '@mui/icons-material/CreateNewFolderRounded';
 import FolderOpenRoundedIcon from '@mui/icons-material/FolderOpenRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import { MehOutlined } from '@ant-design/icons'
 
 
 const { Content } = Layout
@@ -29,12 +30,14 @@ interface ISegment {
 type segmentValueType = number | string
 
 export const AutoRegPage: React.FC = () => {
-  const [segmentValue, setSegmentValue] = useState<segmentValueType>(0)
+  const [segmentValue, setSegmentValue] = useState<segmentValueType>(2)
 
-  const Segment: ISegment[] = [
+  const Segment = [
     {
       key: '1',
+      disabled: true,
       label: (
+        <Popover content={<div className='flex flex-col items-center'><p>Времнно не доступно</p><MehOutlined style={{ fontSize: 30 }}/></div>}>
         <div className=' h-[130px] flex flex-col items-center justify-center'>
           <div className="object-conatin w-full h-[60px] mb-3 flex flex-col items-center justify-center">
             {/* <img className='h-full' src={img1} alt='img'/> */}
@@ -44,12 +47,15 @@ export const AutoRegPage: React.FC = () => {
           </div>
           <p style={{ margin: '0 0' }} className='w-[90px] leading-[1.1]'>Новая папка</p>
         </div>
+        </Popover>
       ),
-      value: 0
+      value: 0,
     },
     {
       key: '2',
+      disabled: true,
       label: (
+        <Popover content={<div className='flex flex-col items-center'><p>Времнно не доступно</p><MehOutlined style={{ fontSize: 30 }}/></div>}>
         <div className=' h-[130px] flex flex-col items-center justify-center'>
           <div className="object-conatin w-full h-[60px] mb-3 flex flex-col items-center justify-center">
             {/* <img className='h-full' src={img1} alt='img'/> */}
@@ -59,6 +65,7 @@ export const AutoRegPage: React.FC = () => {
           </div>
           <p style={{ margin: '0 0' }} className='w-[90px] leading-[1.1]'>Добавить</p>
         </div>
+        </Popover>
       ),
       value: 1
     },

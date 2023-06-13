@@ -1,6 +1,11 @@
 import { Schema, Model, model, Document } from "mongoose";
 import { ErrorService, ErrorType} from "../../utils/errorHandler";
 
+
+export interface IFile {
+  originalname: string
+  buffer: Buffer
+}
 /**
  * interface for `Менеджер аккаунов` page
  */
@@ -17,20 +22,20 @@ export interface IAccountsManagerFolder extends Document {
   accounts: [
     {
       key: string;
-      avatar?: string;
+      avatar: string;
       phoneNumber: string;
       resting: Date | number;
       userName: string;
       firstName?: string;
       lastName?: string;
-      secondFacAith: string;
-      proxy: string;
+      secondFacAith?: string;  // uness
+      proxy?: string;  // uness
       latestActivity: Date;
       status: "success" | "warning" | "error" | string;
-      telegramSession: string;
-      apiId?: number;
-      apiHash?: string;
-      sessionPath?: string; 
+      telegramSession: IFile; // session.json file
+      sessionPath: IFile; // .sesstion file
+      apiId?: number;   // uness
+      apiHash?: string; // uness
     }
   ];
 }
@@ -201,23 +206,27 @@ export interface IUserRes {
 // There are Schemas for MongoDB
 
 interface IRegisterUserModel extends Model<IRegisterUserSchema> {}
+const fileSchema = new Schema<IFile>({
+  originalname: String,
+  buffer: Buffer,
+})
 
 const AccountsDataSchema = new Schema<IAccountsManagerFolder["accounts"][0]>({
   key: String,
-  avatar: {type: String, require: false},
+  avatar: String,
   phoneNumber: String,
-  resting: Number,
+  resting: Date,
   userName: String,
-  firstName: {type: String, require: false},
-  lastName: {type: String, require: false},
-  secondFacAith: String,
-  proxy: String,
-  latestActivity: Date,
-  status: String,
-  telegramSession: String,
-  apiId: {type: Number, require: false},
-  apiHash: {type: String, require: false},
-  sessionPath: {type: String, require: false},
+  firstName: { type: String, require: true },
+  lastName: { type: String, require: true },
+  secondFacAith: { type: String, require: false },  // uness
+  proxy: { type: String, require: false },  // uness
+  latestActivity: { type: Date, require: true },
+  status: { type: String, require: true },
+  telegramSession: { type: fileSchema, require: true }, // session.json file
+  sessionPath: { type: fileSchema, require: true }, // .sesstion file
+  apiId: { type: Number, require: true },   // uness
+  apiHash: { type: String, require: true },// uness
 })
 
 const AccountsManagerFolderSchema = new Schema<IAccountsManagerFolder>({

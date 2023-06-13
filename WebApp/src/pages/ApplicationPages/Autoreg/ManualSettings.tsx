@@ -1,14 +1,5 @@
-import { 
-  Button, 
-  Cascader, 
-  Input, 
-  Popover, 
-  Space, 
-  Typography, 
-  Upload, 
-  message 
-} from 'antd'
-import { CheckOutlined, FolderOpenFilled, FolderOpenOutlined, InfoCircleOutlined, LoadingOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
+import { Button, Col, Row, Typography, message } from 'antd'
+import { BookOutlined, CheckOutlined, FolderOpenFilled, FolderOpenOutlined, InboxOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
 import { colors } from '../../../global-style/style-colors.module'
 import { motion } from 'framer-motion'
 import { Modal } from 'antd'
@@ -21,6 +12,10 @@ import styles from './folder-selection-style.module.css'
 import { IHeaderType } from '../AccountsManager/Collumns'
 import { RcFile, UploadChangeParam, UploadFile, UploadProps } from 'antd/es/upload'
 import { ModalAddNewFolder } from './ModalAddNewFolder'
+import Dragger from 'antd/es/upload/Dragger'
+import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { setUserManagerFolders } from '../../../store/userSlice'
 
 
 const { Title } = Typography
@@ -31,25 +26,11 @@ type propsType = {
   value: number | string,
 }
 
-const getBase64 = (img: RcFile, callback: (url: string) => void) => {
-  const reader = new FileReader()
-  reader.addEventListener('load', () => callback(reader.result as string))
-  reader.readAsDataURL(img)
-}
-
-const beforeUpload = (file: RcFile) => {
-  const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
-  if (!isJpgOrPng) {
-    message.error('You can only upload JPG/PNG file!')
-  }
-  const isLt2M = file.size / 1024 / 1024 < 2
-  if (!isLt2M) {
-    message.error('Image must smaller than 2MB!')
-  }
-  return isJpgOrPng && isLt2M
-}
+type FilterPairsType<T> = { session: UploadFile<T>, json: UploadFile<T> } | undefined
 
 export const ManualSettings = ({current, value}: propsType) => {
+  const dispatch = useDispatch()
+  const userMail = useSelector((state: StoreState) => state.user.mail)
   const accaountsFolders: IHeaderType[] | null = useSelector((state: StoreState) => state.user.userManagerFolders)
 
   const [modal, setModal] = useState<boolean>(false)
@@ -57,32 +38,68 @@ export const ManualSettings = ({current, value}: propsType) => {
 
   const [selectedFolder, setSelectedFolder] = useState<null | IHeaderType>(null)
 
-  const [loading, setLoading] = useState(false)
-  const [imageUrl, setImageUrl] = useState<string>()
+  // Uploaded files
+  const [fileListRaw, setFileListRaw] = useState<UploadFile<any>[]>([])
+
+  const [buttonLoading, setButtonLoading] = useState<boolean>(false)
+
 
   const resetAllData = (): void => {
     setSelectedFolder(null)
+    setFileListRaw([])
+    setButtonLoading(false)
   }
 
-  const uploadButton = (
-    <div>
-      {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{ marginTop: 8 }}>Загрузить</div>
-    </div>
-  )
-
-  const handleAvatarChange: UploadProps['onChange'] = (info: UploadChangeParam<UploadFile>) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true)
+  const createNewAccount = async (): Promise<void> => {
+    // Validate fields
+    if (!selectedFolder) {
+      message.error('Укажите папку для сохранения акаунтов')
       return
     }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as RcFile, (url) => {
-        setLoading(false)
-        setImageUrl(url)
-      })
+    if (!fileListRaw) {
+      message.error('Добавте файлы для загрузки')
+      return
     }
+
+    setButtonLoading(true)
+
+    // Set up from data
+    const formData = new FormData()
+    formData.append('mail', userMail as unknown as Blob)
+    formData.append('folderKey', selectedFolder.key as unknown as Blob)
+    fileListRaw.forEach((file) => {
+      formData.append('files', file.originFileObj as unknown as Blob)
+    })
+    try {
+      const url = `${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/add-new-account-handwrite`
+      const res = await axios.post(url, formData)
+
+      if (res.status == 200 && res.data.accountsManagerFolder && res.data.accountsManagerFolder.length > 0) {
+        message.success('Акаунты успешно добавлены')
+        dispatch(setUserManagerFolders(res.data.accountsManagerFolder))
+      } else {
+        message.error('Ошибка при добавлении акаунтов')
+      }
+      setButtonLoading(false)
+      resetAllData()
+    } catch (err) {
+      console.error(err)
+      message.error('Ошибка при добавлении акаунтов')
+    }
+
+  }
+
+  const props: UploadProps = {
+    multiple: true,
+    onRemove: (file) => {
+      if (!fileListRaw) return
+      const newFileList = fileListRaw.filter((f) => f !== file)
+      setFileListRaw(newFileList)
+    },
+    onChange: (e: any) => setFileListRaw(e.fileList),
+    beforeUpload: () => {
+      return false
+    },
   }
 
   return (
@@ -184,70 +201,28 @@ export const ManualSettings = ({current, value}: propsType) => {
             </div>
           )}
 
-          <div className="flex gap-3 mb-5 items-start">
-            <div className="flex gap-3 flex-col w-full">
-              <div className="flex gap-2 items-center">
-                <Title level={5} style={{ margin: '0 0' }}>Профиль</Title>
-                <Popover className='cursor-pointer' title="Профиль" content='Добавьте описание для Телеграм профиля'>
-                  <InfoCircleOutlined />
-                </Popover>
-              </div>
-              <div className="flex gap-3 items-center w-[fit-content]">
-                <Upload
-                  name="avatar"
-                  listType="picture-circle"
-                  showUploadList={false}
-                  // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  beforeUpload={beforeUpload}
-                  onChange={handleAvatarChange}
-                  className={styles.avatar_uploader}
-                >
-                  {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
-                </Upload>
-                <div className="flex flex-col gap-2">
-                  <Input size="large" placeholder="Имя" />
-                  <Input size="large" placeholder="Фамилия" />
+          <div className="">
+            <Row gutter={20} align={'top'}>
+              <Col span={14}>
+                <Dragger {...props}>
+                  <p className="ant-upload-drag-icon">
+                    <InboxOutlined />
+                  </p>
+                  <p className="ant-upload-text">Нажмите или перетащите файл в эту область, чтобы загрузить</p>
+                  <p className="ant-upload-hint">
+                    Перетащите пары файлов с расширениями .json и .session
+                  </p>
+                </Dragger>
+              </Col>
+              <Col span={10} className='h-full'>
+                <div className="mt-[60px] max-w-[270px] flex flex-col h-full justify-center gap-3">
+                  <p style={{ margin: '0 0' }}>Если у вас возникли проблемы с загрузкой акаунтов, можете прочитать инструкцию ниже.</p>
+                  <div className="flex items-center gap-3">
+                    <Button type='link' icon={<BookOutlined />}>Инструкция</Button>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div className="w-full flex flex-col gap-1">
-              <div className="flex gap-2 items-center">
-                <Title level={5} style={{ margin: '0 0' }}>BIO</Title>
-                <Popover className='cursor-pointer' title="BIO" content='Добавьте BIO для профиля'>
-                  <InfoCircleOutlined />
-                </Popover>
-              </div>
-              <div className="flex flex-col gap-7">
-                <Input size="large" placeholder="BIO" />
-                <Input size="large" placeholder="Имя пользователя" prefix='@' />
-              </div>
-            </div>
-          </div> 
-
-          <div className="flex gap-3 mb-5 items-center">
-            <div className="w-full flex flex-col gap-1">
-              <div className="flex gap-2 items-center">
-                <Title level={5} style={{ margin: '0 0' }}>Номер телефона</Title>
-                <Popover className='cursor-pointer' title="Номер телефона" content='Добавьте номер телефона Телеграм аккаунта'>
-                  <InfoCircleOutlined />
-                </Popover>
-              </div>
-              {/* <Input size="large" placeholder="Номер телефона" /> */}
-              <Space.Compact size="large">
-                <Input size="large" style={{ width: '18%' }} defaultValue="+7" />
-                <Input size="large" style={{ width: '82%' }} placeholder='Номер телефона' />
-              </Space.Compact>
-            </div>
-            <div className="w-full flex flex-col gap-1">
-              <div className="flex gap-2 items-center">
-                <Title level={5} style={{ margin: '0 0' }}>Proxy</Title>
-                <Popover className='cursor-pointer' title="Proxy" content='Тут может быть описание proxy'>
-                  <InfoCircleOutlined />
-                </Popover>
-              </div>
-              <Cascader placeholder="Proxy" size='large' className='w-full'/>
-            </div>
+              </Col>
+            </Row>
           </div>
         </div>
 
@@ -256,14 +231,13 @@ export const ManualSettings = ({current, value}: propsType) => {
             <Button 
               danger 
               type='link'
-              onClick={() => resetAllData()}
             >
               Отменить
             </Button>
           ) : (
             <div className="div"></div>
           )}
-          <Button icon={<CheckOutlined />} size='large' type='primary'>Добавить аккаунт</Button>
+          <Button loading={buttonLoading} onClick={() => createNewAccount()} icon={<CheckOutlined />} size='large' type='primary'>Добавить аккаунт</Button>
         </div>
       </div>
     </motion.div>

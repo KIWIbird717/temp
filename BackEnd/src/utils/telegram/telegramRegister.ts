@@ -158,6 +158,7 @@ export class telegramUser {
 
     return {
       key: userId.toString(),
+      avatar: null, // DONT FOGET TO FIX
       phoneNumber: this.statistic.phone,
       resting: 0,
       userName: this.statistic.tgUserStats.username,
@@ -168,6 +169,7 @@ export class telegramUser {
       latestActivity: new Date(),
       status: "",
       telegramSession: sessionString,
+      sessionPath: { originalname: 'null', buffer: null },  // DONT FOGET TO FIX
     };
   }
 

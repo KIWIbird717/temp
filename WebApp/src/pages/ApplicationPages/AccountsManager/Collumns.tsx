@@ -73,12 +73,13 @@ export const TableHeaders = ({setDeleteModal}: ITableHeaders): ColumnsType<IHead
             <Avatar.Group maxCount={2} maxStyle={{ color: '#f56a00', backgroundColor: '#fde3cf' }} maxPopoverTrigger="focus">
               {accAmount > 0 ? (
                 <>
-                  {/* <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=2" /> */}
-                  {/* <Avatar style={{ backgroundColor: colors.accent }}>K</Avatar> */}
-                  {/* <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} /> */}
                   {new Array(accAmount).fill(0).map((_, index) => {
-                    const letter = record.accounts[index].userName.slice(0,1)
-                    return <Avatar style={{ backgroundColor: colors.accent }}>{letter}</Avatar>
+                    if (!record.accounts[index].userName) {
+                      return <Avatar style={{ backgroundColor: colors.accent }}>А</Avatar>  
+                    } else {
+                      const letter = record.accounts[index].userName.slice(0,1)
+                      return <Avatar style={{ backgroundColor: colors.accent }}>{letter}</Avatar>
+                    }
                   })}
                 </>
               ) : (
