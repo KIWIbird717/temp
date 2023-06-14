@@ -37,7 +37,6 @@ export const ManualSettings = ({current, value}: propsType) => {
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
 
   const [selectedFolder, setSelectedFolder] = useState<null | IHeaderType>(null)
-  console.log(selectedFolder)
 
   // Uploaded files
   const [fileListRaw, setFileListRaw] = useState<UploadFile<any>[]>([])
@@ -64,10 +63,10 @@ export const ManualSettings = ({current, value}: propsType) => {
 
     setButtonLoading(true)
 
-    // Set up from data
+    // Set up form data
     const formData = new FormData()
     formData.append('mail', userMail as unknown as Blob)
-    formData.append('folderKey', selectedFolder.key as unknown as Blob)
+    formData.append('folder_key', selectedFolder.key as unknown as Blob)
     fileListRaw.forEach((file) => {
       formData.append('files', file.originFileObj as unknown as Blob)
     })
@@ -75,9 +74,13 @@ export const ManualSettings = ({current, value}: propsType) => {
       const url = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/accounts/add-session-upload/`
       const res = await axios.post(url, formData)
 
-      if (res.status == 200 && res.data.accountsManagerFolder && res.data.accountsManagerFolder.length > 0) {
+      if (res.status == 200 && res.data.body && res.data.body.length > 0) {
         message.success('Акаунты успешно добавлены')
-        dispatch(setUserManagerFolders(res.data.accountsManagerFolder))
+        const recievedFolders = res.data.body.map((folder: string) => {
+          const folderParsed = JSON.parse(folder)
+          return { ...folderParsed, _id: folderParsed._id.$oid, latestActivity: folderParsed.latestActivity.$date }
+        })
+        dispatch(setUserManagerFolders(recievedFolders))
       } else {
         message.error('Ошибка при добавлении акаунтов')
       }
@@ -86,6 +89,8 @@ export const ManualSettings = ({current, value}: propsType) => {
     } catch (err) {
       console.error(err)
       message.error('Ошибка при добавлении акаунтов')
+      setButtonLoading(false)
+      resetAllData()
     }
 
   }
@@ -151,7 +156,7 @@ export const ManualSettings = ({current, value}: propsType) => {
                     <Title style={{ margin: '0px 0px' }} level={4}>{el.folder}</Title>
                     <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
                     <div className="flex gap-1 items-start">
-                      <Title className='m-0' level={5}>{el.accountsAmount}</Title>
+                      <Title className='m-0' level={5}>{el.accounts.length}</Title>
                       <UserOutlined className='my-1 mt-[5px]' />
                     </div>
                   </div>

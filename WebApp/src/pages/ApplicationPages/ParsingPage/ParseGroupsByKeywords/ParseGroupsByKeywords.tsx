@@ -204,8 +204,8 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
       })
 
       console.log(res)
-      if (res.data.msg == 'Start Server...') {
-        message.info('Начат парсинг аккаунтов. Это может занять около 30 минут')
+      if (res.data.msg === 'Start Server...') {
+        message.info('Начат парсинг групп.')
         setTimeout(() => {
           parsingFoldersFromDB(userMail as string, dispatch)
           message.success('Парсинг групп завершен')
