@@ -57,7 +57,7 @@ router.post('/delete-parsing-folder', async (req: Request, res: Response) => {
     await user.save()
     res.status(200).json({ message: `Folder with key: ${folderKey} successfuly deleted` })
   } catch (err) {
-    res.status(500).json({ message: 'Failed to delete parse folders' })
+    res.status(500).json({ message: 'Failed to delete parse folders', error: err })
   }
 })
 

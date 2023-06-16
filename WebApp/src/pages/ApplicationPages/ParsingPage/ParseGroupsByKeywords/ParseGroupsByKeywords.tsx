@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { AccordionStyled } from '../Accordion/AccordionStyled'
 import { Button, Col, ConfigProvider, Divider, Form, FormInstance, Input, InputRef, Modal, Popover, Row, Table, message } from 'antd'
-import { BuildOutlined, DeleteOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
+import { BugOutlined, BuildOutlined, DeleteOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
 import { useState } from 'react'
 import { IParseFolders } from '../../../../store/types'
@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux'
 import { StoreState } from '../../../../store/store'
 import groupFolder from '../../../../images/groupFolder.svg'
 import accountsFolder from '../../../../images/accountsFolder.svg'
+import botFolder from '../../../../images/tableCard.svg'
+
 import { ModalAddNewParsingFolder } from '../ParseFolders/ModalAddNewParsingFolder'
 import { SliderDriwer } from '../../../../components/SliderDrawer/SliderDriwer'
 import styles from '../../Autoreg/folder-selection-style.module.css'
@@ -16,6 +18,7 @@ import axios from 'axios'
 import { parsingFoldersFromDB } from '../ParseFolders/Folders'
 import { useDispatch } from 'react-redux'
 import { NoKeywordsData } from '../../../../components/CustomNoData/NoKeywordsData'
+import { IHeaderType } from '../../AccountsManager/Collumns'
 
 const { Title } = Typography
 
@@ -134,13 +137,16 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
 
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
   const [selectedFolder, setSelectedFolder] = useState<IParseFolders | null>(null)
+  const [selectedAccountsFolder, setselectedAccountsFolder] = useState<IHeaderType | null>(null)
 
   // Modal
   const [modal, setModal] = useState<boolean>(false)
+  const [modalBots, setModalBots] = useState<boolean>(false)
 
   // Buttons
   const [buttonError, setButtonError] = useState<boolean>(false)
   const [buttonLoading, setButtonLoading] = useState<boolean>(false)
+  const [buttonBotSelection, setButtonBotSelection] = useState<boolean>(false)
 
   // Table data
   const [dataSource, setDataSource] = useState<DataType[]>([])
@@ -151,6 +157,8 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
     setSelectedFolder(null)
     setButtonError(false)
     setButtonLoading(false)
+    setButtonBotSelection(false)
+    setselectedAccountsFolder(null)
   }
 
   const runParsing = async () => {
@@ -166,6 +174,13 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
       setTimeout(() => {
         setButtonError(false)
       }, 2000)
+      return
+    }
+    if (!selectedAccountsFolder) {
+      setButtonBotSelection(true)
+      setTimeout(() => {
+        setButtonBotSelection(false)
+      }, 2_000)
       return
     }
     if (selectedFolder.type != 'groups') {
@@ -197,14 +212,14 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
       const res = await axios.get(url, {
         params: {
           mail: userMail,
-          folder: accountsFolders[0]._id,
+          folder: selectedAccountsFolder._id,
           folder_to_save: selectedFolder._id,
           keywords: keywords,
         }
       })
 
       console.log(res)
-      if (res.data.msg === 'Start Server...') {
+      if (res.data.code == 200) {
         message.info('Начат парсинг групп.')
         setTimeout(() => {
           parsingFoldersFromDB(userMail as string, dispatch)
@@ -306,6 +321,51 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
       <Modal 
         style={{ borderRadius: 20 }}
         title="Выбор папки с аккаунтами" 
+        open={modalBots} 
+        onOk={() => setModalBots(false)} 
+        onCancel={() => setModalBots(false)}
+        footer={[
+          <Button
+            key={1} // Чтобы react не ругался на отсутствие key in map function
+            onClick={() => setModalBots(false)}
+          >
+            Отмена
+          </Button>
+        ]}
+      >
+        <div className="flex flex-col gap-3 my-5">
+        <SliderDriwer 
+            dataSource={accountsFolders || []}
+            open={true}
+            visibleAmount={3}
+            render={(el) => (
+              <div 
+                key={el.key} 
+                className={`${styles.slider_driwer_folder} flex justify-between w-full rounded-2xl p-3 bg-white`}
+                onClick={() => {setselectedAccountsFolder(el); setModalBots(false)}}
+              >
+                <div className="flex items-center gap-5">
+                  <div className='h-[110px] object-contain'>
+                    <img className='w-full h-full' src={botFolder} alt='icon'/>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Title style={{ margin: '0px 0px' }} level={4}>{el.folder}</Title>
+                    <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
+                    <div className="flex gap-1 items-start">
+                      <Title className='m-0' level={5}>{el.accounts.length}</Title>
+                      <UserOutlined className='my-1 mt-[5px]' />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          />
+        </div>
+      </Modal>
+
+      <Modal 
+        style={{ borderRadius: 20 }}
+        title="Выбор папки для парсинга" 
         open={modal} 
         onOk={() => setModal(false)} 
         onCancel={() => setModal(false)}
@@ -394,6 +454,24 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
 
           <div className="div">
             <Row gutter={20}>
+              <Col span={12}>
+                {selectedAccountsFolder ? (
+                  <div className="flex gap-2">
+                    <div className="h-[40px] object-contain">
+                      <img className='w-full h-full' src={botFolder}/>
+                    </div>
+                    <Title level={4} style={{margin: '0 0', fontWeight: '500', cursor: 'default'}}>{selectedAccountsFolder.folder}</Title>
+                  </div>
+                ) : (
+                  <Button 
+                    type="dashed"
+                    size='large'
+                    icon={<BugOutlined />}
+                    danger={buttonBotSelection}
+                    onClick={() => setModalBots(true)}
+                  >Боты для парсинга</Button>
+                )}
+              </Col>
               <Col span={12} className='flex items-end'>
                 {selectedFolder ? (
                   <div className="flex gap-2">
@@ -420,7 +498,7 @@ export const ParseGroupsByKeyword = ({id, expanded, onChange}: IProps) => {
           <Button
             type='link'
             danger={true}
-            disabled={dataSource.length || selectedFolder ? false : true}
+            disabled={dataSource.length || selectedFolder || selectedAccountsFolder ? false : true}
             onClick={() => resetFields()}
           >
             Отмена

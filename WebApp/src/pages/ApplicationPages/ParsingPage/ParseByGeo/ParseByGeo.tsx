@@ -2,12 +2,13 @@ import React, { useState } from 'react'
 import { AccordionStyled } from '../Accordion/AccordionStyled'
 import { Row, Col, Popover, Input, Divider, Modal, Button, message, Select } from "antd"
 import { Typography } from 'antd'
-import { BuildOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
+import { BugOutlined, BuildOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
 import { SliderDriwer } from '../../../../components/SliderDrawer/SliderDriwer'
 import { useSelector } from 'react-redux'
 import { StoreState } from '../../../../store/store'
 import groupFolder from '../../../../images/groupFolder.svg'
 import accountsFolder from '../../../../images/accountsFolder.svg'
+import botFolder from '../../../../images/tableCard.svg'
 
 import styles from '../../Autoreg/folder-selection-style.module.css'
 import { IParseFolders } from '../../../../store/types'
@@ -15,6 +16,7 @@ import { ModalAddNewParsingFolder } from '../ParseFolders/ModalAddNewParsingFold
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { parsingFoldersFromDB } from '../ParseFolders/Folders'
+import { IHeaderType } from '../../AccountsManager/Collumns'
 
 
 const { Title } = Typography
@@ -33,6 +35,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
 
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
   const [selectedFolder, setSelectedFolder] = useState<IParseFolders | null>(null)
+  const [selectedAccountsFolder, setselectedAccountsFolder] = useState<IHeaderType | null>(null)
 
   // Input valus
   const [cityInput, setCityInput] = useState<{status: "warning" | "error" | "", city: string}>({status: "", city: ""})
@@ -52,9 +55,11 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
   // Buttons
   const [buttonError, setButtonError] = useState<boolean>(false)
   const [buttonLoading, setButtonLoading] = useState<boolean>(false)
+  const [buttonBotSelection, setButtonBotSelection] = useState<boolean>(false)
 
   // Modal
   const [modal, setModal] = useState<boolean>(false)
+  const [modalBots, setModalBots] = useState<boolean>(false)
 
   const resetFields = () => {
     setCityInput({status: "", city: ""})
@@ -63,6 +68,8 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
     setButtonLoading(false)
     setReceivedCity(null)
     setCitySelection({status: "", city: null})
+    setButtonBotSelection(false)
+    setselectedAccountsFolder(null)
   }
 
   const runParsing = async () => {
@@ -75,6 +82,13 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
     }
     if (receivedCity && !citySelection.city) {
       setCitySelection({status: "error", city: null})
+      return
+    }
+    if (!selectedAccountsFolder) {
+      setButtonBotSelection(true)
+      setTimeout(() => {
+        setButtonBotSelection(false)
+      }, 2_000)
       return
     }
     if (!selectedFolder) {
@@ -106,7 +120,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
       if (citySelection.city) {
         params = {
           mail: userMail,
-          folder: accountsFolders[0]._id,
+          folder: selectedAccountsFolder._id,
           folder_to_save: selectedFolder._id,
           lat: Number(JSON.parse(citySelection.city).lat),
           long: Number(JSON.parse(citySelection.city).lon),
@@ -114,7 +128,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
       } else if (coordinats.coordinats) {
         params = {
           mail: userMail,
-          folder: accountsFolders[0]._id,
+          folder: selectedAccountsFolder._id,
           folder_to_save: selectedFolder._id,
           lat: Number(coordinats.coordinats.split(',')[0]),
           long: Number(coordinats.coordinats.split(',')[1]),
@@ -122,7 +136,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
       } else {
         params = {
           mail: userMail,
-          folder: accountsFolders[0]._id,
+          folder: selectedAccountsFolder._id,
           folder_to_save: selectedFolder._id,
           city: cityInput.city,
         }
@@ -169,9 +183,54 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
         folder='accounts'
       />
 
-      <Modal 
+<Modal 
         style={{ borderRadius: 20 }}
         title="Выбор папки с аккаунтами" 
+        open={modalBots} 
+        onOk={() => setModalBots(false)} 
+        onCancel={() => setModalBots(false)}
+        footer={[
+          <Button
+            key={1} // Чтобы react не ругался на отсутствие key in map function
+            onClick={() => setModalBots(false)}
+          >
+            Отмена
+          </Button>
+        ]}
+      >
+        <div className="flex flex-col gap-3 my-5">
+        <SliderDriwer 
+            dataSource={accountsFolders || []}
+            open={true}
+            visibleAmount={3}
+            render={(el) => (
+              <div 
+                key={el.key} 
+                className={`${styles.slider_driwer_folder} flex justify-between w-full rounded-2xl p-3 bg-white`}
+                onClick={() => {setselectedAccountsFolder(el); setModalBots(false)}}
+              >
+                <div className="flex items-center gap-5">
+                  <div className='h-[110px] object-contain'>
+                    <img className='w-full h-full' src={botFolder} alt='icon'/>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Title style={{ margin: '0px 0px' }} level={4}>{el.folder}</Title>
+                    <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
+                    <div className="flex gap-1 items-start">
+                      <Title className='m-0' level={5}>{el.accounts.length}</Title>
+                      <UserOutlined className='my-1 mt-[5px]' />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          />
+        </div>
+      </Modal>
+
+      <Modal 
+        style={{ borderRadius: 20 }}
+        title="Выбор папки для парсинга" 
         open={modal} 
         onOk={() => setModal(false)} 
         onCancel={() => setModal(false)}
@@ -234,7 +293,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
                 <div className="w-full flex flex-col gap-1">
                   <div className="flex gap-2 items-center">
                     <Title level={5} style={{ margin: '0 0' }}>Город</Title>
-                    <Popover className='cursor-pointer' title="Город" content='Выберите город, по которому будет осуществляться парсинг. Если город не найдет, введите координаты места в другом поле'>
+                    <Popover className='cursor-pointer' title="Город" content={<p className='max-w-[400px]'>Выберите город, по которому будет осуществляться парсинг. Если город не может быть найден, уточните координаты в поле "Геолокация"</p>}>
                       <InfoCircleOutlined />
                     </Popover>
                   </div>
@@ -266,7 +325,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
                 <div className="w-full flex flex-col gap-1">
                   <div className="flex gap-2 items-center">
                     <Title level={5} style={{ margin: '0 0' }}>Геолокация</Title>
-                    <Popover className='cursor-pointer' title="Геолокация" content='Введите координаты места. Это опциональное поле, его можно оставить пустым'>
+                    <Popover className='cursor-pointer' title="Геолокация" content={<p className='max-w-[400px]'>Введите координаты места. Это опциональное поле, его можно оставить пустым</p>}>
                       <InfoCircleOutlined />
                     </Popover>
                   </div>
@@ -287,6 +346,24 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
           <div className="div">
             <Row gutter={20}>
               <Col span={12}>
+                {selectedAccountsFolder ? (
+                  <div className="flex gap-2">
+                    <div className="h-[40px] object-contain">
+                      <img className='w-full h-full' src={botFolder}/>
+                    </div>
+                    <Title level={4} style={{margin: '0 0', fontWeight: '500', cursor: 'default'}}>{selectedAccountsFolder.folder}</Title>
+                  </div>
+                ) : (
+                  <Button 
+                    type="dashed"
+                    size='large'
+                    icon={<BugOutlined />}
+                    danger={buttonBotSelection}
+                    onClick={() => setModalBots(true)}
+                  >Боты для парсинга</Button>
+                )}
+              </Col>
+              <Col span={12}>
                 {selectedFolder ? (
                   <div className="flex gap-2">
                     <div className="h-[40px] object-contain">
@@ -301,7 +378,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
                     danger={buttonError}
                     icon={<FolderOpenOutlined />}
                     onClick={() => setModal(true)}
-                  >Папка для аккаунтов</Button>
+                  >Папка для парсинга</Button>
                 )}
               </Col>
             </Row>
@@ -312,7 +389,7 @@ export const ParseByGeo = ({id, expanded, onChange}: IProps) => {
           <Button
             type='link'
             danger={true}
-            disabled={cityInput.city || selectedFolder || coordinats.coordinats ? false : true}
+            disabled={cityInput.city || selectedFolder || coordinats.coordinats || selectedAccountsFolder ? false : true}
             onClick={() => resetFields()}
           >
             Отмена

@@ -209,6 +209,7 @@ export const Folders = () => {
       // update folders in DB
       await axios.post(url, { mail: userMail, folderKey: record.key })
         .then((res) => {
+          console.log(res)
           if (res.status === 200) {
             // message.success(`Папка успешно удалена из базы данных`)
           } else {
@@ -219,6 +220,10 @@ export const Folders = () => {
               dispatch(setUserParsingFolders([record]))
             }
           }
+        })
+        .catch((err) => {
+          message.error('Ошибка при удалении папки')
+          console.error(err)
         })
 
       setDeleteModalButton(false)

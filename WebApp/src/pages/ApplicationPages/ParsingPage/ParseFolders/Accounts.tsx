@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { MCard } from '../../../../components/Card/MCard'
 import { Button, ConfigProvider, Table, Tooltip } from 'antd'
-import { ArrowLeftOutlined } from '@ant-design/icons'
+import { ArrowLeftOutlined, StopTwoTone } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { ColumnGroupType, ColumnType, ColumnsType } from 'antd/es/table'
 import { Typography } from 'antd'
@@ -9,6 +9,8 @@ import { useSelector } from 'react-redux'
 import { StoreState } from '../../../../store/store'
 import { NoParseFolders } from '../../../../components/CustomNoData/NoParseFolders'
 import { setParseManagerFolder } from '../../../../store/appSlice'
+import { colors } from '../../../../global-style/style-colors.module'
+import Link from 'antd/es/typography/Link'
 
 
 const { Title } = Typography
@@ -23,7 +25,22 @@ const TableHeaders = () => {
     {
       title: 'Ник',
       dataIndex: 'account_id',
-      render: (_, record: any) => <div>{record.fullInfo.username}</div>
+      render: (_, record: any) => {
+        <div>{record.fullInfo.username}</div>
+        return (
+          <div>
+            {record.fullInfo.username ? (
+              <Link href={`https://t.me/${record.fullInfo.username}`}>
+                @{record.fullInfo.username}
+              </Link>
+            ) : (
+              <div className="ml-[10px]">
+                <StopTwoTone twoToneColor={colors.danger}/>
+              </div>
+            )}
+          </div>
+        )
+      }
     },
     {
       title: 'Имя',
@@ -38,7 +55,12 @@ const TableHeaders = () => {
     {
       title: 'Телефон',
       dataIndex: 'account_id',
-      render: (_, record: any) => <div>{record.fullInfo.phone ? (`${record.fullInfo.phone}`) : ('-')}</div>
+      render: (_, record: any) => 
+          record.fullInfo.phone ? (
+            <div>{record.fullInfo.phone}</div>
+          ) : (
+            <StopTwoTone twoToneColor={colors.danger}/>
+          )
     },
   ]
   return tableHeaders

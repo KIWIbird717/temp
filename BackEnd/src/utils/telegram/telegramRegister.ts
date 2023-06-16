@@ -169,7 +169,7 @@ export class telegramUser {
       latestActivity: new Date(),
       status: "",
       telegramSession: sessionString,
-      sessionPath: { originalname: 'null', buffer: null },  // DONT FOGET TO FIX
+      sessionPath: '',  // DONT FOGET TO FIX
     };
   }
 

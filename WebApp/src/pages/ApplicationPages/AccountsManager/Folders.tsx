@@ -21,6 +21,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { StoreState } from '../../../store/store'
 import { setUserManagerFolders } from '../../../store/userSlice'
 import axios from 'axios'
+import { result } from 'lodash'
 
 
 interface IEditButton {
@@ -60,29 +61,43 @@ export const Folders = () => {
 
       setButtomLoading(true)
 
-      const url = `${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/delete-accounts-folder`
-      try {
-        const res = await axios.post(url, {
-          mail: userMail,
-          folderKey: record.key,
-        })
-  
-        if (res.status == 200) {
-          message.success('Папка успешно удалена')
-          dispatch(setUserManagerFolders(res.data.updatedFolders))
-          setDataSource(res.data.updatedFolders || null)
-        } else {
-          message.error('Ошибка при удалении папки')
-        }
-        
-        setButtomLoading(false)
-        setDeleteModal({open: false, record: null})
-      } catch (err) {
-        setButtomLoading(false)
-        setDeleteModal({open: false, record: null})
-        console.error(err)
-      }
+      const urlTsServer = `${process.env.REACT_APP_SERVER_END_POINT}/newAccountsFolder/delete-accounts-folder`
+      const urlPythonBeServer = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/accounts/sessions/delete/folder`
 
+      // Delete folder from MongDb and PythonBE server
+      await Promise.allSettled([
+        axios.post(urlTsServer, { mail: userMail, folderKey: record.key }),
+        axios.get(urlPythonBeServer, {params: { mail: userMail, folder_key: record.key }})
+      ])
+        .then((results) => {
+          let fulfilledCount = 0
+          results.forEach((result) => {
+            if (result.status == 'fulfilled') {
+              fulfilledCount++
+            }
+          })
+          // check if all responses are fulfilled
+          if (fulfilledCount === 2) {
+            results.forEach((result: any) => {
+              if (result.value.data.updatedFolders) {
+                message.success('Папка успешно удалена')
+                dispatch(setUserManagerFolders(result.value.data.updatedFolders))
+                setDataSource(result.value.data.updatedFolders || null)
+              }
+            })
+          } else {
+            message.error('Ошибка при удалении папки')
+          }
+        })
+        .catch((err) => {
+          setButtomLoading(false)
+          setDeleteModal({open: false, record: null})
+          console.error(err)
+        })
+
+      // reset temp data and button loading
+      setButtomLoading(false)
+      setDeleteModal({open: false, record: null}) 
       setDataSource(newAccountsFolders || null)
     }
   }

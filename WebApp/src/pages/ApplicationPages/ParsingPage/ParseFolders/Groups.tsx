@@ -1,6 +1,6 @@
 import { MCard } from '../../../../components/Card/MCard'
-import { Button, ConfigProvider, Table, Tooltip } from 'antd'
-import { ArrowLeftOutlined } from '@ant-design/icons'
+import { Button, ConfigProvider, Table, Tag, Tooltip } from 'antd'
+import { ArrowLeftOutlined, StopTwoTone } from '@ant-design/icons'
 import { useDispatch } from 'react-redux'
 import { ColumnGroupType, ColumnType, ColumnsType } from 'antd/es/table'
 import { Typography } from 'antd'
@@ -8,8 +8,8 @@ import { useSelector } from 'react-redux'
 import { StoreState } from '../../../../store/store'
 import { NoParseFolders } from '../../../../components/CustomNoData/NoParseFolders'
 import { setParseManagerFolder } from '../../../../store/appSlice'
-import { IParseFolders } from '../../../../store/types'
 import Link from 'antd/es/typography/Link'
+import { colors } from '../../../../global-style/style-colors.module'
 
 
 const { Title } = Typography
@@ -19,7 +19,13 @@ const TableHeaders = () => {
     {
       title: 'ID',
       dataIndex: 'group_id',
-      render: (_, record: any) => <div>{record.fullInfo.id}</div>
+      render: (_, record: any) => {
+        if (record.fullInfo.megagroup) {
+          return <Tag style={{ minWidth: 56, display: 'flex', justifyContent: 'center' }} color="cyan">Чат</Tag>
+        } else {
+          return <Tag style={{ minWidth: 56, display: 'flex', justifyContent: 'center' }} color="purple">Группа</Tag>
+        }
+      }
     },
     {
       title: 'Название группы',
@@ -30,11 +36,21 @@ const TableHeaders = () => {
       title: 'Ссылка',
       dataIndex: 'group_id',
       width: '30%',
-      render: (_, record: any) => <div>
-        <Link href={`https://t.me/${record.group_name}`}>
-          @{record.group_name}
-        </Link>
-      </div>
+      render: (_, record: any) => {
+        return (
+          <div>
+            {record.group_name ? (
+              <Link href={`https://t.me/${record.group_name}`}>
+                @{record.group_name}
+              </Link>
+            ) : (
+              <div className="ml-[10px]">
+                <StopTwoTone twoToneColor={colors.danger}/>
+              </div>
+            )}
+          </div>
+        )
+      }
     },
     {
       title: 'Колличество участников',

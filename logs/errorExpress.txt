@@ -2463,3 +2463,712 @@
     at runMicrotasks (<anonymous>)
     at processTicksAndRejections (node:internal/process/task_queues:96:5)
 
+ 
+ | Time: Wed Jun 14 2023 21:25:12 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Wed Jun 14 2023 21:25:13 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Wed Jun 14 2023 21:29:08 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Wed Jun 14 2023 21:29:09 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Wed Jun 14 2023 21:31:11 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Wed Jun 14 2023 21:31:12 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 20:29:03 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 20:29:03 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 20:37:47 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 20:37:47 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 20:50:06 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 20:50:06 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 20:50:22 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 20:50:23 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:01:03 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:01:03 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:01:09 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:01:09 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:02:18 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:02:19 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:02:59 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:03:29 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:03:29 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:07:28 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:14:55 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:14:55 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:15:12 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:15:12 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:22:22 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:22:23 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:35:41 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:35:42 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:36:51 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 21:36:51 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 22:01:30 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 22:01:31 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:10:39 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:10:39 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:19:24 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:19:25 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:28:51 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:28:52 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:39:00 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Thu Jun 15 2023 23:39:01 GMT+0300 (Moscow Standard Time)
+ | Error: read ECONNRESET
+ | Stack: Error: read ECONNRESET
+    at Function.AxiosError.from (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/core/AxiosError.js:89:14)
+    at RedirectableRequest.handleRequestError (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/axios/lib/adapters/http.js:591:25)
+    at RedirectableRequest.emit (node:events:526:28)
+    at RedirectableRequest.emit (node:domain:475:12)
+    at ClientRequest.eventHandlers.<computed> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/node_modules/follow-redirects/index.js:14:24)
+    at ClientRequest.emit (node:events:526:28)
+    at ClientRequest.emit (node:domain:475:12)
+    at TLSSocket.socketErrorListener (node:_http_client:442:9)
+    at TLSSocket.emit (node:events:526:28)
+    at TLSSocket.emit (node:domain:475:12)
+
+ 
+ | Time: Thu Jun 15 2023 23:43:29 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:44:19 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:46:14 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:46:54 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:47:02 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:47:02 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:47:11 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:47:11 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:52:21 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Thu Jun 15 2023 23:53:42 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 00:41:49 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 00:41:50 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 00:53:32 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 00:53:33 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 01:04:07 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 01:04:07 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 01:18:25 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 01:18:25 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 01:30:02 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 01:30:03 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 01:58:08 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 01:58:09 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 02:08:06 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 02:08:07 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 02:29:55 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 02:29:55 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 02:32:34 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+
+ 
+ | Time: Fri Jun 16 2023 02:32:35 GMT+0300 (Moscow Standard Time)
+ | Error: Invalid response from SMS-Hub: {"0":{}}
+ | Stack: Error: Invalid response from SMS-Hub: {"0":{}}
+    at Object.<anonymous> (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:324:15)
+    at Generator.next (<anonymous>)
+    at fulfilled (/Users/evgenijtrubnikov/Documents/Coding/Work/Autoreg/BackEnd/src/utils/smsService/smsActivate.ts:5:58)
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+

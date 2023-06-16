@@ -71,7 +71,7 @@ export const ManualSettings = ({current, value}: propsType) => {
       formData.append('files', file.originFileObj as unknown as Blob)
     })
     try {
-      const url = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/accounts/add-session-upload/`
+      const url = `${process.env.REACT_APP_PYTHON_SERVER_END_POINT}/api/accounts/sessions/add/folder`
       const res = await axios.post(url, formData)
 
       if (res.status == 200 && res.data.body && res.data.body.length > 0) {
@@ -210,7 +210,7 @@ export const ManualSettings = ({current, value}: propsType) => {
           <div className="">
             <Row gutter={20} align={'top'}>
               <Col span={14}>
-                <Dragger {...props}>
+                <Dragger {...props} fileList={fileListRaw}>
                   <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                   </p>

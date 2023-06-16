@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useRef } from 'react'
 import { AccordionStyled } from '../Accordion/AccordionStyled'
 import { Button, Col, ConfigProvider, Divider, Form, FormInstance, Input, InputRef, Modal, Popover, Row, Table, message } from 'antd'
-import { BuildOutlined, DeleteOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
+import { BugOutlined, BuildOutlined, DeleteOutlined, FolderOpenOutlined, InfoCircleOutlined, PlusOutlined, UserOutlined } from '@ant-design/icons'
 import { Typography } from 'antd'
 import { useState } from 'react'
 import { IParseFolders } from '../../../../store/types'
@@ -9,12 +9,16 @@ import { useSelector } from 'react-redux'
 import { StoreState } from '../../../../store/store'
 import groupFolder from '../../../../images/groupFolder.svg'
 import accountsFolder from '../../../../images/accountsFolder.svg'
+import botFolder from '../../../../images/tableCard.svg'
+
 import { ModalAddNewParsingFolder } from '../ParseFolders/ModalAddNewParsingFolder'
 import { SliderDriwer } from '../../../../components/SliderDrawer/SliderDriwer'
 import styles from '../../Autoreg/folder-selection-style.module.css'
 import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { NoKeywordsData } from '../../../../components/CustomNoData/NoKeywordsData'
+import { IHeaderType } from '../../AccountsManager/Collumns'
+import { parsingFoldersFromDB } from '../ParseFolders/Folders'
 
 const { Title } = Typography
 
@@ -131,17 +135,18 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
   const pasingFoldersRaw: IParseFolders[] | null = useSelector((state: StoreState) => state.user.userParsingFolders)
   const accountsFolders = useSelector((state: StoreState) => state.user.userManagerFolders)
 
-  const [avaliableAccountsLoading, setAvaliableAccountsLoading] = useState<boolean>(false)
   const [newFolderModal, setNewFolderModal] = useState<boolean>(false)
   const [selectedFolder, setSelectedFolder] = useState<IParseFolders | null>(null)
+  const [selectedAccountsFolder, setselectedAccountsFolder] = useState<IHeaderType | null>(null)
 
   // Modal
   const [modal, setModal] = useState<boolean>(false)
-  const [accaountsFolders, setAccountsFolders] = useState<IParseFolders[] | null>(pasingFoldersRaw)
+  const [modalBots, setModalBots] = useState<boolean>(false)
 
   // Buttons
   const [buttonError, setButtonError] = useState<boolean>(false)
   const [buttonLoading, setButtonLoading] = useState<boolean>(false)
+  const [buttonBotSelection, setButtonBotSelection] = useState<boolean>(false)
 
   //chat link
   const [chatLink, setChatLink] = useState<{status: "error" | "warning" | "", link: string}>({status: "", link: ""})
@@ -156,6 +161,8 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
     setButtonError(false)
     setButtonLoading(false)
     setChatLink({status: "", link: ""})
+    setButtonBotSelection(false)
+    setselectedAccountsFolder(null)
   }
 
   const runParsing = async () => {
@@ -168,6 +175,13 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
     }
     if (!chatLink.link) {
       setChatLink({status: "error", link: ""})
+      return
+    }
+    if (!selectedAccountsFolder) {
+      setButtonBotSelection(true)
+      setTimeout(() => {
+        setButtonBotSelection(false)
+      }, 2_000)
       return
     }
     if (!selectedFolder) {
@@ -198,7 +212,7 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
       const res = await axios.get(url, {
         params: {
           mail: userMail,
-          folder: accountsFolders[0]._id,
+          folder: selectedAccountsFolder._id,
           folder_to_save: selectedFolder._id,
           chat: chatLink.link,
           keywords: keywords,
@@ -208,13 +222,16 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
       console.log(res)
       if (res.status == 200) {
         message.info('Начат парсинг аккаунтов. Это может занять около 30 минут')
-        // setTimeout(() => {
-        //   parsingFoldersFromDB(userMail as string, dispatch)
-        //   message.success('Парсинг аккаунтов завершен')
-        // }, 20_000)
+        setTimeout(() => {
+          parsingFoldersFromDB(userMail as string, dispatch)
+          message.success('Парсинг аккаунтов завершен')
+          setButtonLoading(false)
+          resetFields()
+        }, 20_000)
+      } else {
+        message.error('Ошибка при парсинге акаунтов')  
+        setButtonLoading(false)
       }
-      setButtonLoading(false)
-      resetFields()
     } catch (err) {
       setButtonLoading(false)
       message.error('Ошибка при парсинге акаунтов')
@@ -304,6 +321,51 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
       <Modal 
         style={{ borderRadius: 20 }}
         title="Выбор папки с аккаунтами" 
+        open={modalBots} 
+        onOk={() => setModalBots(false)} 
+        onCancel={() => setModalBots(false)}
+        footer={[
+          <Button
+            key={1} // Чтобы react не ругался на отсутствие key in map function
+            onClick={() => setModalBots(false)}
+          >
+            Отмена
+          </Button>
+        ]}
+      >
+        <div className="flex flex-col gap-3 my-5">
+        <SliderDriwer 
+            dataSource={accountsFolders || []}
+            open={true}
+            visibleAmount={3}
+            render={(el) => (
+              <div 
+                key={el.key} 
+                className={`${styles.slider_driwer_folder} flex justify-between w-full rounded-2xl p-3 bg-white`}
+                onClick={() => {setselectedAccountsFolder(el); setModalBots(false)}}
+              >
+                <div className="flex items-center gap-5">
+                  <div className='h-[110px] object-contain'>
+                    <img className='w-full h-full' src={botFolder} alt='icon'/>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Title style={{ margin: '0px 0px' }} level={4}>{el.folder}</Title>
+                    <Title style={{ margin: '0px 0px', fontWeight: '400' }} type='secondary' level={5}>{el.dopTitle}</Title>
+                    <div className="flex gap-1 items-start">
+                      <Title className='m-0' level={5}>{el.accounts.length}</Title>
+                      <UserOutlined className='my-1 mt-[5px]' />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          />
+        </div>
+      </Modal>
+
+      <Modal 
+        style={{ borderRadius: 20 }}
+        title="Выбор папки для парсинга" 
         open={modal} 
         onOk={() => setModal(false)} 
         onCancel={() => setModal(false)}
@@ -359,7 +421,32 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
         expanded={expanded}
         onChange={onChange}
       >
+
         <div className="m-2 flex flex-col gap-4">
+          <div>
+            <Row gutter={20}>
+              <Col span={12}>
+                <div className="w-full flex flex-col gap-1">
+                  <div className="flex gap-2 items-center">
+                    <Title level={5} style={{ margin: '0 0' }}>Ссылка на телеграм чат</Title>
+                    <Popover className='cursor-pointer' title="Ссылка на телеграм чат" content='Ссылку на группу или чат можно взять, нажав "троеточие" -> "info"'>
+                      <InfoCircleOutlined />
+                    </Popover>
+                  </div>
+                  <Input
+                    size='large'
+                    placeholder='Ссылка на телеграм чат'
+                    status={chatLink?.status || ""} 
+                    value={chatLink?.link}
+                    onChange={(e) => setChatLink({status: "", link: e.currentTarget.value})}
+                  />
+                </div>
+              </Col>
+            </Row>
+          </div>
+
+          <Divider style={{ margin: '0 0' }}/>
+
           <div className="w-full flex flex-col gap-1">
             <div className="w-full flex justify-between">
               <div className="flex gap-2 items-center">
@@ -393,21 +480,22 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
           <div className="div">
             <Row gutter={20}>
               <Col span={12}>
-                <div className="w-full flex flex-col gap-1">
-                  <div className="flex gap-2 items-center">
-                    <Title level={5} style={{ margin: '0 0' }}>Ссылка на телеграм чат</Title>
-                    <Popover className='cursor-pointer' title="Ссылка на телеграм чат" content='Ссылку на группу или чат можно взять, нажав "троеточие" -> "info"'>
-                      <InfoCircleOutlined />
-                    </Popover>
+                {selectedAccountsFolder ? (
+                  <div className="flex gap-2">
+                    <div className="h-[40px] object-contain">
+                      <img className='w-full h-full' src={botFolder}/>
+                    </div>
+                    <Title level={4} style={{margin: '0 0', fontWeight: '500', cursor: 'default'}}>{selectedAccountsFolder.folder}</Title>
                   </div>
-                  <Input
+                ) : (
+                  <Button 
+                    type="dashed"
                     size='large'
-                    placeholder='Ссылка на телеграм чат'
-                    status={chatLink?.status || ""} 
-                    value={chatLink?.link}
-                    onChange={(e) => setChatLink({status: "", link: e.currentTarget.value})}
-                  />
-                </div>
+                    icon={<BugOutlined />}
+                    danger={buttonBotSelection}
+                    onClick={() => setModalBots(true)}
+                  >Боты для парсинга</Button>
+                )}
               </Col>
               <Col span={12} className='flex items-end'>
                 {selectedFolder ? (
@@ -435,7 +523,7 @@ export const ParseByKeywords = ({id, expanded, onChange}: IProps) => {
           <Button
             type='link'
             danger={true}
-            disabled={dataSource.length || selectedFolder || chatLink.link ? false : true}
+            disabled={dataSource.length || selectedFolder || chatLink.link || selectedAccountsFolder ? false : true}
             onClick={() => resetFields()}
           >
             Отмена

@@ -2,10 +2,6 @@ import { Schema, Model, model, Document } from "mongoose";
 import { ErrorService, ErrorType} from "../../utils/errorHandler";
 
 
-export interface IFile {
-  originalname: string
-  buffer: Buffer
-}
 /**
  * interface for `Менеджер аккаунов` page
  */
@@ -32,8 +28,8 @@ export interface IAccountsManagerFolder extends Document {
       proxy?: string;  // uness
       latestActivity: Date;
       status: "success" | "warning" | "error" | string;
-      telegramSession: IFile; // session.json file
-      sessionPath: IFile; // .sesstion file
+      telegramSession: string; // session.json file
+      sessionPath: string; // .sesstion file
       apiId?: number;   // uness
       apiHash?: string; // uness
     }
@@ -206,10 +202,6 @@ export interface IUserRes {
 // There are Schemas for MongoDB
 
 interface IRegisterUserModel extends Model<IRegisterUserSchema> {}
-const fileSchema = new Schema<IFile>({
-  originalname: String,
-  buffer: Buffer,
-})
 
 const AccountsDataSchema = new Schema<IAccountsManagerFolder["accounts"][0]>({
   key: String,
@@ -223,8 +215,8 @@ const AccountsDataSchema = new Schema<IAccountsManagerFolder["accounts"][0]>({
   proxy: { type: String, require: false },  // uness
   latestActivity: { type: Date, require: true },
   status: { type: String, require: true },
-  telegramSession: { type: fileSchema, require: true }, // session.json file
-  sessionPath: { type: fileSchema, require: true }, // .sesstion file
+  telegramSession: { type: String, require: true }, // session.json file
+  sessionPath: { type: String, require: true }, // .sesstion file
   apiId: { type: Number, require: true },   // uness
   apiHash: { type: String, require: true },// uness
 })
